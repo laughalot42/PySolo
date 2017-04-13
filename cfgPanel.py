@@ -33,75 +33,16 @@ __license__ = "Python"
 import os
 import wx
 import wx.grid as gridlib
-import sys
 import winsound
 import subprocess
-import configurator as cfg
-import videoMonitor
-import track
+
 import pysolovideoGlobals as gbl
-import threading
+import configurator as cfg
+import scrollingWindow as SW
 from filebrowsebutton_LL import FileBrowseButton
 from wx.lib.newevent import NewCommandEvent
 ThumbnailClickedEvt, EVT_THUMBNAIL_CLICKED = wx.lib.newevent.NewCommandEvent()
-# ------------------------------------------------------------------------- creates a thread that plays a videoMonitor
-class panelThread (threading.Thread):
-    def __init__(self, monPanel, name):
-        threading.Thread.__init__(self)
-        self.monPanel = monPanel
-        self.name = name
 
-    def run(self):
-        print "Starting " + self.name
-        self.monPanel.PlayMonitor()
-        print "Exiting " + self.name
-
-class scrolledThumbs(wx.ScrolledWindow):     # ---------------------- contails a list of thumbnails in a scrolled window
-    def __init__(self, parent):
-        """
-        Thumbs may be videoMonitor panels or console panels.  They are contained in the gbl.thumbPanels list
-        and are mutually exclusive.
-        """
-        # -------------------------------------------------------------------------------------- Set up scrolling window
-        self.parent = parent
-        wx.ScrolledWindow.__init__(self, parent, wx.ID_ANY, size=(-1, 300))
-        self.SetScrollbars(1, 1, 1, 1)
-        self.SetScrollRate(10, 10)
-        self.thumbGridSizer = wx.GridSizer(3, 3, 5, 5)
-
-        self.refreshThumbGrid()            # --------------------- put thumbnails in gridsizer and display in scrolled window
-
-    def clearThumbGrid(self):
-        if len(gbl.thumbPanels) > 1:        # don't remove the 0th element
-            maxcount = len(gbl.thumbPanels) -1
-            for mon_count in range(maxcount, 0, -1):     # destroy old previewPanel objects or they will keep playing
-                                                            # reverse order avoids issues with list renumbering
-                gbl.thumbPanels[mon_count].monPanel.keepPlaying = False        # stop playing video
-                gbl.thumbPanels[mon_count].monPanel.Hide()
-                gbl.thumbPanels[mon_count].monPanel.Destroy()
-                del gbl.thumbPanels[mon_count]                    # delete the objects from the list.
-
-        self.thumbGridSizer.Clear()                          # clear out gridsizer
-
-    def refreshThumbGrid(self):  # -------------------------------------- Make array of thumbnails to populate the grid
-
-        self.clearThumbGrid()
-        # --------------------------------------------- go through each monitor configuration and make a thumbnail panel
-        for gbl.mon_ID in range(1, gbl.monitors +1):
-            cfg.mon_dict_to_nicknames()                    # load monitor parameters to globals
-
-            # create thread with thumbnail panel and add to grid
-            gbl.thumbPanels.append(panelThread(videoMonitor.monitorPanel(self, mon_ID=gbl.mon_ID, panelType='thumb'),
-                                             gbl.mon_name))
-
-            self.thumbGridSizer.Add(gbl.thumbPanels[gbl.mon_ID].monPanel, 1, wx.ALIGN_CENTER_HORIZONTAL, 5)
-
-            gbl.thumbPanels[gbl.mon_ID].start()                     # start thread to begin playback
-            gbl.thumbPanels[gbl.mon_ID].monPanel.playTimer.Start(1000 / gbl.thumb_fps)  # thumbnail panel uses threading
-
-        gbl.mon_ID = 0                          # set mon_ID back to configuration page
-        self.SetSizerAndFit(self.thumbGridSizer)
-        self.SetAutoLayout(True)
 
 class cfgPanel(wx.Panel):
 
@@ -116,29 +57,11 @@ class cfgPanel(wx.Panel):
         self.sizers()                            # Set sizers
 
     def makeWidgets(self):    # --------------------------------------------------------------------- create the widgets
-        self.thumbnailsWidget()
-        self.tableWidget()
-        self.cfgBrowseWidget()
-        self.btnsWidget()
-        self.settingsWidget()
-
-    def thumbnailsWidget(self):
-        # ----------------------------------------------------------------------------------------- scrolled thumbnails
-        self.scrolledThumbs = scrolledThumbs(self)
-        gbl.mon_ID = 0                                          # configuration panel settings is mon_ID=0
-
-    def tableWidget(self):
-        # --------------------------------------------------------------------------------------------- create the table
-        self.colLabels = ['Monitor', 'Track type', 'Track', 'Source', 'Mask', 'Output']
-
-        self.cfgTable = gridlib.Grid(self)
-        self.cfgTable.CreateGrid(gbl.monitors, len(self.colLabels))
-        self.cfgTable.SetRowLabelSize(0)                                    # no need to show row numbers
-        self.cfgTable.EnableEditing(False)                                  # user should not make changes here         TODO: allow changes from cfgTable?
-        for colnum in range(0, len(self.colLabels)):
-            self.cfgTable.SetColLabelValue(colnum, self.colLabels[colnum])  # apply labels to columns
-
-        self.fillTable()                 # fill the table using config info
+        self.cfgBrowseWidget()                                  # browse to find another config file
+        self.tableWidget()                                      # display table of config information
+        self.btnsWidget()                                       # buttons
+        self.videosWidget()                                     # video thumbnails for each monitor in a scrolled window
+        self.settingsWidget()                                   # adjust thumbnail size and playback rate
 
     def cfgBrowseWidget(self):
 
@@ -153,22 +76,41 @@ class cfgPanel(wx.Panel):
                                                wildcard=wildcard, style=wx.ALL,
                                                changeCallback=self.onChangeCfgFile, name='cfgBrowseButton')
 
+    def tableWidget(self):
+        # --------------------------------------------------------------------------------------------- create the table
+        self.colLabels = ['Monitor', 'Track type', 'Track', 'Source', 'Mask', 'Output']
+
+        self.cfgTable = gridlib.Grid(self)
+        self.cfgTable.CreateGrid(gbl.monitors, len(self.colLabels))
+        self.cfgTable.SetRowLabelSize(0)                                    # no need to show row numbers
+        self.cfgTable.EnableEditing(False)                                  # user should not make changes here         TODO: allow changes from cfgTable?
+        for colnum in range(0, len(self.colLabels)):
+            self.cfgTable.SetColLabelValue(colnum, self.colLabels[colnum])  # apply labels to columns
+
+        self.fillTable()                 # fill the table using config info
+
     def btnsWidget(self):
         # ----------------------------------------------------------------------------------------------------- buttons
-        self.btnAddMonitor = wx.Button(self, wx.ID_ANY, size=(130,20), label='Add Monitor')
+        self.btnAddMonitor = wx.Button(self, wx.ID_ANY, size=(130,25), label='Add Monitor')
         self.btnAddMonitor.Enable(True)
 
-        self.btnSaveCfg = wx.Button(self, wx.ID_ANY, size=(130,20), label='Save Configuration')
+        self.btnSaveCfg = wx.Button(self, wx.ID_ANY, size=(130,25), label='Save Configuration')
         self.btnSaveCfg.Enable(True)
 
-        self.btnStart = wx.Button(self, wx.ID_ANY, size=(130,20), label='Start Acquisition')
+        self.btnStart = wx.Button(self, wx.ID_ANY, size=(130,25), label='Start Acquisition')
         self.btnStart.Enable(True)
 
-        self.btnDAMFS = wx.Button(self, wx.ID_ANY, size=(130,20), label='DAMFileScan110X')                 # start DAMFileScan110X
+        self.btnDAMFS = wx.Button(self, wx.ID_ANY, size=(130,25), label='DAMFileScan110X')                 # start DAMFileScan110X
         self.btnDAMFS.Enable(True)
 
-        self.btnSCAMP = wx.Button(self, wx.ID_ANY, size=(130,20), label='SCAMP')                 # start DAMFileScan110X
+        self.btnSCAMP = wx.Button(self, wx.ID_ANY, size=(130,25), label='SCAMP')                 # start DAMFileScan110X
         self.btnSCAMP.Enable(True)
+
+    def videosWidget(self):
+        # ----------------------------------------------------------------------------------------- scrolled thumbnails
+        self.scrolledThumbs = SW.scrollingWindow(self)      # INITIAL CALL to create scrolling window with sizers to contain thumbnails
+
+        gbl.mon_ID = 0                                          # configuration panel settings is mon_ID=0
 
     def settingsWidget(self):
         # ------------------------------------------------------------------------------------  monitor display options
@@ -180,7 +122,7 @@ class cfgPanel(wx.Panel):
 
     def binders(self):      # ---------------------------------------------------------------------------------- binders
         self.Bind(wx.EVT_BUTTON,        self.onAddMonitor,      self.btnAddMonitor)         # add monitor
-        self.Bind(wx.EVT_BUTTON,        self.onStartAcquisition,           self.btnStart)              # start data acquisition
+        self.Bind(wx.EVT_BUTTON,        self.onStartAcquisition,self.btnStart)              # start data acquisition
         self.Bind(wx.EVT_BUTTON,        self.onSaveCfg,         self.btnSaveCfg)            # save configuration
         self.Bind(wx.EVT_BUTTON,        self.onDAMFileScan110X, self.btnDAMFS)              # start binning pgm
         self.Bind(wx.EVT_TEXT_ENTER,    self.onthumbFPSnSize,   self.thumbFPS)              # update thumbnail FPS
@@ -192,7 +134,7 @@ class cfgPanel(wx.Panel):
         self.tableSizer     = wx.BoxSizer(wx.VERTICAL)          # for browse button and config table
         self.btnSizer       = wx.BoxSizer(wx.VERTICAL)          # for button controls
         self.lowerSizer     = wx.BoxSizer(wx.VERTICAL)          # scrolled windows and settings
-        self.scrolledSizer  = wx.BoxSizer(wx.HORIZONTAL)          # scrolling window of thumbnails
+        self.scrolledSizer  = wx.BoxSizer(wx.HORIZONTAL)        # scrolling window of thumbnails
         self.settingsSizer  = wx.BoxSizer(wx.HORIZONTAL)        # fps and size settings
 
     # ------------------------------------------------------------------------------------ browser control and table
@@ -200,18 +142,19 @@ class cfgPanel(wx.Panel):
         self.tableSizer.Add(self.cfgTable,          1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 2)
 
     # ------------------------------------------------------------------------------------------------------ buttons
-        self.btnSizer.Add(self.btnSaveCfg,          1, wx.ALL | wx.ALIGN_CENTER, 2)
-        self.btnSizer.Add(self.btnAddMonitor,       1, wx.ALL | wx.ALIGN_CENTER, 2)
-        self.btnSizer.Add(self.btnStart,            1, wx.ALL | wx.ALIGN_CENTER, 2)
-        self.btnSizer.Add(self.btnDAMFS,            1, wx.ALL | wx.ALIGN_CENTER, 2)
-        self.btnSizer.Add(self.btnSCAMP,            1, wx.ALL | wx.ALIGN_CENTER, 2)
+        self.btnSizer.Add(self.btnSaveCfg,          1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
+        self.btnSizer.Add(self.btnAddMonitor,       1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
+        self.btnSizer.Add(self.btnStart,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
+        self.btnSizer.Add(self.btnDAMFS,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
+        self.btnSizer.Add(self.btnSCAMP,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
 
     # ---------------------------------------------------------------------------------------------------- upper sizer
-        self.upperSizer.Add(self.tableSizer,        0, wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, 2)
-        self.upperSizer.Add(self.btnSizer,          0, wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, 2)
+        self.upperSizer.AddSpacer(40)
+        self.upperSizer.Add(self.tableSizer,        0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 2)
+        self.upperSizer.Add(self.btnSizer,          0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_TOP, 2)
 
     # ---------------------------------------------------------------------------------------- scrolling window sizer
-        self.scrolledSizer.Add(self.scrolledThumbs,    1, wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, 2)
+        self.scrolledSizer.Add(self.scrolledThumbs,    1, wx.ALL | wx.ALIGN_CENTER, 2)
 
     # ---------------------------------------------------------------------------------------------- settings sizer
         self.settingsSizer.Add(self.thumbSizeTxt,       0, wx.ALL | wx.EXPAND, 2)
@@ -228,8 +171,8 @@ class cfgPanel(wx.Panel):
         self.lowerSizer.Add(self.settingsSizer,     0, wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, 2)
 
     # --------------------------------------------------------------------------------------------- main panel sizer
-        self.cfgPanelSizer.Add(self.upperSizer,        1, wx.ALL | wx.EXPAND | wx.ALIGN_TOP | wx.ALIGN_CENTER, 2)
-        self.cfgPanelSizer.Add(self.lowerSizer,        1, wx.ALL | wx.EXPAND | wx.ALIGN_BOTTOM | wx.ALIGN_CENTER, 2)
+        self.cfgPanelSizer.Add(self.upperSizer,        1, wx.ALL | wx.EXPAND | wx.ALIGN_TOP | wx.ALIGN_CENTER_HORIZONTAL, 2)
+        self.cfgPanelSizer.Add(self.lowerSizer,        1, wx.ALL | wx.EXPAND | wx.ALIGN_BOTTOM | wx.ALIGN_CENTER_HORIZONTAL, 2)
 
         self.SetSizer(self.cfgPanelSizer)
         self.Layout()
@@ -237,9 +180,9 @@ class cfgPanel(wx.Panel):
     def onthumbFPSnSize(self, event):
         gbl.thumb_fps = gbl.correctType(self.thumbFPS.GetValue(), 'thumb_size')
         gbl.thumb_size = gbl.correctType(self.thumbSize.GetValue(), 'thumb_fps')
+        cfg.cfg_nicknames_to_dicts()
 
         self.scrolledThumbs.refreshThumbGrid()              # refresh thumbnails
-        self.scrolledThumbs.Layout()
 
     def onAddMonitor(self, event):      # ---------------------------------------------------------------    Add monitor
         """
@@ -277,6 +220,8 @@ class cfgPanel(wx.Panel):
         gbl.mon_ID = 0                                                      # adding monitors happens on page 0
         self.TopLevelParent.theNotebook.onGoToPage(gbl.cfg_dict[0]['monitors'])         # leave notebook on new page
         gbl.mon_ID = gbl.cfg_dict[0]['monitors']
+
+        self.scrolledThumbs.refreshThumbGrid()                   # create the thumbnail window
 
         return True
 
@@ -336,10 +281,19 @@ class cfgPanel(wx.Panel):
 
     def onChangeCfgFile(self, event):       # ------------------------------------------------  new config file selected
 
+        cfg.cfg_nicknames_to_dicts()
+        cfg.mon_nicknames_to_dicts()
+
+
+        self.TopLevelParent.config.cfgSaveAs(self)
+
         newFile = self.pickConfigFile.GetValue()
 
         gbl.cfg_dict = [gbl.cfg_dict[0], gbl.cfg_dict[1]]   # remove all but monitors 1 from dictionary
         cfg.Configuration(self, newFile)                    # initialize the new configuration
+
+        cfg.cfg_dict_to_nicknames()
+        cfg.mon_dict_to_nicknames()
 
         self.fillTable()                                    # put new configuration into the table
         self.scrolledThumbs.refreshThumbGrid()                   # create the thumbnail window
@@ -350,13 +304,9 @@ class cfgPanel(wx.Panel):
         replace scrolled thumbnails with progress windows
         start tracking
         """
-        self.scrolledThumbs.clearThumbGrid()                       # kill thumbnail processes
-
-        self.TopLevelParent.SetStatusText('Tracking %d Monitors' % gbl.monitors)  # TODO:  progress indicator
+        gbl.statbar.SetStatusText('Tracking %d Monitors' % gbl.monitors)
         self.acquiring = True
-        track.tracker(self)                            # start tracking for this monitor
-
-
+        self.scrolledThumbs.refreshConsoleGrid()          # replace thumbnails with progress consoles and start tracking
 
     def onDAMFileScan110X(self, event):
 

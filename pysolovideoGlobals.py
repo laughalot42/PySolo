@@ -1,12 +1,18 @@
 """ Global Variable Declarations """
 
+# previewPanels cannot be global because they must be assigned to their apecific panel
+
 # ----------------------------------------------------------------------------   Imports
+import numpy as np                      # for ROIs
 import wx                               # GUI controls
 import os                               # system controls
+import cv2
+import cv2.cv
 from os.path import expanduser          # get user's home directory
 import datetime                         # date and time handling functions
 import sys
 import cPickle
+import winsound
 
 
 exec_dir = sys.path[0]    # folder containing the scripts for this program
@@ -19,7 +25,8 @@ global monitors, \
     thumb_fps, \
     cfg_path, \
     thumbPanels, \
-    trackers
+    trackers, \
+    statbar
 
 monitors = 1
 webcams = 1
@@ -32,6 +39,7 @@ thumbPanels = ['']                  # list of thumbnail panels used in scrolled 
 
 trackers = []                       # list of trackers for acquiring data.  index does not match cfg_dict
                                                 # since not all monitors are necessarily tracked
+statbar = ''
 
 # -------------------------------------------------- nicknames for monitor configuration for **current** mon_ID
 global mon_ID, \
@@ -41,6 +49,7 @@ global mon_ID, \
     source_fps, \
     preview_size, \
     preview_fps, \
+    line_thickness, \
     issdmonitor, \
     start_datetime, \
     track, \
@@ -55,22 +64,13 @@ source = 'Webcam1'
 source_fps = 0.5
 preview_size = (480, 480)
 preview_fps = 1
+line_thickness = 3
 issdmonitor = False
 start_datetime = wx.DateTime_Now()
 track_type = 0
 track = True
 mask_file = 'None'
 data_folder = os.path.join(expanduser('~'), 'PySolo_Files')
-
-# -------------------------------------------------------------- nicknames for video Monitor and ROIs
-global previewPanel, \
-        ROIs, \
-        showROIs
-
-previewPanel = None
-ROIs = []
-showROIs = False
-
 
 # --------------------------------------------------------------------- cfg_dict contains all configuration settings
 global cfg_dict
@@ -96,6 +96,21 @@ cfg_dict = [{                                               # create the default
         'mask_file'     : mask_file,
         'data_folder'   : data_folder
         }]
+
+# ------------------------------------------------------------------------------------ Timer Dictionary
+global timer_dict, numberOfTimers
+global thread_dict
+
+timer_dict = {}                       # keeps list of timers (method, mon_name, enabled)
+numberOfTimers = 0
+thread_dict = {}                      # keeps list of threads (method, mon_name, enabled)
+
+# ------------------------------------------------------------------- miscellaneous globals
+global ROIs
+
+ROIs = []               # temporary storage for ROIs
+genmaskflag = False     # change to true on clicking mask generator button
+
 
 
 # ---------------------------------------------------------------- functions needed by multiple classes
@@ -160,7 +175,8 @@ def correctType(r, key):
 
     return r  # all else has failed:  return as string
 
-def loadROIs(mask_file):
+def loadROIsfromMaskFile(mask_file):      # ------------------------------------------------------ read Mask file
+
     if mask_file is None:
         return False  # there is no mask file
 
@@ -170,9 +186,11 @@ def loadROIs(mask_file):
             ROItuples = cPickle.load(cf)  # list of 4 tuple sets describing rectangles on the image
             cf.close()
         except:
-            print('Mask failed to load')
+            statbar.SetStatusText('Mask failed to load')
+            winsound.Beep(600, 200)
             return False
 
+    # ------------------------------------------------------------------------------------------ make gbl.ROIs
     ROIs = []
     for roi in ROItuples:  # complete each rectangle by adding first coordinate to end of list
         roiList = []  # clear for each rectangle
@@ -181,10 +199,30 @@ def loadROIs(mask_file):
         roiList.append(roi[0])
         ROIs.append(roiList)  # add the rectangle lists to the list of ROIs
 
-    if not ROIs:
-        showROIs = False
-
     return ROIs
+
+def makeMaskFrames(ROIs, size):
+
+    # creates a transparent frame (2D)
+    # draws the ROIs on the frame  &  returns the frame
+    # mask
+
+    # ---------------------------------------------------------------------------------------- create transparent frame
+    npsize = (size[1], size[0])                     # opencv and np use opposite order
+    trans_frame = np.ones(npsize, np.uint8)          # binary frame for creating mask
+
+    # ---------------------------------------------------------------------------------------- draw ROIs in red channel
+    for roi in ROIs:
+        for count in range(0, 4):
+            cv2.line(trans_frame, roi[count], roi[count + 1], (0,0,0), line_thickness)
+
+    mask = np.dstack((trans_frame, trans_frame, trans_frame))           # stacks 3 trans_frames so each color has ROIs
+    mask = mask.astype(np.uint8)
+    redmask = np.dstack((np.zeros(npsize, np.uint8), np.zeros(npsize, np.uint8), (1-trans_frame)*255))   # applies mask to red only
+
+    genmaskflag = False                     # reset mask generator flag
+
+    return mask, redmask
 
 def pydatetime2wxdatetime(pydt):  # ---------------------- convert python datetime.datetime to wx.datetime
     dt_iso = pydt.isoformat()

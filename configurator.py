@@ -34,13 +34,13 @@ def cfg_dict_to_nicknames():
     gbl.cfg_path = gbl.cfg_dict[0]['cfg_path']
 
 def mon_nicknames_to_dicts():
-    # gbl.previewPanels is not saved to dictionary
     gbl.cfg_dict[gbl.mon_ID]['mon_name'] = gbl.mon_name
     gbl.cfg_dict[gbl.mon_ID]['source_type'] = gbl.source_type
     gbl.cfg_dict[gbl.mon_ID]['source'] = gbl.source
     gbl.cfg_dict[gbl.mon_ID]['source_fps'] = gbl.source_fps
     gbl.cfg_dict[gbl.mon_ID]['preview_size'] = gbl.preview_size
     gbl.cfg_dict[gbl.mon_ID]['preview_fps'] = gbl.preview_fps
+    gbl.cfg_dict[gbl.mon_ID]['line_thickness'] = gbl.line_thickness
     gbl.cfg_dict[gbl.mon_ID]['issdmonitor'] = gbl.issdmonitor
     gbl.cfg_dict[gbl.mon_ID]['start_datetime'] = gbl.start_datetime
     gbl.cfg_dict[gbl.mon_ID]['track'] = gbl.track
@@ -49,13 +49,13 @@ def mon_nicknames_to_dicts():
     gbl.cfg_dict[gbl.mon_ID]['data_folder'] = gbl.data_folder
 
 def mon_dict_to_nicknames():
-    # gbl.previewPanel is not in dictionary
     gbl.mon_name = gbl.cfg_dict[gbl.mon_ID]['mon_name']
     gbl.source_type = gbl.cfg_dict[gbl.mon_ID]['source_type']
     gbl.source = gbl.cfg_dict[gbl.mon_ID]['source']
     gbl.source_fps = gbl.cfg_dict[gbl.mon_ID]['source_fps']
     gbl.preview_size = gbl.cfg_dict[gbl.mon_ID]['preview_size']
     gbl.preview_fps = gbl.cfg_dict[gbl.mon_ID]['preview_fps']
+    gbl.line_thickness = gbl.cfg_dict[gbl.mon_ID]['line_thickness']
     gbl.issdmonitor = gbl.cfg_dict[gbl.mon_ID]['issdmonitor']
     gbl.start_datetime = gbl.cfg_dict[gbl.mon_ID]['start_datetime']
     gbl.track = gbl.cfg_dict[gbl.mon_ID]['track']
@@ -126,6 +126,7 @@ class Configuration(object):
                          'issdmonitor',     # is sleep deprivation monitor
                          'preview_size',    # size to use for full size video display
                          'preview_fps',     # speed to use for full size video display
+                         'line_thickness',   # thickness of line around ROIs
                          'start_datetime',  # date and time experiment started
                          'track',           # track this monitor or not?
                          'track_type',       # type of tracking to be used
@@ -202,7 +203,7 @@ class Configuration(object):
         gbl.monitors = gbl.cfg_dict[0]['monitors'] = len(self.cfg_Obj._sections) -1        # item 0 is options, not a monitor
 
         dictSize = len(gbl.cfg_dict)                        # need to add a new dictionaries for any new monitors
-        if gbl.monitors > dictSize:
+        if gbl.monitors >= dictSize:
             for gbl.mon_ID in range(dictSize, gbl.monitors + 1):
                 gbl.cfg_dict.append({})
 
@@ -214,12 +215,13 @@ class Configuration(object):
                 if self.cfg_Obj.has_option(gbl.mon_name,key):
                     gbl.cfg_dict[gbl.mon_ID][key] = self.getValue(gbl.mon_name, key)  # copy config info into dictionary
                 else:
-                    gbl.cfg_dict[gbl.mon_ID][key] = gbl.cfg_dict[1][key]     # if key not in cfg_obj, fill in with monitor1 value
+                    gbl.cfg_dict[gbl.mon_ID][key] = 0               # if key not in cfg_obj, fill in with zero
 
 #            if gbl.source[0:6] == 'Webcam':  # count the number of webcams
 #                gbl.webcams_inuse.append(gbl.mon_name)
 
 #        gbl.webcams = len(gbl.webcams_inuse)
+
 
     def loadConfigFile(self, filePathName=''):    # --------------------------------  Load config from file
         """ --------------------------------------------------------------------- create the ConfigParser object """
@@ -235,30 +237,33 @@ class Configuration(object):
 
         self.cfg_to_dicts()                                # update the config dictionary from the config file
 
-
     def cfgSaveAs(self, parent):  # --------------------------------------------------------  Save config file
         """
         Dictionary should be up to date before calling this function.
         Lets user select file and path where configuration will be saved. Saves using ConfigParser .write()
         """
-        # get a filename for the configuration file
-        self.dict_to_cfg_Obj()
+        for section in self.cfg_Obj.sections():      # delete all monitors from configuration object
+            if section != 'Options':                        # keep the Options section
+                self.cfg_Obj.remove_section(section)
 
+        self.dict_to_cfg_Obj()                              # and recreate monitor sections from dictionary
+
+        # get a filename for the configuration file
         wildcard = "PySolo Video config file (*.cfg)|*.cfg|" \
                    "All files (*.*)|*.*"  # adding space in here will mess it up!
 
         dlg = wx.FileDialog(parent,
-        message = "Save configuration as file ...",
-        defaultDir = gbl.cfg_path,
-        wildcard = wildcard,
-        style = (wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
-        )
+                            message = "Save configuration as file ...",
+                            defaultDir = gbl.cfg_path,
+                            wildcard = wildcard,
+                            style = (wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+                            )
 
+        # save configuration to selected file
         if dlg.ShowModal() == wx.ID_OK:  # show the file browser window
             self.filePathName = dlg.GetPath()  # get the path from the save dialog
 
             gbl.cfg_path = os.path.split(self.filePathName)[0]
-            self.dict_to_cfg_Obj()  # save the current dictionary into a configuration object
 
             with open(self.filePathName, 'wb') as configfile:
                 self.cfg_Obj.write(configfile)  # ConfigParser write to file

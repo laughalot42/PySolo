@@ -8,9 +8,9 @@ import configurator as cfg
 import threading
 
 
-class myThread (threading.Thread):
+class myThread (multiprocessing.Process):
     def __init__(self, parent, monPanel, name):
-        threading.Thread.__init__(self)
+        multiprocessing.Process.__init__(self)
         self.monPanel = monPanel
         self.name = name
 

@@ -71,24 +71,29 @@ class mainNotebook(wx.Notebook):
         self.AddPage(self.notebookPages[gbl.mon_ID], gbl.mon_name)      # add to notebook
         gbl.mon_ID = 0                                                  # monitor was added from config page (0)
 
+
     def onPageChanged(self, event):                             # ----- directs event related page changes to onGoToPage
         page_num = event.GetSelection()
         self.onGoToPage(page_num)
 
     def onGoToPage(self, page_num):  # --------------------------------------------- for changing pages without an event
 
+        gbl.statbar.SetStatusText(' ')
         cfg.cfg_nicknames_to_dicts()                              # save any new changes to config or monitor parameters
         cfg.mon_nicknames_to_dicts()
 
         if gbl.mon_ID == 0:  # ---------------------------------------------------------- leaving the configuration page
             try:
-                for mon_count in range(1, gbl.monitors +1):    # stop all thumbnail video timers
-                    gbl.thumbPanels[mon_count].keepGoing = False            # stops thread timer
+                self.notebookPages[0].scrolledThumbs.clearThumbGrid()       # remove all thumbnails, timers, and threads
+#                for mon_count in range(1, gbl.monitors +1):    # stop all thumbnail video timers
+#                    thumbPanels[mon_count].keepGoing = False            # stops thread timer   TODO: timers not stopping
+#                    self.notebookPages[0].scrolledThumbs.thumbPanels[mon_count].playTimer.Stop()
             except: pass
 
         else:   # ------------------------------------------------------------------------------- leaving a monitor page
             try:
-                gbl.previewPanel.playTimer.Stop()    # stop current monitor page video timer
+                self.notebookPages[gbl.mon_ID].previewPanel.clearVideo()        # remove video, timer, and thread
+#                self.notebookPages[gbl.mon_ID].previewPanel.playTimer.Stop()    # stop current monitor page video timer
             except: pass
 
         gbl.mon_ID = page_num                   # update the global mon_ID to the new page number
@@ -101,10 +106,7 @@ class mainNotebook(wx.Notebook):
 
         else:          # ---------------------------------------------------------------------- going to a monitor page
             cfg.mon_dict_to_nicknames()                 # update nicknames to values for the selected monitor
-            gbl.ROIs = gbl.loadROIs(gbl.mask_file)
-            gbl.showROIs = True
-            gbl.previewPanel = self.notebookPages[gbl.mon_ID].previewPanel   # put preview panel in global variable
-            gbl.previewPanel.parent.refreshVideo()                              # start video
+            self.notebookPages[gbl.mon_ID].previewPanel.parent.refreshVideo()                              # start video
 
         self.SetSelection(gbl.mon_ID)   # -------------------------------------------------------------- change the page
         self.Layout()
@@ -112,25 +114,19 @@ class mainNotebook(wx.Notebook):
     def repaginate(self):     # -------------------------------------- update notebook after number of pages has changed
         # page 0 (config page) will not be affected except for thumbnails               # then go to configuration page
 
-        # ---------------------------------------------------- stop configuration thumbnail timers and delete thumbnails
-        for count in range(1, len(gbl.thumbPanels)):
-            gbl.thumbPanels[count].monPanel.playTimer.Stop()
-        del gbl.thumbPanels
-        gbl.thumbPanels = ['videoMonitors']                                   # initiate a new thumbnail list; element 0 identifies type of list
-
-        # ------------------------------------- stop current monitor preview and delete notebook monitor pages from list
-        try: gbl.previewPanel.playTimer.Stop()                                   # stop preview panel in globals
-        except: pass
-
-        for count in range(1, len(self.notebookPages)):
-            self.notebookPages[1].previewPanel.playTimer.Stop()             # stop any running previewPanel
-            del self.notebookPages[1]                                       # remove each page from notebookPages list
-
         # -------------------------------------------------------------------- delete each page from notebook (except 0)
-        pgcount = self.GetPageCount()
         self.Unbind(wx.EVT_NOTEBOOK_PAGE_CHANGED)                   # prevent page changing while deleting pages
-        for count in range(1, pgcount):
-            self.DeletePage(1)
+        for count in range(1, len(self.notebookPages)):
+            self.notebookPages[1].clearVideo()                       # stop & remove video, timer, and thread
+            del self.notebookPages[1]
+            self.DeletePage(1)                                       # remove page from notebookPages list
+
+        # ---------------------------------------------------- stop configuration thumbnail timers and delete thumbnails
+        self.notebookPages[0].scrolledThumbs.clearThumbGrid()       # stop & remove all thumbnails, timers, and threads
+        del self.notebookPages[0].scrolledThumbs.thumbPanels        # delete the scrolled window panel
+
+        # --------------------------------------------------------------------------------------- create everything anew
+        self.notebookPages[0].scrolledThumbs.thumbPanels = ['videoMonitors']  # initiate a new thumbnail list; element 0 identifies type of list
 
         # -------------------------------------------------------------------------------------------- add monitor pages
         for gbl.mon_ID in range(1, gbl.monitors+1):
@@ -155,13 +151,13 @@ class mainFrame(wx.Frame):
 
         self.config = cfg.Configuration(self)                   # let user select a configuration to load before starting
 
-        self.statbar = wx.StatusBar(self, wx.ID_ANY)
-        self.SetStatusBar(self.statbar)
-        self.statbar.SetStatusText('status bar')
+        gbl.statbar = wx.StatusBar(self, wx.ID_ANY)  # status bar
+        self.SetStatusBar(gbl.statbar)
+        gbl.statbar.SetStatusText('Status Bar')
 
         self.theNotebook = mainNotebook(self)
 
-        self.__set_properties("pySolo Video", 0.9)  # set title and frame/screen ratio
+        self.__set_properties("pySolo Video", 0.95)  # set title and frame/screen ratio
         self.__do_layout()
 
         mainSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -217,7 +213,7 @@ if __name__ == "__main__":
     app.SetTopWindow(frame_1)                   # Makes this window the main window
     frame_1.Show()                              # Shows the main window
 
-    wx.lib.inspection.InspectionTool().Show()
+#    wx.lib.inspection.InspectionTool().Show()
 
     app.MainLoop()                              # Begin user interactions.
 
