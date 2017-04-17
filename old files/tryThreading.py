@@ -1,25 +1,12 @@
 import wx, threading
 
-class panelThread (threading.Thread):
-    def __init__(self, monPanel, name):
-        threading.Thread.__init__(self)
-        self.monPanel = monPanel
-        self.name = name
-
-    def run(self):
-        print "Starting " + self.name
-        self.monPanel.PlayMonitor()
-        print "Exiting " + self.name
-
-class doIt(object):
-    def __init__(self):
-        trackedObjectList.append(panelThread(trackedOjectClass(self, parameters), name))
-
-        trackedObjectList.start()                                           # start thread to begin playback
-        trackedObjectList.monPanel.playTimer.Start(1000 / gbl.thumb_fps)  # thumbnail panel uses threading
+class acquireThread(threading.Thread):
+    def __init__(self, parent, count):
+        super(acquireThread, self).__init__()
+        self.t = threading.Thread(target=parent.worker(count))
 
 
-        # ------------------------------------------------------------------------------------------ Stand alone test code
+ # ------------------------------------------------------------------------------------------ Stand alone test code
 
 #
 class mainFrame(wx.Frame):

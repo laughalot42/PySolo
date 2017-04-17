@@ -49,7 +49,6 @@ class mainNotebook(wx.Notebook):
 
         wx.Notebook.__init__(self, parent, id=wx.ID_ANY, style=wx.NB_LEFT, name='NotebookNameStr') # initialize notebook
 
-        self.mon_ID = 0                                                # looking at config page first, not a monitor
         self.notebookPages = []
 
         self.notebookPages.append(cfgPanel.cfgPanel(self))          # -----configuration page is element 0
@@ -69,7 +68,6 @@ class mainNotebook(wx.Notebook):
         cfg.mon_dict_to_nicknames()                                     # load monitor's configuration into globals
         self.notebookPages.append(maskPanel.maskMakerPanel(self))       # make the monitor page
         self.AddPage(self.notebookPages[gbl.mon_ID], gbl.mon_name)      # add to notebook
-        gbl.mon_ID = 0                                                  # monitor was added from config page (0)
 
 
     def onPageChanged(self, event):                             # ----- directs event related page changes to onGoToPage
@@ -80,23 +78,21 @@ class mainNotebook(wx.Notebook):
 
         gbl.statbar.SetStatusText(' ')
         cfg.cfg_nicknames_to_dicts()                              # save any new changes to config or monitor parameters
-        cfg.mon_nicknames_to_dicts()
+        if gbl.mon_ID != 0:
+            cfg.mon_nicknames_to_dicts(gbl.mon_ID)
 
         if gbl.mon_ID == 0:  # ---------------------------------------------------------- leaving the configuration page
             try:
                 self.notebookPages[0].scrolledThumbs.clearThumbGrid()       # remove all thumbnails, timers, and threads
-#                for mon_count in range(1, gbl.monitors +1):    # stop all thumbnail video timers
-#                    thumbPanels[mon_count].keepGoing = False            # stops thread timer   TODO: timers not stopping
-#                    self.notebookPages[0].scrolledThumbs.thumbPanels[mon_count].playTimer.Stop()
             except: pass
 
         else:   # ------------------------------------------------------------------------------- leaving a monitor page
             try:
                 self.notebookPages[gbl.mon_ID].previewPanel.clearVideo()        # remove video, timer, and thread
-#                self.notebookPages[gbl.mon_ID].previewPanel.playTimer.Stop()    # stop current monitor page video timer
             except: pass
 
         gbl.mon_ID = page_num                   # update the global mon_ID to the new page number
+        cfg.mon_dict_to_nicknames()
 
         if page_num == 0:         # -------------------------------------------------------- going to configuration page
             cfg.cfg_dict_to_nicknames()          # load configuration page parameters
@@ -113,7 +109,6 @@ class mainNotebook(wx.Notebook):
 
     def repaginate(self):     # -------------------------------------- update notebook after number of pages has changed
         # page 0 (config page) will not be affected except for thumbnails               # then go to configuration page
-
         # -------------------------------------------------------------------- delete each page from notebook (except 0)
         self.Unbind(wx.EVT_NOTEBOOK_PAGE_CHANGED)                   # prevent page changing while deleting pages
         for count in range(1, len(self.notebookPages)):
@@ -136,11 +131,9 @@ class mainNotebook(wx.Notebook):
         self.notebookPages[0].fillTable()                                # update the configuration table
         self.notebookPages[0].scrolledThumbs.refreshThumbGrid()               # update the scrolled thumbs window
 
-        gbl.mon_ID = 0                          # set mon_ID to configuration panel
         self.onGoToPage(gbl.mon_ID)             # go to configuration panel & update table and thumbnails
 
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged)     # restore binding
-
 
 class mainFrame(wx.Frame):
 

@@ -8,22 +8,15 @@ import pysolovideoGlobals as gbl
 from wx.lib.newevent import NewCommandEvent
 ThumbnailClickedEvt, EVT_THUMBNAIL_CLICKED = wx.lib.newevent.NewCommandEvent()
 
-class RedirectText(object):
-    def __init__(self,aWxTextCtrl):
-        self.out=aWxTextCtrl
-
-    def write(self, string):
-        wx.CallAfter(self.out.WriteText, string)
 
 class consolePanel(wx.TextCtrl):   # ------------------------------------------------ redirect sysout to scrolled textctrl
     def __init__(self, parent, size=(200,200)):                             # parent is the cfgPanel
         self.mon_ID = gbl.mon_ID                            # keep track of which monitor this console is for
-        style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH | wx.TE_AUTO_SCROLL | wx.HSCROLL | wx.VSCROLL | wx.EXPAND
+        style = wx.TE_MULTILINE | wx.TE_RICH | wx.TE_AUTO_SCROLL | wx.HSCROLL | wx.VSCROLL | wx.EXPAND
         wx.TextCtrl.__init__(self, parent, wx.ID_ANY, size=size, style=style, name=gbl.mon_name)
 
-    def flush(self):            # imitates a file-like object to avoid "no attribute 'flush'" error
-        pass
-
+    def writemsg(self, message):
+        self.AppendText(message + '\n')
 
 # ------------------------------------------------------------------------- creates a thread that plays a videoMonitor
 class videoThread (threading.Thread):                       # threading speeds up video processing
@@ -33,17 +26,18 @@ class videoThread (threading.Thread):                       # threading speeds u
         self.name = name
 
     def start(self):
-        self.monitorPanel.PlayMonitor()                        # start playing the video
+        self.monitorPanel.PlayMonitor()                             # start playing the video
 
 class trackingThread (threading.Thread):        #----------------------- creates a Thread that processes the video input
-    def __init__(self, trackedMonitor, consolePanel, mon_ID):
+    def __init__(self, parent, trackedMonitor, mon_ID):
         threading.Thread.__init__(self)
         self.trackedMonitor = trackedMonitor                # the tracking object
-        self.console = consolePanel                         # the output console
+        self.console = consolePanel(parent, size=gbl.thumb_size)                         # the output console
         self.mon_ID = mon_ID
         self.name = gbl.cfg_dict[self.mon_ID]['mon_name']
 
     def run(self):
+
         self.trackedMonitor.startTrack()
 
 
@@ -73,15 +67,15 @@ class scrollingWindow(wx.ScrolledWindow):     # ---------------------- contails 
                 self.thumbPanels[mon_count].monitorPanel.keepPlaying = False        # stop playing video
                 self.thumbPanels[mon_count].monitorPanel.playTimer.Stop()
                 self.thumbPanels[mon_count].monitorPanel.Hide()
-                self.thumbPanels[mon_count].monitorPanel.Destroy()
+                self.thumbPanels[mon_count]._Thread__stop()
                 del self.thumbPanels[mon_count]                    # delete the objects from the list.
-
+                gbl.numberOfTimers = gbl.numberOfTimers -1
 
 
         self.thumbGridSizer.Clear()                          # clear out gridsizer
 
     def refreshThumbGrid(self):  # -------------------------------------- Make array of thumbnails to populate the grid
-
+        oldMonID = gbl.mon_ID
         self.clearThumbGrid()
         # --------------------------------------------- go through each monitor configuration and make a thumbnail panel
         for gbl.mon_ID in range(1, gbl.monitors + 1):
@@ -96,25 +90,27 @@ class scrollingWindow(wx.ScrolledWindow):     # ---------------------- contails 
             self.thumbPanels[gbl.mon_ID].monitorPanel.playTimer.Start(interval)
             self.thumbGridSizer.Add(self.thumbPanels[gbl.mon_ID].monitorPanel, 1, wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        gbl.mon_ID = 0                          # this function is only called from the config panel (mon_ID = 0)
+        gbl.mon_ID = oldMonID                          # go back to same page we came from
+        if gbl.mon_ID != 0:
+            cfg.mon_dict_to_nicknames()
         self.SetSizer(self.thumbGridSizer)
         self.Layout()
 
     def refreshConsoleGrid(self):  # ------------------------------------- Make array of thumbnails to populate the grid
-
+        oldMon_ID = gbl.mon_ID
         self.clearThumbGrid()
         # --------------------------------------------- go through each monitor configuration and make a thumbnail panel
         for gbl.mon_ID in range(1, gbl.monitors + 1):
             cfg.mon_dict_to_nicknames()  # load monitor parameters to globals
 
             # create thread with tracked monitor and scroll panel and add to grid
-            self.thumbPanels.append(trackingThread(track.trackedMonitor(self, gbl.mon_ID),            # create tracked object
-                                    consolePanel(self, size=gbl.thumb_size), gbl.mon_ID))
+            self.thumbPanels.append(trackingThread(self, track.trackedMonitor(self, gbl.mon_ID), gbl.mon_ID))  # create tracked object
 
             self.thumbGridSizer.Add(self.thumbPanels[gbl.mon_ID].console, 1, wx.ALIGN_CENTER_HORIZONTAL, 5) # add console to scrolled window
             self.thumbPanels[gbl.mon_ID].trackedMonitor.startTrack()                            # start tracking
 
-        gbl.mon_ID = 0  # this function is only called from the config panel (mon_ID = 0)
+        gbl.mon_ID = oldMon_ID              # go back to the page we came from
+        cfg.mon_dict_to_nicknames()
         self.SetSizer(self.thumbGridSizer)
         self.Layout()
 

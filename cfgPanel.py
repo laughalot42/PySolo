@@ -34,12 +34,11 @@ import os
 import wx
 import wx.grid as gridlib
 import winsound
-import subprocess
+import subprocess                       # for DAMFileScan110X
 
 import pysolovideoGlobals as gbl
 import configurator as cfg
 import scrollingWindow as SW
-from filebrowsebutton_LL import FileBrowseButton
 from wx.lib.newevent import NewCommandEvent
 ThumbnailClickedEvt, EVT_THUMBNAIL_CLICKED = wx.lib.newevent.NewCommandEvent()
 
@@ -64,21 +63,15 @@ class cfgPanel(wx.Panel):
         self.settingsWidget()                                   # adjust thumbnail size and playback rate
 
     def cfgBrowseWidget(self):
-
-        # ----------------------------------------------------------------------------- select a different config file
-        wildcard = "PySolo Video config file (*.cfg)|*.cfg|" \
-                   "All files (*.*)|*.*"  # adding space in here will mess it up!
-
-        self.pickConfigFile = FileBrowseButton(self, id=wx.ID_ANY,
-                                               labelText='Configuration', buttonText='Browse',
-                                               dialogTitle='Choose a configuration file',
-                                               startDirectory=gbl.data_folder,
-                                               wildcard=wildcard, style=wx.ALL,
-                                               changeCallback=self.onChangeCfgFile, name='cfgBrowseButton')
+        self.pickCFGtxt = wx.StaticText(self, wx.ID_ANY, 'Configuration File: ')
+        self.pickCFGfile = wx.TextCtrl(self, wx.ID_ANY, size=(700,25), style=wx.TE_PROCESS_ENTER, name='cfgname')
+        self.pickCFGfile.SetValue(self.TopLevelParent.config.filePathName)
+        self.pickBrowseBtn = wx.Button(self, wx.ID_ANY, size=(130,25), label='Browse')
+        self.pickBrowseBtn.Enable(True)
 
     def tableWidget(self):
         # --------------------------------------------------------------------------------------------- create the table
-        self.colLabels = ['Monitor', 'Track type', 'Track', 'Source', 'Mask', 'Output']
+        self.colLabels = ['Monitor', 'Track type', 'Track', 'Source', 'Mask File', 'Output Prefix']
 
         self.cfgTable = gridlib.Grid(self)
         self.cfgTable.CreateGrid(gbl.monitors, len(self.colLabels))
@@ -103,8 +96,8 @@ class cfgPanel(wx.Panel):
         self.btnDAMFS = wx.Button(self, wx.ID_ANY, size=(130,25), label='DAMFileScan110X')                 # start DAMFileScan110X
         self.btnDAMFS.Enable(True)
 
-        self.btnSCAMP = wx.Button(self, wx.ID_ANY, size=(130,25), label='SCAMP')                 # start DAMFileScan110X
-        self.btnSCAMP.Enable(True)
+#        self.btnSCAMP = wx.Button(self, wx.ID_ANY, size=(130,25), label='SCAMP')                 # start DAMFileScan110X
+#        self.btnSCAMP.Enable(True)
 
     def videosWidget(self):
         # ----------------------------------------------------------------------------------------- scrolled thumbnails
@@ -121,16 +114,20 @@ class cfgPanel(wx.Panel):
         self.thumbFPS = wx.TextCtrl (self, wx.ID_ANY, str(gbl.thumb_fps), style=wx.TE_PROCESS_ENTER)
 
     def binders(self):      # ---------------------------------------------------------------------------------- binders
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeCfgFile,   self.pickCFGfile)           # change configuration
+        self.Bind(wx.EVT_BUTTON,        self.onBrowseCfgFile,   self.pickBrowseBtn)         # change configuration
         self.Bind(wx.EVT_BUTTON,        self.onAddMonitor,      self.btnAddMonitor)         # add monitor
         self.Bind(wx.EVT_BUTTON,        self.onStartAcquisition,self.btnStart)              # start data acquisition
         self.Bind(wx.EVT_BUTTON,        self.onSaveCfg,         self.btnSaveCfg)            # save configuration
         self.Bind(wx.EVT_BUTTON,        self.onDAMFileScan110X, self.btnDAMFS)              # start binning pgm
-        self.Bind(wx.EVT_TEXT_ENTER,    self.onthumbFPSnSize,   self.thumbFPS)              # update thumbnail FPS
-        self.Bind(wx.EVT_TEXT_ENTER,    self.onthumbFPSnSize,   self.thumbSize)             # update thumbnail size
+#        self.Bind(wx.EVT_BUTTON,        self.onSCAMP,           self.btnSCAMP)              # start SCAMP pgm
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeThumbFPS,        self.thumbFPS)              # update thumbnail FPS
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeThumbSize,       self.thumbSize)             # update thumbnail size
 
     def sizers(self):  # ----------------------------------------------------------------------------------- sizers
         self.cfgPanelSizer  = wx.BoxSizer(wx.VERTICAL)          # covers whole page
         self.upperSizer     = wx.BoxSizer(wx.HORIZONTAL)        # config table, browser, and buttons
+        self.pickCFGsizer = wx.BoxSizer(wx.HORIZONTAL)        # config browser
         self.tableSizer     = wx.BoxSizer(wx.VERTICAL)          # for browse button and config table
         self.btnSizer       = wx.BoxSizer(wx.VERTICAL)          # for button controls
         self.lowerSizer     = wx.BoxSizer(wx.VERTICAL)          # scrolled windows and settings
@@ -138,7 +135,12 @@ class cfgPanel(wx.Panel):
         self.settingsSizer  = wx.BoxSizer(wx.HORIZONTAL)        # fps and size settings
 
     # ------------------------------------------------------------------------------------ browser control and table
-        self.tableSizer.Add(self.pickConfigFile,    0, wx.ALIGN_CENTER | wx.EXPAND, 2)
+        self.pickCFGsizer.Add(self.pickCFGtxt,    0, wx.ALIGN_LEFT, 2)
+        self.pickCFGsizer.Add(self.pickCFGfile,   0, wx.ALIGN_CENTER | wx.EXPAND, 2)
+        self.pickCFGsizer.Add(self.pickBrowseBtn, 0, wx.ALIGN_RIGHT, 2)
+
+
+        self.tableSizer.Add(self.pickCFGsizer,    0, wx.ALIGN_CENTER | wx.EXPAND, 2)
         self.tableSizer.Add(self.cfgTable,          1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 2)
 
     # ------------------------------------------------------------------------------------------------------ buttons
@@ -146,7 +148,7 @@ class cfgPanel(wx.Panel):
         self.btnSizer.Add(self.btnAddMonitor,       1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
         self.btnSizer.Add(self.btnStart,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
         self.btnSizer.Add(self.btnDAMFS,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
-        self.btnSizer.Add(self.btnSCAMP,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
+#        self.btnSizer.Add(self.btnSCAMP,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 2)
 
     # ---------------------------------------------------------------------------------------------------- upper sizer
         self.upperSizer.AddSpacer(40)
@@ -177,13 +179,6 @@ class cfgPanel(wx.Panel):
         self.SetSizer(self.cfgPanelSizer)
         self.Layout()
 
-    def onthumbFPSnSize(self, event):
-        gbl.thumb_fps = gbl.correctType(self.thumbFPS.GetValue(), 'thumb_size')
-        gbl.thumb_size = gbl.correctType(self.thumbSize.GetValue(), 'thumb_fps')
-        cfg.cfg_nicknames_to_dicts()
-
-        self.scrolledThumbs.refreshThumbGrid()              # refresh thumbnails
-
     def onAddMonitor(self, event):      # ---------------------------------------------------------------    Add monitor
         """
         adds a monitor to the list then calls page-change to update the cfg page
@@ -200,9 +195,10 @@ class cfgPanel(wx.Panel):
 
         # -------------------------------------------------------------------- put new monitor settings in gbl nicknames
 
-
         gbl.cfg_dict.append({})                          # add a dictionary to the cfg_dict list
         gbl.mon_ID = gbl.monitors +1                     # update the current mon_ID
+        cfg.cfg_dict_to_nicknames()
+
         gbl.monitors += 1  # increase the number of monitors
         gbl.mon_name = 'Monitor%d' % gbl.mon_ID          # update the monitor name
 
@@ -213,13 +209,14 @@ class cfgPanel(wx.Panel):
             gbl.source = 'Webcam1'                      # only one webcam is supported, but multiple monitors can use it
 
         cfg.cfg_nicknames_to_dicts()    # ---------------------------------- save new configuration settings to cfg_dict
-        cfg.mon_nicknames_to_dicts()  # ----------------------------------------- apply new monitor settings to cfg_dict
+        cfg.mon_nicknames_to_dicts(gbl.mon_ID)  # ----------------------------------------- apply new monitor settings to cfg_dict
 
         # --------------------------------------------------------------------------------- add monitor page to notebook
         self.parent.addMonitorPage()
         gbl.mon_ID = 0                                                      # adding monitors happens on page 0
         self.TopLevelParent.theNotebook.onGoToPage(gbl.cfg_dict[0]['monitors'])         # leave notebook on new page
         gbl.mon_ID = gbl.cfg_dict[0]['monitors']
+        cfg.mon_dict_to_nicknames()
 
         self.scrolledThumbs.refreshThumbGrid()                   # create the thumbnail window
 
@@ -227,7 +224,8 @@ class cfgPanel(wx.Panel):
 
     def onSaveCfg(self, event):
         cfg.cfg_nicknames_to_dicts()        #  save any new settings to dictionary
-        cfg.mon_nicknames_to_dicts()
+        if gbl.mon_ID != 0:
+            cfg.mon_nicknames_to_dicts(gbl.mon_ID)
 
         r = self.TopLevelParent.config.cfgSaveAs(self)
         if r:                                                                                                   #       TODO: progress indicator of some sort?
@@ -238,11 +236,11 @@ class cfgPanel(wx.Panel):
             winsound.Beep(600,200)
 
     def fillTable(self):      # --------------------------------------- use cfg dictionary to fill in table
-                                                                              # and start threading
         currentrows = self.cfgTable.GetNumberRows()                 # clear the grid & resize to fit new configuration
         self.cfgTable.AppendRows(gbl.monitors, updateLabels=False)                  # add new rows to end
         self.cfgTable.DeleteRows(0, currentrows, updateLabels=False)                  # deletes old rows from beginning
 
+        oldMonID = gbl.mon_ID
         for gbl.mon_ID in range(1, gbl.monitors +1):
             #        columns are: 'Monitor', 'Track type', 'Track', 'Source', 'Mask', 'Output'
             #       row numbers are 0-indexed
@@ -275,29 +273,89 @@ class cfgPanel(wx.Panel):
             outfile = os.path.join(gbl.data_folder, gbl.mon_name)                                   # output file name
             self.cfgTable.SetCellValue(gbl.mon_ID -1, 5, outfile)
 
-        gbl.mon_ID = 0                              # staying on configuration page
+        gbl.mon_ID = oldMonID
+        if gbl.mon_ID != 0:
+            cfg.mon_dict_to_nicknames()
         self.cfgTable.AutoSize()                    # cell size based on contents
         self.Layout()
 
-    def onChangeCfgFile(self, event):       # ------------------------------------------------  new config file selected
+    def onChangeThumbFPS(self, event):
+        input = gbl.correctType(self.thumbFPS.GetValue(), 'thumb_fps')
+        if not (type(input) == int or type(input) == float):
+            input = gbl.thumb_fps                         # don't change the value if input wasn't a number
 
+        gbl.thumb_fps = input
         cfg.cfg_nicknames_to_dicts()
-        cfg.mon_nicknames_to_dicts()
+        self.scrolledThumbs.refreshThumbGrid()              # refresh thumbnails
+        self.thumbFPS.SetValue(input)
 
+    def onChangeThumbSize(self, event):
+        input = gbl.correctType(self.thumbSize.GetValue(), 'thumb_size')
+        if type(input) != tuple:
+            input = gbl.preview_size
 
-        self.TopLevelParent.config.cfgSaveAs(self)
+        gbl.thumb_size = input
+        cfg.cfg_nicknames_to_dicts()
+        self.scrolledThumbs.refreshThumbGrid()              # refresh thumbnails
+        self.thumbSize.SetValue(input)
 
-        newFile = self.pickConfigFile.GetValue()
+    def onBrowseCfgFile(self, event):
+        cfg.cfg_nicknames_to_dicts()
 
+        answer = self.TopLevelParent.config.wantToSave()        # save this config before loading new one?
+        if answer == wx.ID_YES:
+            self.TopLevelParent.config.cfgSaveAs(self)                  # yes -> save cfg file
+        elif answer == wx.ID_CANCEL:
+            return                                                  # cancel -> don't save & don't change cfg
+        else:
+            pass                                                    # no -> don't save, load new cfg
+
+        # ----------------------------------------------------------------------------- select a different config file
+        wildcard = "PySolo Video config file (*.cfg)|*.cfg|" \
+                   "All files (*.*)|*.*"  # adding space in here will mess it up!
+
+        dlg = wx.FileDialog(self,
+                            message = "Select Configuration File ...",
+                            defaultDir = gbl.cfg_path,
+                            wildcard = wildcard,
+                            style = (wx.FD_OPEN)
+                            )
+
+        # load new configuration file
+        if dlg.ShowModal() == wx.ID_OK:  # show the file browser window
+            self.filePathName = dlg.GetPath()  # get the path from the save dialog
+        else:
+            winsound.Beep(600,200)
+            gbl.statbar.SetStatusText('Config file selection failed in cfgPanel.')
+            return
+
+        self.changeConfig()
+
+    def onChangeCfgFile(self, event):       # ------------------------------------------------  new config file selected
+        cfg.cfg_nicknames_to_dicts()
+
+        answer = self.TopLevelParent.config.wantToSave()            # ask about saving configuration
+        if answer == wx.ID_YES:
+            self.TopLevelParent.config.cfgSaveAs(self)                  # do save
+        elif answer == wx.ID_CANCEL:
+            return                                                      # cancel changing cfg file
+        else:
+            pass                                                        # proceed without saving
+
+        self.filePathName = self.TopLevelParent.config.cfgGetFilePathName(self, possiblePathName=self.pickCFGfile.GetValue())   # make sure file exists
+
+        self.changeConfig()
+
+    def changeConfig(self):
         gbl.cfg_dict = [gbl.cfg_dict[0], gbl.cfg_dict[1]]   # remove all but monitors 1 from dictionary
-        cfg.Configuration(self, newFile)                    # initialize the new configuration
 
+        self.TopLevelParent.config = cfg.Configuration(self.TopLevelParent, self.filePathName)          # initialize the new configuration
         cfg.cfg_dict_to_nicknames()
-        cfg.mon_dict_to_nicknames()
 
         self.fillTable()                                    # put new configuration into the table
-        self.scrolledThumbs.refreshThumbGrid()                   # create the thumbnail window
+        self.scrolledThumbs.refreshThumbGrid()              # create the thumbnail window
         self.parent.repaginate()                            # add monitor pages to notebook & end on config page
+        self.pickCFGfile.SetValue(self.filePathName)
 
     def onStartAcquisition(self, event=None):
         """
@@ -314,7 +372,9 @@ class cfgPanel(wx.Panel):
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         process.wait()
 
-
+    """
+    def onSCAMP(self, event):
+    """
 
 # ------------------------------------------------------------------------------------------ Stand alone test code
 #  insert other classes above and call them in mainFrame

@@ -19,6 +19,7 @@ import pysolovideoGlobals as gbl
 #   The following functions transfer values from one type of storage to another:
 
 
+
 def cfg_nicknames_to_dicts():
     gbl.cfg_dict[0]['monitors'] = gbl.monitors
     gbl.cfg_dict[0]['webcams'] = gbl.webcams
@@ -33,22 +34,22 @@ def cfg_dict_to_nicknames():
     gbl.thumb_fps = gbl.cfg_dict[0]['thumb_fps']
     gbl.cfg_path = gbl.cfg_dict[0]['cfg_path']
 
-def mon_nicknames_to_dicts():
-    gbl.cfg_dict[gbl.mon_ID]['mon_name'] = gbl.mon_name
-    gbl.cfg_dict[gbl.mon_ID]['source_type'] = gbl.source_type
-    gbl.cfg_dict[gbl.mon_ID]['source'] = gbl.source
-    gbl.cfg_dict[gbl.mon_ID]['source_fps'] = gbl.source_fps
-    gbl.cfg_dict[gbl.mon_ID]['preview_size'] = gbl.preview_size
-    gbl.cfg_dict[gbl.mon_ID]['preview_fps'] = gbl.preview_fps
-    gbl.cfg_dict[gbl.mon_ID]['line_thickness'] = gbl.line_thickness
-    gbl.cfg_dict[gbl.mon_ID]['issdmonitor'] = gbl.issdmonitor
-    gbl.cfg_dict[gbl.mon_ID]['start_datetime'] = gbl.start_datetime
-    gbl.cfg_dict[gbl.mon_ID]['track'] = gbl.track
-    gbl.cfg_dict[gbl.mon_ID]['track_type'] = gbl.track_type
-    gbl.cfg_dict[gbl.mon_ID]['mask_file'] = gbl.mask_file
-    gbl.cfg_dict[gbl.mon_ID]['data_folder'] = gbl.data_folder
+def mon_nicknames_to_dicts(mon_ID):
+    gbl.cfg_dict[mon_ID]['mon_name'] = gbl.mon_name
+    gbl.cfg_dict[mon_ID]['source_type'] = gbl.source_type
+    gbl.cfg_dict[mon_ID]['source'] = gbl.source
+    gbl.cfg_dict[mon_ID]['source_fps'] = gbl.source_fps
+    gbl.cfg_dict[mon_ID]['preview_size'] = gbl.preview_size
+    gbl.cfg_dict[mon_ID]['preview_fps'] = gbl.preview_fps
+    gbl.cfg_dict[mon_ID]['line_thickness'] = gbl.line_thickness
+    gbl.cfg_dict[mon_ID]['issdmonitor'] = gbl.issdmonitor
+    gbl.cfg_dict[mon_ID]['start_datetime'] = gbl.start_datetime
+    gbl.cfg_dict[mon_ID]['track'] = gbl.track
+    gbl.cfg_dict[mon_ID]['track_type'] = gbl.track_type
+    gbl.cfg_dict[mon_ID]['mask_file'] = gbl.mask_file
+    gbl.cfg_dict[mon_ID]['data_folder'] = gbl.data_folder
 
-def mon_dict_to_nicknames():
+def mon_dict_to_nicknames():                                                ###### received bad cfg_dict
     gbl.mon_name = gbl.cfg_dict[gbl.mon_ID]['mon_name']
     gbl.source_type = gbl.cfg_dict[gbl.mon_ID]['source_type']
     gbl.source = gbl.cfg_dict[gbl.mon_ID]['source']
@@ -93,19 +94,19 @@ class Configuration(object):
             setValue(section, key, value)   sets the value for a configuration parameter and updates dictionary
     """
 
-    def __init__(self, parent, filePathName=gbl.cfg_path):
+    def __init__(self, parent, possiblePathName=gbl.cfg_path):
         """
         Initializes the configuration.
         """
-
+        self.parent = parent
         self.assignKeys()
 
     # ------------------------------------------------------ make sure the expected file exists or create a default file
-        if filePathName == '' :
+        if possiblePathName == '' :
             self.defaultDir = os.path.join(expanduser('~'), 'PySolo_Files') # define a default output directory
-            filePathName = os.path.join(self.defaultDir, 'pysolo_video.cfg')    # and filename
+            possiblePathName = os.path.join(self.defaultDir, 'pysolo_video.cfg')    # and filename
 
-        self.filePathName = self.cfgGetFilePathName(parent, filePathName)   # allow user to select a different configuration
+        self.filePathName = self.cfgGetFilePathName(parent, possiblePathName)   # allow user to select a different configuration
                                                                                 # cancelling will leave defaults in place
 
         self.loadConfigFile(self.filePathName)              # load the configuration file
@@ -133,13 +134,13 @@ class Configuration(object):
                          'mask_file',        # contains ROI coordinates
                          'data_folder']      # folder where output should be saved
 
-    def cfgGetFilePathName(self, parent, filePathName=''):  # ----------------------------  get config file path & name
+    def cfgGetFilePathName(self, parent, possiblePathName=''):  # ----------------------------  get config file path & name
         """
         Lets user select or create a config file, and makes sure it is valid
         """
         # if directory or file name are invalid, start file dialog
 
-        if not(os.path.isfile(filePathName)):
+        if not(os.path.isfile(possiblePathName)):
 
             wildcard = "PySolo Video config file (*.cfg)|*.cfg|" \
                        "All files (*.*)|*.*"  # adding space in here will mess it up!
@@ -154,13 +155,16 @@ class Configuration(object):
             if dlg.ShowModal() == wx.ID_OK:                         # show the file browser window
                 self.filePathName = dlg.GetPath()                   # get the filepath from the save dialog
             else:
-                self.filePathName = os.path.join(expanduser('~'), 'Pysolo_Files', 'pysolo_video.cfg')
+                self.filePathName = None                            # no filename was selected
 
             dlg.Destroy()
         else:                                                   # supplied filename was valid so use it
-            self.filePathName = filePathName
+            self.filePathName = possiblePathName
 
-        gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path = os.path.split(self.filePathName)[0]    # this file's path
+        if self.filePathName != None:
+            gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path = os.path.split(self.filePathName)[0]    # this file's path
+        else:
+            gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path = os.path.join(expanduser('~'), 'PySolo_Files')      # a default path
 
         return self.filePathName
 
@@ -176,11 +180,12 @@ class Configuration(object):
             self.cfg_Obj.set('Options', key, gbl.cfg_dict[0][key])
 
         gbl.monitors = gbl.cfg_dict[0]['monitors']
-        for gbl.mon_ID in range(1, gbl.monitors + 1):  # for each monitor make sure the
-            if not self.cfg_Obj.has_section(gbl.cfg_dict[gbl.mon_ID]['mon_name']):  # monitor section exists in cfg_obj
+        for gbl.mon_ID in range(1, gbl.monitors + 1):  # for each monitor make sure the monitor section exists in cfg_obj
+            mon_dict_to_nicknames()
+            if not self.cfg_Obj.has_section(gbl.cfg_dict[gbl.mon_ID]['mon_name']):
                 self.cfg_Obj.add_section(gbl.cfg_dict[gbl.mon_ID]['mon_name'])
 
-            for key in self.mon_keys:  # add parameters to this monitor section
+            for key in self.mon_keys:  # add parameters to this monitor section              ###################  - this is where date(2) = 1970
                 self.cfg_Obj.set(gbl.cfg_dict[gbl.mon_ID]['mon_name'], key, gbl.cfg_dict[gbl.mon_ID][key])
 
     def cfg_to_dicts(self):  # ---------------------------------------  use config parser object to update dictionary
@@ -219,7 +224,7 @@ class Configuration(object):
 
 #            if gbl.source[0:6] == 'Webcam':  # count the number of webcams
 #                gbl.webcams_inuse.append(gbl.mon_name)
-
+        print('check')
 #        gbl.webcams = len(gbl.webcams_inuse)
 
 
@@ -231,9 +236,9 @@ class Configuration(object):
             self.cfg_Obj.read(self.filePathName)               # read the selected configuration file
 
         except:                                             # otherwise just use the default config dictionary as is
-            print('Invalid configuration file.  Creating default.')
+            print('Invalid configuration file input.  Creating default.')
             self.dict_to_cfg_Obj()                       # apply the default configuration to the cfg object
-            self.cfgSaveAs(self)                         # save the cfg object to a cfg file
+            self.cfgSaveAs(self.parent)                         # save the cfg object to a cfg file
 
         self.cfg_to_dicts()                                # update the config dictionary from the config file
 
@@ -275,6 +280,14 @@ class Configuration(object):
         configfile.close()
 
         return True
+
+    def wantToSave(self):
+        dlg = wx.MessageDialog(self.parent, 'Do you want to save the current configuration?',
+                               style=wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+        answer = dlg.ShowModal()
+        dlg.Destroy()
+        return answer
+
 
     def getValue(self, section, key):       # ------------- get cfg object string and convert into value of correct type
         """

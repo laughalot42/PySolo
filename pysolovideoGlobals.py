@@ -64,7 +64,7 @@ source = 'Webcam1'
 source_fps = 0.5
 preview_size = (480, 480)
 preview_fps = 1
-line_thickness = 3
+line_thickness = 2
 issdmonitor = False
 start_datetime = wx.DateTime_Now()
 track_type = 0
@@ -94,22 +94,20 @@ cfg_dict = [{                                               # create the default
         'track'         : track,
         'track_type'    : track_type,
         'mask_file'     : mask_file,
-        'data_folder'   : data_folder
+        'data_folder'   : data_folder,
+        'line_thickness': line_thickness
         }]
 
 # ------------------------------------------------------------------------------------ Timer Dictionary
-global timer_dict, numberOfTimers
-global thread_dict
+global numberOfTimers
 
-timer_dict = {}                       # keeps list of timers (method, mon_name, enabled)
 numberOfTimers = 0
-thread_dict = {}                      # keeps list of threads (method, mon_name, enabled)
 
 # ------------------------------------------------------------------- miscellaneous globals
-global ROIs
+global ROIs, genmaskflag
 
 ROIs = []               # temporary storage for ROIs
-genmaskflag = False     # change to true on clicking mask generator button
+genmaskflag = False     # changes to true when new mask is created
 
 
 
@@ -119,8 +117,11 @@ def correctType(r, key):
     """
     changes string r into appropriate type (int, datetime, tuple, etc.)
     """
+#    theYear = gbl.start_datetime.GetCurrentYear()  # change the wx.DateTime year representation to 4 digits for datepickerctrl
+#    gbl.start_datetime.SetYear(theYear)
+#    self.start_date.SetValue(gbl.start_datetime)
 
-    if key == 'start_datetime':  # order of conditional test is important! do this first!
+    if key == 'start_datetime':  # order of conditional test is important! do this first!           ###### -1 ok
         if type(r) == type(wx.DateTime.Now()):
             pass
         elif type(r) == type(''):  # string -> datetime value
@@ -209,18 +210,17 @@ def makeMaskFrames(ROIs, size):
 
     # ---------------------------------------------------------------------------------------- create transparent frame
     npsize = (size[1], size[0])                     # opencv and np use opposite order
-    trans_frame = np.ones(npsize, np.uint8)          # binary frame for creating mask
+    mask_frame = np.ones(npsize, np.uint8)          # binary frame for creating mask
 
+    if not ROIs: ROIs = []
     # ---------------------------------------------------------------------------------------- draw ROIs in red channel
     for roi in ROIs:
         for count in range(0, 4):
-            cv2.line(trans_frame, roi[count], roi[count + 1], (0,0,0), line_thickness)
+            cv2.line(mask_frame, roi[count], roi[count + 1], 0, line_thickness)        # zeros in regions that will be masked, ones in regions that won't
 
-    mask = np.dstack((trans_frame, trans_frame, trans_frame))           # stacks 3 trans_frames so each color has ROIs
+    mask = np.dstack((mask_frame, mask_frame, mask_frame))           # stacks 3 mask_frames so each color has ROIs that won't be covered by other colors
     mask = mask.astype(np.uint8)
-    redmask = np.dstack((np.zeros(npsize, np.uint8), np.zeros(npsize, np.uint8), (1-trans_frame)*255))   # applies mask to red only
-
-    genmaskflag = False                     # reset mask generator flag
+    redmask = np.dstack(((1-mask_frame)*255, np.zeros(npsize, np.uint8), np.zeros(npsize, np.uint8)))   # applies mask to red only
 
     return mask, redmask
 
@@ -233,8 +233,26 @@ def pydatetime2wxdatetime(pydt):  # ---------------------- convert python dateti
 def string2wxdatetime(strdt):  # ---------------------------------------- convert string to wx.datetime
     wxdt = wx.DateTime()
     wxdt.ParseDateTime(strdt)
-    return wxdt
 
-def wxdatetime2string(datetime):
+    chkYear = wxdt.GetYear()             # two-digit years will cause problems later.    # TODO: better way to handle 2-digit year problems?
+    thisYear = wx.DateTime.Now()
+    thisYear = thisYear.GetYear()
+    if chkYear < 1900:
+        if chkYear < (thisYear - 2000) :
+            wxdt.SetYear(chkYear + 2000)
+        else:
+            wxdt.SetYear(chkYear + 1900)
+
+    return wxdt                     ###### -1 year fixed
+
+def wxdatetime2timestring(datetime):
     strdt = datetime.FormatISOTime()
     return strdt
+
+def get_DateTime(date, time):   #---------------------------------- convert string date and string time to wx.datetime
+    date = date.GetValue()
+    time = time.GetValue(as_wxTimeSpan=True)
+    wxdt = date.AddTS(time)
+    return wxdt                                             # return changes the date!  ???
+
+

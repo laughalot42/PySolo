@@ -123,7 +123,7 @@ class FileBrowseButton(wx.Panel):
 
     def createTextControl(self):
         """Create the text control"""
-        textControl = wx.TextCtrl(self, -1, name=self.name)
+        textControl = wx.TextCtrl(self, -1, style=wx.TE_PROCESS_ENTER, name=self.name)
         textControl.SetToolTipString(self.toolTip)
         if self.changeCallback:
             textControl.Bind(wx.EVT_TEXT, self.OnChanged)

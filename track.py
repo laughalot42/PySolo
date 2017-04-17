@@ -71,6 +71,39 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
 
         self.ROIs = gbl.loadROIsfromMaskFile(gbl.mask_file)  # -----------------------------------------------------ROIs
 
+    def getCoordsArray(self):
+        keepgoing = True
+        fly_coords = []                                 # table of coordinates of flies in each ROI for each frame
+        frameCount = 0
+        # ------------------------------------------------ make 2D array of fly coordinates for every ROI in every frame
+        while keepgoing:                     # goes through WHOLE video
+            # each of the 3 video input classes has a "getImage" function.
+            # CaptureMovie is either webcam, video, or a folder
+            frame = self.captureMovie.getImage()                # get image
+            frameCount = frameCount + 1
+            self.parent.thumbPanels[self.mon_ID].console.writemsg('monitor %d, frame %d' % (self.mon_ID, frameCount))
+            self.parent.thumbPanels[self.mon_ID].console.SetFocus()
+            if frame != None:
+                bw_image = self.prepImage(frame)                    # convert image to B&W and reduce noise
+                fly_coords.append(self.getFrameFlyCoords(bw_image)) # append coordinates for every ROI in this frame
+            else:
+                keepgoing = False
+
+        return fly_coords
+
+    def calcDistances(self, fly_coords):
+        # ------------------------------------------------------- in one minute increments, tabulate the distances moved
+        # AFTER whole video is finished, do calculations
+        distByMinute = []  # this is the tracking data we're producing
+        self.previousFrame = fly_coords[0]
+        for frameCount in range(0, len(fly_coords), int(60 * self.fps)):  # for each one minute interval
+            subsetCoordinates = fly_coords[
+                                frameCount:(frameCount + int(60 * self.fps))]  # get distance value for each ROI
+            distByMinute.append(
+                self.getDistances(subsetCoordinates, frameCount))  # append to array of distance calculations
+
+        return distByMinute
+
     def startTrack(self, show_raw_diff=False, drawPath=True):  # ---------------------------------------- begin tracking
         """
         Each frame is compared against the moving average
@@ -78,37 +111,32 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         """
 
         gbl.statbar.SetStatusText('Tracking started: ' + self.mon_name)
-        self.keepPlaying = True
 
-        fly_coords = []                                 # table of coordinates of flies in each ROI for each frame
-        frameCount = 0
-        # ------------------------------------------------ make 2D array of fly coordinates for every ROI in every frame
-        while self.keepPlaying:                     # goes through WHOLE video
-            """ identify the ROIs on the video """
+        fly_coords = self.getCoordsArray()                       # finds coordinates of flies in each ROI in each frame
+        distByMinute = self.calcDistances(fly_coords)            # calculates distance each fly travelled in each minute
+        outputArrays = self.colSplit32(distByMinute)             # splits data into 32 ROI groups
 
-            # each of the 3 video input classes has a "getImage" function.
-            # CaptureMovie is either webcam, video, or a folder
-            frame = self.captureMovie.getImage()                # get image
-            frameCount = frameCount + 1
-            print('monitor %d, frame %d' % (self.mon_ID, frameCount))
-            if frame != None:
-                bw_image = self.prepImage(frame)                    # convert image to B&W and reduce noise
-                fly_coords.append(self.getFrameFlyCoords(bw_image)) # append coordinates for every ROI in this frame
-            else:
-                self.keepPlaying = False
+        self.outputprefix = self.checkFilenames(len(outputArrays))      # prevents overwriting of files
 
-        # ------------------------------------------------------- in one minute increments, tabulate the distances moved
-        # AFTER whole video is finished, do calculations
-        distByMinute = []                                      # this is the tracking data we're producing
-        self.previousFrame = fly_coords[0]
-        for frameCount in range(0, len(fly_coords), int(60*self.fps)):                  # for each one minute interval
-            subsetCoordinates = fly_coords[frameCount:(frameCount + int(60*self.fps))]  #   get distance value for each ROI
-            distByMinute.append(self.getDistances(subsetCoordinates, frameCount))      # append to array of distance calculations
+        for batch in range(0, len(outputArrays)):                  # output the files
+            outputfile = self.outputprefix + str(batch + 1) + '.txt'  # create a filename for saving
 
-        # --------------------------------------------------------- add datetime and break into 32 ROIs per array
-        self.colSplit32(distByMinute)
+            f_out = open(outputfile, 'a')
+            for rownum in range(0, len(outputArrays[batch])):
+                f_out.write(outputArrays[batch][rownum])       # save "part" to the file in tab delimited format
+                self.parent.thumbPanels[self.mon_ID].console.writemsg(outputArrays[batch][rownum])
+                self.parent.thumbPanels[self.mon_ID].console.SetFocus()
+            f_out.close()
 
-        print('time to output the files')
+            filename = os.path.split(self.outputprefix)[1]
+
+        if filename == '':
+            gbl.statbar.SetStatusText('Cancelled.')
+        else:
+            gbl.statbar.SetStatusText('Done. Output file names start with:  ' + filename)
+
+        self.parent.thumbPanels[self.mon_ID].console.writemsg('Acquisition of Monitor %d is finished.' % self.mon_ID)
+        self.parent.thumbPanels[self.mon_ID].console.SetFocus()
 
     def colSplit32(self, array):
         oneMinute = wx.TimeSpan(0,1,0,0)
@@ -116,10 +144,9 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         parts = []
         for rowdata in array:                           # determine how many files are needed
             if rownum == 1:
-                self.numofParts = int(math.ceil((len(rowdata)-10)/32.0))         # number of separate files needed
-                for num in range(0, self.numofParts):
+                numofParts = int(math.ceil((len(rowdata)-10)/32.0))         # number of separate files needed
+                for num in range(0, numofParts):
                     parts.append([])                            # create an empty list for each file to be created
-
 
                 realdatetime = self.start_datetime              # get the date and time for this row of data
             else:
@@ -131,7 +158,7 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
             prefix = prefix + '\t'.join(['1']*7)                                    # next 7 columns are not used
 
 
-            for batch in range(0, self.numofParts):               # add 32 columns to each part
+            for batch in range(0, numofParts):               # add 32 columns to each part
                 datastring = prefix
                 startcol = batch * 32
                 endcol = startcol + 32
@@ -143,36 +170,20 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
 
             rownum = rownum +1
 
-        if len(rowdata) != self.numofParts * 32:                    # need to fill empty columns with zeroes
-            morecols = (self.numofParts * 32) - len(rowdata)
-            for rownum in range(0, len(parts[self.numofParts - 1])):
-                parts[self.numofParts - 1][rownum] = parts[self.numofParts - 1][rownum][0:-1] + \
+        if len(rowdata) != numofParts * 32:                    # need to fill empty columns with zeroes
+            morecols = (numofParts * 32) - len(rowdata)
+            for rownum in range(0, len(parts[numofParts - 1])):
+                parts[numofParts - 1][rownum] = parts[numofParts - 1][rownum][0:-1] + \
                                                 '\t' + '\t'.join(list(repeat('0', morecols))) + '\n'
+        return parts
 
-        self.outputprefix = self.checkFilenames()
-
-        for batch in range(0, self.numofParts):
-            outputfile = self.outputprefix + str(batch + 1) + '.txt'  # create a filename for saving
-
-            f_out = open(outputfile, 'a')
-            for rownum in range(0, len(parts[batch])):
-                f_out.write(parts[batch][rownum])       # save "part" to the file in tab delimited format
-
-            f_out.close()
-
-            filename = os.path.split(self.outputprefix)[1]
-
-        if filename == '':
-            gbl.statbar.SetStatusText('Cancelled.')
-        else:
-            gbl.statbar.SetStatusText('Done. Output file names start with:  ' + filename)
 
     def tryNewName(self):
-        wildcard = "Monitor File Prefix (*.txt)|*.txt|" \
-                   "All files (*.*)|*.*"  # adding space in here will mess it up!
+        wildcard = "File Prefix |*.txt|" \
+                       "All files (*.*)|*.*"
 
         dlg = wx.FileDialog(self.parent,
-                            message="Choose a different output prefix ...",
+                            message="Choose a different output prefix for Monitor %d ..." % self.mon_ID,
                             wildcard=wildcard,
                             style=wx.SAVE,
                             )
@@ -185,21 +196,22 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         dlg.Destroy()
         return self.outputprefix
 
-    def checkFilenames(self):       # ----------------------------- gets valid output name and avoids overwriting
+    def checkFilenames(self, numofParts):       # ----------------------------- gets valid output name and avoids overwriting
         goodname = False
         if not os.path.isdir(os.path.split(self.outputprefix)[0]):          # ------ directory must exist
             self.outputprefix = self.tryNewName()
 
         while not goodname:
-            goodname = True  # change back to false if there's a problem
-            for batch in range(0, self.numofParts):                             # ------ check for each output file
+            for batch in range(0, numofParts):                             # ------ check for each output file
                 outputfile = self.outputprefix + str(batch + 1) + '.txt'  # create a filename for saving
 
-                if os.path.isfile(outputfile) and goodname == True:
-                    gbl.statbar.SetValue('Avoid overwrite: File -> ' + outputfile + ' <- already exists.')
+                if os.path.isfile(outputfile):
+                    gbl.statbar.SetStatusText('Avoid overwrite: File -> ' + outputfile + ' <- already exists.')
                     winsound.Beep(600, 200)
                     goodname = False                            # stop testing filenames
                     self.outputprefix = self.tryNewName()       # ask for a new prefix
+                else:
+                    goodname = True
 
             return self.outputprefix
 
