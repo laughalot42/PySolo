@@ -22,14 +22,14 @@ import pysolovideoGlobals as gbl
 
 def cfg_nicknames_to_dicts():
     gbl.cfg_dict[0]['monitors'] = gbl.monitors
-    gbl.cfg_dict[0]['webcams'] = gbl.webcams
+#    gbl.cfg_dict[0]['webcams'] = gbl.webcams
     gbl.cfg_dict[0]['thumb_size'] = gbl.thumb_size
     gbl.cfg_dict[0]['thumb_fps'] = gbl.thumb_fps
     gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path
 
 def cfg_dict_to_nicknames():
     gbl.monitors = gbl.cfg_dict[0]['monitors']
-    gbl.webcams = gbl.cfg_dict[0]['webcams']
+#    gbl.webcams = gbl.cfg_dict[0]['webcams']
     gbl.thumb_size = gbl.cfg_dict[0]['thumb_size']
     gbl.thumb_fps = gbl.cfg_dict[0]['thumb_fps']
     gbl.cfg_path = gbl.cfg_dict[0]['cfg_path']
@@ -94,28 +94,33 @@ class Configuration(object):
             setValue(section, key, value)   sets the value for a configuration parameter and updates dictionary
     """
 
-    def __init__(self, parent, possiblePathName=gbl.cfg_path):
+    def __init__(self, parent, possiblePathName=None):
         """
         Initializes the configuration.
         """
+        if possiblePathName is None:  possiblePathName = gbl.cfg_path
         self.parent = parent
         self.assignKeys()
 
     # ------------------------------------------------------ make sure the expected file exists or create a default file
         if possiblePathName == '' :
-            self.defaultDir = os.path.join(expanduser('~'), 'PySolo_Files') # define a default output directory
+            self.defaultDir = os.path.join(expanduser('~'), 'Documents', 'PySolo_Files') # define a default output directory
             possiblePathName = os.path.join(self.defaultDir, 'pysolo_video.cfg')    # and filename
 
         self.filePathName = self.cfgGetFilePathName(parent, possiblePathName)   # allow user to select a different configuration
                                                                                 # cancelling will leave defaults in place
 
-        self.loadConfigFile(self.filePathName)              # load the configuration file
-
+        if self.filePathName is not None:
+            self.loadConfigFile(self.filePathName)              # load the configuration file
+        else:
+            self.filePathName = 'None Selected'
+            self.cfg_Obj = ConfigParser.RawConfigParser()       # create a ConfigParser object for when it's time to save
+            # just keep using the global variables until the user saves the file
 
     def assignKeys(self):        # -------------------------------------------------------------- configuration keywords
 
         self.opt_keys = ['monitors',        # number of monitors in the configuration
-                         'webcams',         # number of available webcams
+#                         'webcams',         # number of available webcams
                          'thumb_size',      # size to use for thumbnails
                          'thumb_fps',        # speed to use for thumbnails
                          'cfg_path']        # folder where configuration file is kept
@@ -161,10 +166,10 @@ class Configuration(object):
         else:                                                   # supplied filename was valid so use it
             self.filePathName = possiblePathName
 
-        if self.filePathName != None:
+        if self.filePathName is not None:
             gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path = os.path.split(self.filePathName)[0]    # this file's path
         else:
-            gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path = os.path.join(expanduser('~'), 'PySolo_Files')      # a default path
+            gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path = os.path.join(expanduser('~'), 'Documents', 'PySolo_Files')      # a default path
 
         return self.filePathName
 
@@ -195,7 +200,7 @@ class Configuration(object):
         Remaining element's indices indicate monitor number.
         """
 
-        gbl.webcams_inuse = []  # webcam names will be added to list and counted
+#        gbl.webcams_inuse = []  # webcam names will be added to list and counted
         # ------------------------------------------------------------------------------------------------------ Options
         if not self.cfg_Obj.has_section('Options'):         # make sure the options section exists in the cfg object
             self.cfg_Obj.add_section('Options')
@@ -232,9 +237,9 @@ class Configuration(object):
         """ --------------------------------------------------------------------- create the ConfigParser object """
         self.filePathName = filePathName
         self.cfg_Obj = ConfigParser.RawConfigParser()               # create a ConfigParser object
-        try:
-            self.cfg_Obj.read(self.filePathName)               # read the selected configuration file
 
+        try:  # -------  file could be corrupted
+            self.cfg_Obj.read(self.filePathName)               # read the selected configuration file
         except:                                             # otherwise just use the default config dictionary as is
             print('Invalid configuration file input.  Creating default.')
             self.dict_to_cfg_Obj()                       # apply the default configuration to the cfg object

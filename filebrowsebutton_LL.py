@@ -331,6 +331,7 @@ class DirBrowseButton(FileBrowseButton):
                  toolTip='Type directory name or browse to select',
                  dialogTitle='',
                  startDirectory='.',
+                 value = '',
                  changeCallback=None,
                  dialogClass=wx.DirDialog,
                  newDirectory=False,
@@ -338,7 +339,7 @@ class DirBrowseButton(FileBrowseButton):
         FileBrowseButton.__init__(self, parent, id, pos, size,
                                   labelText, buttonText, toolTip,
                                   dialogTitle, startDirectory,
-                                  initialValue="", wildcard = "*.*",
+                                  initialValue=value, wildcard = "*.*",
                                   style= wx.FD_OPEN,
                                   changeCallback=changeCallback,
                                   labelWidth = 0, name=name)

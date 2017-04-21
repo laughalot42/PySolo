@@ -20,23 +20,25 @@ exec_dir = sys.path[0]    # folder containing the scripts for this program
 
 # -------------------------------------------------- nicknames for general configuration parameters
 global monitors, \
-    webcams, \
     thumb_size, \
     thumb_fps, \
     cfg_path, \
     thumbPanels, \
+    threadsStarted, \
+    timersStarted, \
     trackers, \
     statbar
 
 monitors = 1
-webcams = 1
+# webcams = 1
 thumb_size = (320,240)
 thumb_fps = 5
-cfg_path = os.path.join(expanduser('~'), 'PySolo_Files')
+cfg_path = os.path.join(expanduser('~'), 'Documents', 'PySolo_Files')
 
-thumbPanels = ['']                  # list of thumbnail panels used in scrolled window on configuration page
+thumbPanels = ['thumb panels']                  # list of thumbnail panels used in scrolled window on configuration page
                                                  # element 0 identifies the type of list
-
+threadsStarted  = []              # list of threads started
+timersStarted = []
 trackers = []                       # list of trackers for acquiring data.  index does not match cfg_dict
                                                 # since not all monitors are necessarily tracked
 statbar = ''
@@ -60,7 +62,7 @@ global mon_ID, \
 mon_ID = 1   # always at least one monitor.  use it to initialize
 mon_name = 'Monitor1'
 source_type = 0
-source = 'Webcam1'
+source = None
 source_fps = 0.5
 preview_size = (480, 480)
 preview_fps = 1
@@ -69,15 +71,15 @@ issdmonitor = False
 start_datetime = wx.DateTime_Now()
 track_type = 0
 track = True
-mask_file = 'None'
-data_folder = os.path.join(expanduser('~'), 'PySolo_Files')
+mask_file = None
+data_folder = os.path.join(expanduser('~'), 'Documents', 'PySolo_Files')
 
 # --------------------------------------------------------------------- cfg_dict contains all configuration settings
 global cfg_dict
 
 cfg_dict = [{                                               # create the default config dictionary
         'monitors'      : monitors,                        # element 0 is the options dictionary
-        'webcams'       : webcams,                        # number of webcams available, not necessarily in use
+#        'webcams'       : webcams,                        # number of webcams available, not necessarily in use
         'thumb_size'    : thumb_size,
         'thumb_fps'     : thumb_fps,
         'cfg_path'      : cfg_path
@@ -121,23 +123,19 @@ def correctType(r, key):
 #    gbl.start_datetime.SetYear(theYear)
 #    self.start_date.SetValue(gbl.start_datetime)
 
-    if key == 'start_datetime':  # order of conditional test is important! do this first!           ###### -1 ok
+    if key == 'start_datetime':  # order of conditional test is important! do this first!
         if type(r) == type(wx.DateTime.Now()):
             pass
         elif type(r) == type(''):  # string -> datetime value
-            try:
+            try:    # ------  string may not be decipherable
                 r = string2wxdatetime(r)
             except:
                 r = wx.DateTime.Now()
         elif type(r) == type(datetime.datetime.now()):
-            try:
                 r = pydatetime2wxdatetime(r)
-            except:
-                r = wx.DateTime.Now()
         else:
-            r = wx.DateTime.Now()
             print('$$$$$$ could not interpret start_datetime value')
-            return r
+            r = wx.DateTime.Now()
 
         return r
 
@@ -154,16 +152,16 @@ def correctType(r, key):
 
         return r
 
-    try:
-        int(r) == int(0)  # int
+    try:    # ------  test to see if the value is an integer
+        int(r)
         return int(r)
-    except Exception:
+    except:
         pass
 
-    try:
-        float(r) == float(1.1)  # float
+    try:    # ------  test to see if the value is a floating point number
+        float(r)
         return float(r)
-    except Exception:
+    except:
         pass
 
     if ',' in r:  # tuple of two integers
@@ -179,10 +177,11 @@ def correctType(r, key):
 def loadROIsfromMaskFile(mask_file):      # ------------------------------------------------------ read Mask file
 
     if mask_file is None:
-        return False  # there is no mask file
+        ROIs = []
+        return ROIs             # there is no mask file
 
     if os.path.isfile(mask_file):  # if mask file is there, try to load ROIs
-        try:
+        try:    # ------ mask file may be corrupt
             cf = open(mask_file, 'r')  # read mask file
             ROItuples = cPickle.load(cf)  # list of 4 tuple sets describing rectangles on the image
             cf.close()
@@ -256,3 +255,11 @@ def get_DateTime(date, time):   #---------------------------------- convert stri
     return wxdt                                             # return changes the date!  ???
 
 
+def del_started_item(theList, mon_ID):
+    try:
+        for count in range(0, len(theList)):
+            if theList[count][0] == mon_ID:
+                del theList[count]
+
+            print('pause')                                                                                                              ###### debug
+    except: pass

@@ -33,7 +33,6 @@ __license__ = "Python"
 import wx
 import os
 import cv2
-import cv2.cv as cv
 import numpy as np
 import pysolovideoGlobals as gbl
 import configurator as cfg
@@ -41,6 +40,9 @@ import videoMonitor as VM
 import math
 from itertools import repeat  # generate tab-delimited zeroes to fill in extra columns
 import winsound
+
+# TODO: monitors are being tracked one at a time
+
 
 class trackedMonitor(wx.Panel):                                    # TODO: why does this need to be a panel?  does it matter?
     def __init__(self, parent, mon_ID):
@@ -54,22 +56,37 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         self.loop = False                       # never loop tracking
         self.keepPlaying = False                # don't start yet
         self.source = gbl.source
+        self.source_type = gbl.source_type
         self.devnum = 0                         # only one camera is currently supported
         self.fps = gbl.source_fps
         self.start_datetime = gbl.start_datetime
-        self.outputprefix = os.path.join(gbl.data_folder, self.mon_name)     # path to folder where output will be saved
+        self.mask_file = gbl.mask_file
+        self.data_folder = gbl.data_folder
+        self.outputprefix = os.path.join(self.data_folder, self.mon_name)     # path to folder where output will be saved
+        self.console = self.consolePanel(parent, size=gbl.thumb_size)                         # the output console
+
 
         # ---------------------------------------- use the sourcetype to create the correct type of object for capture
-        if gbl.source_type == 0:
+        if self.source_type == 0:
             self.captureMovie = VM.realCam(self.mon_ID, 1, devnum=0)
-        elif gbl.source_type == 1:
+        elif self.source_type == 1:
             self.captureMovie = VM.virtualCamMovie(self.mon_ID, 1, self.source, loop=False)
-        elif gbl.source_type == 2:
+        elif self.source_type == 2:
             self.captureMovie = VM.virtualCamFrames(self.mon_ID, 1, self.source, loop=False)
 
         (self.cols, self.rows) = self.size = self.captureMovie.initialSize
 
-        self.ROIs = gbl.loadROIsfromMaskFile(gbl.mask_file)  # -----------------------------------------------------ROIs
+        self.ROIs = gbl.loadROIsfromMaskFile(self.mask_file)  # -----------------------------------------------------ROIs
+
+    class consolePanel(
+        wx.TextCtrl):  # ------------------------------------------------ redirect sysout to scrolled textctrl
+        def __init__(self, parent, size=(200, 200)):  # parent is the cfgPanel
+            self.mon_ID = gbl.mon_ID  # keep track of which monitor this console is for
+            style = wx.TE_MULTILINE | wx.TE_RICH | wx.TE_AUTO_SCROLL | wx.HSCROLL | wx.VSCROLL | wx.TE_READONLY
+            wx.TextCtrl.__init__(self, parent, wx.ID_ANY, size=size, style=style, name=gbl.mon_name)
+
+        def writemsg(self, message):
+            self.AppendText(message + '\n')
 
     def getCoordsArray(self):
         keepgoing = True
@@ -81,9 +98,9 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
             # CaptureMovie is either webcam, video, or a folder
             frame = self.captureMovie.getImage()                # get image
             frameCount = frameCount + 1
-            self.parent.thumbPanels[self.mon_ID].console.writemsg('monitor %d, frame %d' % (self.mon_ID, frameCount))
-            self.parent.thumbPanels[self.mon_ID].console.SetFocus()
-            if frame != None:
+            self.parent.trackedConsoles[self.mon_ID].writemsg('monitor %d, frame %d' % (self.mon_ID, frameCount))
+            self.parent.trackedConsoles[self.mon_ID].SetFocus()
+            if frame is not None:
                 bw_image = self.prepImage(frame)                    # convert image to B&W and reduce noise
                 fly_coords.append(self.getFrameFlyCoords(bw_image)) # append coordinates for every ROI in this frame
             else:
@@ -124,8 +141,8 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
             f_out = open(outputfile, 'a')
             for rownum in range(0, len(outputArrays[batch])):
                 f_out.write(outputArrays[batch][rownum])       # save "part" to the file in tab delimited format
-                self.parent.thumbPanels[self.mon_ID].console.writemsg(outputArrays[batch][rownum])
-                self.parent.thumbPanels[self.mon_ID].console.SetFocus()
+                self.parent.trackedConsoles[self.mon_ID].writemsg(outputArrays[batch][rownum])
+                self.parent.trackedConsoles[self.mon_ID].SetFocus()
             f_out.close()
 
             filename = os.path.split(self.outputprefix)[1]
@@ -135,8 +152,8 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         else:
             gbl.statbar.SetStatusText('Done. Output file names start with:  ' + filename)
 
-        self.parent.thumbPanels[self.mon_ID].console.writemsg('Acquisition of Monitor %d is finished.' % self.mon_ID)
-        self.parent.thumbPanels[self.mon_ID].console.SetFocus()
+        self.parent.trackedConsoles[self.mon_ID].writemsg('Acquisition of Monitor %d is finished.' % self.mon_ID)
+        self.parent.trackedConsoles[self.mon_ID].SetFocus()
 
     def colSplit32(self, array):
         oneMinute = wx.TimeSpan(0,1,0,0)
@@ -154,8 +171,8 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
 
 
             prefix = str(rownum) + '\t' + realdatetime.Format('%d %b %y')           # column 0 is the row number, column 1 is the date
-            prefix = prefix + '\t' + realdatetime.Format('%H:%M:%S') +'\t'          # column 2 is the time
-            prefix = prefix + '\t'.join(['1']*7)                                    # next 7 columns are not used
+            prefix = prefix + '\t' + realdatetime.Format('%H:%M:%S')                # column 2 is the time
+            prefix = prefix + '\t1\t1\t0\t0\t0\t0\t0'                               # next 7 columns are not used but DAMFileScan110X does not take 0000000 or 1111111
 
 
             for batch in range(0, numofParts):               # add 32 columns to each part
@@ -177,16 +194,14 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
                                                 '\t' + '\t'.join(list(repeat('0', morecols))) + '\n'
         return parts
 
-
     def tryNewName(self):
+        defaultDir = os.path.split(self.outputprefix)[0]
         wildcard = "File Prefix |*.txt|" \
                        "All files (*.*)|*.*"
 
         dlg = wx.FileDialog(self.parent,
                             message="Choose a different output prefix for Monitor %d ..." % self.mon_ID,
-                            wildcard=wildcard,
-                            style=wx.SAVE,
-                            )
+                            defaultDir=defaultDir, wildcard=wildcard, style=wx.SAVE)
 
         if dlg.ShowModal() == wx.ID_OK:  # show the file browser window
             self.outputprefix = dlg.GetPath()[0:-4]  # get the filepath & name from the save dialog, don't use extension
@@ -201,19 +216,20 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         if not os.path.isdir(os.path.split(self.outputprefix)[0]):          # ------ directory must exist
             self.outputprefix = self.tryNewName()
 
-        while not goodname:
+        while not goodname:                                     # test to see if files will be overwritten
+            goodname = True     # assume name is good until proven otherwise
             for batch in range(0, numofParts):                             # ------ check for each output file
                 outputfile = self.outputprefix + str(batch + 1) + '.txt'  # create a filename for saving
 
-                if os.path.isfile(outputfile):
+                if goodname  and  os.path.isfile(outputfile):
                     gbl.statbar.SetStatusText('Avoid overwrite: File -> ' + outputfile + ' <- already exists.')
                     winsound.Beep(600, 200)
-                    goodname = False                            # stop testing filenames
-                    self.outputprefix = self.tryNewName()       # ask for a new prefix
-                else:
-                    goodname = True
+                    goodname = False
 
-            return self.outputprefix
+            if not goodname:
+                self.outputprefix = self.tryNewName()       # ask for a new prefix
+
+        return self.outputprefix
 
     def getDistances(self, coords, currentFrame):   # ------------------------- tabulates distance travelled by each fly
         totalDists = np.zeros(len(self.ROIs), dtype=int)     # tabulation of distances travelled in each ROI throughout video
@@ -288,249 +304,6 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         return ((fly_rect[0] + fly_rect[2] / 2),     # x-coordinate
                  (fly_rect[1] + fly_rect[3] / 2))  # y-coordinate
 
-
-    def hasSource(self):
-        return self.cam != None
-
-    def setSource(self, camera, resolution, options=None):
-        """
-        Set source intelligently
-        """
-        try:
-            camera = int(camera)
-        except:
-            pass
-
-        if type(camera) == type(0):
-            self.CaptureFromCAM(camera, resolution, options)
-        elif os.path.isfile(camera):
-            self.CaptureFromMovie(camera, resolution, options)
-        elif os.path.isdir(camera):
-            self.CaptureFromFrames(camera, resolution, options)
-
-    def setTracking(self, track, trackType=0, mask_file='', outputFile=''):
-        """
-        Set the tracking parameters
-
-        track       Boolean     Do we do tracking of flies?
-        trackType   0           tracking using the virtual beam method
-                    1 (Default) tracking calculating distance moved
-        mask_file   text        the file used to load and store masks
-        outputFile  text        the txt file where results will be saved
-        """
-
-        if trackType == None: trackType = 0
-        if mask_file == None: mask_file = ''
-        if outputFile == None: outputFile = ''
-
-        self.track = track
-        self.arena.trackType = int(trackType)
-        self.mask_file = mask_file
-        self.arena.outputFile = outputFile
-
-        if mask_file:
-            self.loadROIS(mask_file)
-
-    def getFrameTime(self):
-        """
-        """
-        return self.cam.getFrameTime()
-
-    def isLastFrame(self):
-        """
-        Proxy to isLastFrame()
-        Handled by camera
-        """
-        return self.cam.isLastFrame()
-
-    def saveMovie(self, filename, fps=24, codec='FMP4', startOnKey=False):
-        """
-        Determines whether all the frames grabbed through getImage will also
-        be saved as movie.
-
-        filename                           the full path to the file to be written
-        fps             24   (Default)     number of frames per second
-        codec           FMP4 (Default)     codec to be used
-
-        http://stackoverflow.com/questions/5426637/writing-video-with-opencv-python-mac
-        """
-        fourcc = cv.CV_FOURCC(*[c for c in codec])
-
-        self.writer = cv.CreateVideoWriter(filename, fourcc, fps, self.resolution, 1)
-        self.grabMovie = not startOnKey
-
-    def saveSnapshot(self, *args, **kwargs):
-        """
-        proxy to saveSnapshot
-        """
-        self.cam.saveSnapshot(*args, **kwargs)
-
-    def SetLoop(self,loop):
-        """
-        Set Loop on or off.
-        Will work only in virtual cam mode and not realCam
-        Return current loopmode
-        """
-        if self.isVirtualCam:
-            self.cam.loop = loop
-            return self.cam.loop
-        else:           
-            return False
-
-    def findOuterFrame(self, img, thresh=50):
-        """
-        EXPERIMENTAL
-        Find the greater square
-        """
-        N = 11
-        sz = (img.width & -2, img.height & -2)
-        storage = cv.CreateMemStorage(0)
-        timg = cv.CloneImage(img)
-        gray = cv.CreateImage(sz, 8, 1)
-        pyr = cv.CreateImage((img.width / 2, img.height / 2), 8, 3)
-
-        squares = []
-        # select the maximum ROI in the image
-        # with the width and height divisible by 2
-        subimage = cv.GetSubRect(timg, (0, 0, sz[0], sz[1]))
-
-        # down-scale and upscale the image to filter out the noise
-        cv.PyrDown(subimage, pyr, 7)
-        cv.PyrUp(pyr, subimage, 7)
-        tgray = cv.CreateImage(sz, 8, 1)
-        # find squares in every color plane of the image
-        for c in range(3):
-            # extract the c-th color plane
-            channels = [None, None, None]
-            channels[c] = tgray
-            cv.Split(subimage, channels[0], channels[1], channels[2], None)
-            for l in range(N):
-                # hack: use Canny instead of zero threshold level.
-                # Canny helps to catch squares with gradient shading
-                if (l == 0):
-                    cv.Canny(tgray, gray, 0, thresh, 5)
-                    cv.Dilate(gray, gray, None, 1)
-                else:
-                    # apply threshold if l!=0:
-                    #     tgray(x, y) = gray(x, y) < (l+1)*255/N ? 255 : 0
-                    cv.Threshold(tgray, gray, (l + 1) * 255 / N, 255, cv.CV_THRESH_BINARY)
-
-                # find contours and store them all as a list
-                contours = cv.FindContours(gray, storage, cv.CV_RETR_LIST, cv.CV_CHAIN_APPROX_SIMPLE)
-
-                if not contours:
-                    continue
-
-                    contour = contours
-                    totalNumberOfContours = 0
-                    while (contour.h_next() != None):
-                        totalNumberOfContours = totalNumberOfContours + 1
-                        contour = contour.h_next()
-                    # test each contour
-                    contour = contours
-                    # print 'total number of contours %d' % totalNumberOfContours                                                # debug
-                    contourNumber = 0
-
-                    while (contourNumber < totalNumberOfContours):
-
-                        # print 'contour #%d' % contourNumber                                                # debug
-                        # print 'number of points in contour %d' % len(contour)                                                # debug
-                        contourNumber = contourNumber + 1
-
-                        # approximate contour with accuracy proportional
-                        # to the contour perimeter
-                        result = cv.ApproxPoly(contour, storage,
-                                               cv.CV_POLY_APPROX_DP, cv.ArcLength(contour) * 0.02, 0)
-
-                        # square contours should have 4 vertices after approximation
-                        # relatively large area (to filter out noisy contours)
-                        # and be convex.
-                        # Note: absolute value of an area is used because
-                        # area may be positive or negative - in accordance with the
-                        # contour orientation
-                        if (len(result) == 4 and
-                                    abs(cv.ContourArea(result)) > 500 and
-                                cv.CheckContourConvexity(result)):
-                            s = 0
-                            for i in range(5):
-                                # find minimum angle between joint
-                                # edges (maximum of cosine)
-                                if (i >= 2):
-                                    t = abs(self.__angle(result[i % 4], result[i - 2], result[i - 1]))
-                                    if s < t:
-                                        s = t
-                            # if cosines of all angles are small
-                            # (all angles are ~90 degree) then write quandrange
-                            # vertices to resultant sequence
-                            if (s < 0.3):
-                                pt = [result[i] for i in range(4)]
-                                squares.append(pt)
-                                print ('current # of squares found %d' % len(squares))
-                        contour = contour.h_next()
-
-            return squares
-
-    def maskImage(self, drawROIs=False, selection=None, crosses=None, timestamp=False):
-        """
-        GetImage(self, drawROIs = False, selection=None, timestamp=0)
-
-        drawROIs       False        (Default)   Will draw all ROIs to the image
-                       True
-
-        selection      (x1,y1,x2,y2)            A four point selection to be drawn
-
-        crosses        (x,y),(x1,y1)            A list of tuples containing single point coordinates
-
-        timestamp      True                     Will add a timestamp to the bottom right corner
-                       False        (Default)
-
-        Returns the last collected image
-        """
-        self.imageCount += 1
-        frame = self.cam.getImage(timestamp)
-
-        if timestamp: frame = self.__drawFPS(frame)
-
-        if frame:
-
-            if self.tracking: frame = self.doTrack(frame, show_raw_diff=False, drawPath=self.drawPath)
-
-            if drawROIs and self.arena.ROIS:
-                ROInum = 0
-                for ROI, beam in zip(self.arena.ROIS, self.arena.beams):
-                    ROInum += 1
-                    frame = self.__drawROI(frame, ROI, ROInum=ROInum)
-                    frame = self.__drawBeam(frame, beam)
-
-            if selection:
-                frame = self.__drawROI(frame, selection, color=(0, 0, 255))
-
-            if crosses:
-                for pt in crosses:
-                    frame = self.__drawCross(frame, pt, color=(0, 0, 255))
-
-            if self.grabMovie: cv.WriteFrame(self.writer, frame)
-
-
-        return frame
-
-    def processFlyMovements(self):
-
-
-        """
-        Decides what to do with the data
-        Called every frame
-        """
-        ct = self.getFrameTime()
-        self.__tempFPS += 1
-        delta = (ct - self.lasttime)
-
-        if delta >= 1:  # if one second has elapsed
-            self.lasttime = ct
-            self.arena.compactSeconds(self.__tempFPS,
-                                      delta)  # average the coordinates and transfer from buffer to array
-            self.processingFPS = self.__tempFPS;
-            self.__tempFPS = 0
 
 
 
