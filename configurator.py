@@ -21,48 +21,54 @@ import pysolovideoGlobals as gbl
 
 
 def cfg_nicknames_to_dicts():
-    gbl.cfg_dict[0]['monitors'] = gbl.monitors
-#    gbl.cfg_dict[0]['webcams'] = gbl.webcams
+    gbl.cfg_dict[0]['monitors'] =   gbl.monitors
+#    gbl.cfg_dict[0]['webcams'] =    gbl.webcams
     gbl.cfg_dict[0]['thumb_size'] = gbl.thumb_size
-    gbl.cfg_dict[0]['thumb_fps'] = gbl.thumb_fps
-    gbl.cfg_dict[0]['cfg_path'] = gbl.cfg_path
+    gbl.cfg_dict[0]['thumb_fps'] =  gbl.thumb_fps
+    gbl.cfg_dict[0]['cfg_path'] =   gbl.cfg_path
 
 def cfg_dict_to_nicknames():
-    gbl.monitors = gbl.cfg_dict[0]['monitors']
-#    gbl.webcams = gbl.cfg_dict[0]['webcams']
-    gbl.thumb_size = gbl.cfg_dict[0]['thumb_size']
-    gbl.thumb_fps = gbl.cfg_dict[0]['thumb_fps']
-    gbl.cfg_path = gbl.cfg_dict[0]['cfg_path']
+    gbl.monitors =      gbl.cfg_dict[0]['monitors']
+#    gbl.webcams =       gbl.cfg_dict[0]['webcams']
+    gbl.thumb_size =    gbl.cfg_dict[0]['thumb_size']
+    gbl.thumb_fps =     gbl.cfg_dict[0]['thumb_fps']
+    gbl.cfg_path =      gbl.cfg_dict[0]['cfg_path']
 
 def mon_nicknames_to_dicts(mon_ID):
-    gbl.cfg_dict[mon_ID]['mon_name'] = gbl.mon_name
-    gbl.cfg_dict[mon_ID]['source_type'] = gbl.source_type
-    gbl.cfg_dict[mon_ID]['source'] = gbl.source
-    gbl.cfg_dict[mon_ID]['source_fps'] = gbl.source_fps
-    gbl.cfg_dict[mon_ID]['preview_size'] = gbl.preview_size
-    gbl.cfg_dict[mon_ID]['preview_fps'] = gbl.preview_fps
-    gbl.cfg_dict[mon_ID]['line_thickness'] = gbl.line_thickness
-    gbl.cfg_dict[mon_ID]['issdmonitor'] = gbl.issdmonitor
-    gbl.cfg_dict[mon_ID]['start_datetime'] = gbl.start_datetime
-    gbl.cfg_dict[mon_ID]['track'] = gbl.track
-    gbl.cfg_dict[mon_ID]['track_type'] = gbl.track_type
-    gbl.cfg_dict[mon_ID]['mask_file'] = gbl.mask_file
-    gbl.cfg_dict[mon_ID]['data_folder'] = gbl.data_folder
+    gbl.cfg_dict[mon_ID]['mon_name'] =          gbl.mon_name
+    gbl.cfg_dict[mon_ID]['source_type'] =       gbl.source_type
+    gbl.cfg_dict[mon_ID]['source'] =            gbl.source
+    gbl.cfg_dict[mon_ID]['source_fps'] =        gbl.source_fps
+    gbl.cfg_dict[mon_ID]['source_mmsize'] =     gbl.source_mmsize
+    gbl.cfg_dict[mon_ID]['preview_size'] =      gbl.preview_size
+    gbl.cfg_dict[mon_ID]['preview_fps'] =       gbl.preview_fps
+    gbl.cfg_dict[mon_ID]['preview_font'] =      gbl.preview_font
+    gbl.cfg_dict[mon_ID]['preview_RGBcolor'] =  gbl.preview_RGBcolor
+    gbl.cfg_dict[mon_ID]['line_thickness'] =    gbl.line_thickness
+    gbl.cfg_dict[mon_ID]['issdmonitor'] =       gbl.issdmonitor
+    gbl.cfg_dict[mon_ID]['start_datetime'] =    gbl.start_datetime
+    gbl.cfg_dict[mon_ID]['track'] =             gbl.track
+    gbl.cfg_dict[mon_ID]['track_type'] =        gbl.track_type
+    gbl.cfg_dict[mon_ID]['mask_file'] =         gbl.mask_file
+    gbl.cfg_dict[mon_ID]['data_folder'] =       gbl.data_folder
 
 def mon_dict_to_nicknames():                                                ###### received bad cfg_dict
-    gbl.mon_name = gbl.cfg_dict[gbl.mon_ID]['mon_name']
-    gbl.source_type = gbl.cfg_dict[gbl.mon_ID]['source_type']
-    gbl.source = gbl.cfg_dict[gbl.mon_ID]['source']
-    gbl.source_fps = gbl.cfg_dict[gbl.mon_ID]['source_fps']
-    gbl.preview_size = gbl.cfg_dict[gbl.mon_ID]['preview_size']
-    gbl.preview_fps = gbl.cfg_dict[gbl.mon_ID]['preview_fps']
-    gbl.line_thickness = gbl.cfg_dict[gbl.mon_ID]['line_thickness']
-    gbl.issdmonitor = gbl.cfg_dict[gbl.mon_ID]['issdmonitor']
-    gbl.start_datetime = gbl.cfg_dict[gbl.mon_ID]['start_datetime']
-    gbl.track = gbl.cfg_dict[gbl.mon_ID]['track']
-    gbl.track_type = gbl.cfg_dict[gbl.mon_ID]['track_type']
-    gbl.mask_file = gbl.cfg_dict[gbl.mon_ID]['mask_file']
-    gbl.data_folder = gbl.cfg_dict[gbl.mon_ID]['data_folder']
+    gbl.mon_name =          gbl.cfg_dict[gbl.mon_ID]['mon_name']
+    gbl.source_type =       gbl.cfg_dict[gbl.mon_ID]['source_type']
+    gbl.source =            gbl.cfg_dict[gbl.mon_ID]['source']
+    gbl.source_fps =        gbl.cfg_dict[gbl.mon_ID]['source_fps']
+    gbl.source_mmsize =     gbl.cfg_dict[gbl.mon_ID]['source_mmsize']
+    gbl.preview_size =      gbl.cfg_dict[gbl.mon_ID]['preview_size']
+    gbl.preview_fps =       gbl.cfg_dict[gbl.mon_ID]['preview_fps']
+    gbl.preview_font =      gbl.cfg_dict[gbl.mon_ID]['preview_font']
+    gbl.preview_RGBcolor =  gbl.cfg_dict[gbl.mon_ID]['preview_RGBcolor']
+    gbl.line_thickness =    gbl.cfg_dict[gbl.mon_ID]['line_thickness']
+    gbl.issdmonitor =       gbl.cfg_dict[gbl.mon_ID]['issdmonitor']
+    gbl.start_datetime =    gbl.cfg_dict[gbl.mon_ID]['start_datetime']
+    gbl.track =             gbl.cfg_dict[gbl.mon_ID]['track']
+    gbl.track_type =        gbl.cfg_dict[gbl.mon_ID]['track_type']
+    gbl.mask_file =         gbl.cfg_dict[gbl.mon_ID]['mask_file']
+    gbl.data_folder =       gbl.cfg_dict[gbl.mon_ID]['data_folder']
 
 
 
@@ -120,24 +126,27 @@ class Configuration(object):
     def assignKeys(self):        # -------------------------------------------------------------- configuration keywords
 
         self.opt_keys = ['monitors',        # number of monitors in the configuration
-#                         'webcams',         # number of available webcams
+#                         'webcams',        # number of available webcams
                          'thumb_size',      # size to use for thumbnails
-                         'thumb_fps',        # speed to use for thumbnails
+                         'thumb_fps',       # speed to use for thumbnails
                          'cfg_path']        # folder where configuration file is kept
 
         self.mon_keys = ['mon_name',        # name of monitor
-                         'source_type',      # type of source (webcam = 0, video = 1, folder of images = 2)
+                         'source_type',     # type of source (webcam = 0, video = 1, folder of images = 2)
                          'source',          # source file or webcam identifier
-                         'source_fps',       # speed of video
+                         'source_fps',      # speed of video
+                         'source_mmsize',   # physical frame size in mm
                          'issdmonitor',     # is sleep deprivation monitor
                          'preview_size',    # size to use for full size video display
                          'preview_fps',     # speed to use for full size video display
-                         'line_thickness',   # thickness of line around ROIs
+                         'preview_font',    # font to use for display column numbers
+                         'preview_RGBcolor',# color to use for video display mask
+                         'line_thickness',  # thickness of line around ROIs
                          'start_datetime',  # date and time experiment started
                          'track',           # track this monitor or not?
-                         'track_type',       # type of tracking to be used
-                         'mask_file',        # contains ROI coordinates
-                         'data_folder']      # folder where output should be saved
+                         'track_type',      # type of tracking to be used
+                         'mask_file',       # contains ROI coordinates
+                         'data_folder']     # folder where output should be saved
 
     def cfgGetFilePathName(self, parent, possiblePathName=''):  # ----------------------------  get config file path & name
         """
@@ -205,9 +214,11 @@ class Configuration(object):
         if not self.cfg_Obj.has_section('Options'):         # make sure the options section exists in the cfg object
             self.cfg_Obj.add_section('Options')
 
-        for key in self.opt_keys:  # fill dictionary with project parameters
-            if self.cfg_Obj.has_option('Options', key):         # otherwise just leave the dictionary option as is
+        for key in self.opt_keys:                               # fill dictionary with project parameters
+            if self.cfg_Obj.has_option('Options', key):
                 gbl.cfg_dict[0][key] = self.getValue('Options', key)
+            else:                                               # add the option
+                gbl.cfg_dict[0][key] = None                         # I don't think this should have happened.
 
         # ----------------------------------------------------------------------------------------------------- Monitors
         gbl.monitors = gbl.cfg_dict[0]['monitors'] = len(self.cfg_Obj._sections) -1        # item 0 is options, not a monitor
@@ -225,7 +236,7 @@ class Configuration(object):
                 if self.cfg_Obj.has_option(gbl.mon_name,key):
                     gbl.cfg_dict[gbl.mon_ID][key] = self.getValue(gbl.mon_name, key)  # copy config info into dictionary
                 else:
-                    gbl.cfg_dict[gbl.mon_ID][key] = 0               # if key not in cfg_obj, fill in with zero
+                    gbl.cfg_dict[gbl.mon_ID][key] = gbl.cfg_dict[1][key]        # use setting from monitor 1
 
 #            if gbl.source[0:6] == 'Webcam':  # count the number of webcams
 #                gbl.webcams_inuse.append(gbl.mon_name)

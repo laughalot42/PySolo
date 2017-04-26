@@ -11,8 +11,8 @@ import pysolovideoGlobals as gbl
 
 # TODO: datetimes are not working.  they look fine on the maskpanel, but are wrong in the configuration
 #                   they change randomly when unrelated statements are executed.
-# TODO: preview panel too large for actual image
 # TODO: removed live camera option.  tracking doesn't stop because camera doesn't stop.
+
 
 class maskMakerPanel(wx.Panel):
     #
@@ -29,14 +29,17 @@ class maskMakerPanel(wx.Panel):
         cfg.mon_dict_to_nicknames()
         self.start_datetime =   gbl.start_datetime
         self.mon_name =         gbl.mon_name
-        self.preview_size =      gbl.preview_size
-        self.preview_fps =       gbl.preview_fps
-        self.line_thickness =    gbl.line_thickness
+        self.preview_size =     gbl.preview_size
+        self.preview_fps =      gbl.preview_fps
+        self.preview_font =     gbl.preview_font
+        self.preview_RGBcolor = gbl.preview_RGBcolor
+        self.line_thickness =   gbl.line_thickness
         self.source =           gbl.source
         self.monitors =         gbl.monitors
         self.data_folder =      gbl.data_folder
         self.source_type =      gbl.source_type
         self.source_fps =       gbl.source_fps
+        self.source_mmsize =    gbl.source_mmsize
         self.issdmonitor =      gbl.issdmonitor
         self.track_type =       gbl.track_type
         self.track =            gbl.track
@@ -66,6 +69,14 @@ class maskMakerPanel(wx.Panel):
         self.previewFPSLabel = wx.StaticText(self, wx.ID_ANY, 'preview fps =')         # --------- preview video fps
         self.previewFPS = wx.TextCtrl(self, wx.ID_ANY, str(self.preview_fps),
                                               style=wx.TE_PROCESS_ENTER, name='previewFPS')
+
+        self.previewFontLabel = wx.StaticText(self, wx.ID_ANY, 'preview font =')         # --------- preview video fps
+        self.previewFont = wx.TextCtrl(self, wx.ID_ANY, str(self.preview_font),
+                                              style=wx.TE_PROCESS_ENTER, name='previewFont')
+
+        self.previewRGBColorLabel = wx.StaticText(self, wx.ID_ANY, 'preview color (RGB) =')         # --------- preview video fps
+        self.previewRGBColor = wx.TextCtrl(self, wx.ID_ANY, str(self.preview_RGBcolor),
+                                              style=wx.TE_PROCESS_ENTER, name='previewRGBColor')
 
         self.lineThicknessLabel = wx.StaticText(self, wx.ID_ANY, 'ROI line thickness =')  # --------- preview ROI line thickness
         self.lineThickness = wx.TextCtrl(self, wx.ID_ANY, str(self.line_thickness),
@@ -163,16 +174,20 @@ class maskMakerPanel(wx.Panel):
                                                  name='pickOutputBrowser')
 
    # ------------------------------------------------------------------------------------------------- video attributes
-        self.sourceFPSLabel = wx.StaticText(self, wx.ID_ANY, 'Speed (fps) =')           # ---------------- source fps
+        self.txtSourceFPS = wx.StaticText(self, wx.ID_ANY, 'Speed (fps) =')           # ---------------- source fps
         self.sourceFPS = wx.TextCtrl (self, wx.ID_ANY, str(self.source_fps),
                                               style=wx.TE_PROCESS_ENTER, name='sourceFPS')
+
+        self.txtSourceMMSize = wx.StaticText(self, wx.ID_ANY, 'Frame Size (mm)')           # ---------------- source fps
+        self.sourceMMSize = wx.TextCtrl (self, wx.ID_ANY, str(self.source_mmsize),
+                                              style=wx.TE_PROCESS_ENTER, name='sourceMMSize')
 
         self.txtDate = wx.StaticText(self, wx.ID_ANY, "Date: ")                        # ---------------- start date
         self.startDate = wx.DatePickerCtrl(self, wx.ID_ANY, dt=self.start_datetime,
                                             style=wx.DP_DROPDOWN | wx.DP_SHOWCENTURY | wx.TE_PROCESS_ENTER, name='start_date')
 
 
-        self.txtTime = wx.StaticText(self, wx.ID_ANY, 'Time (24-hr): ')                 # ---------------- start time
+        self.txtTime = wx.StaticText(self, wx.ID_ANY, 'Time (24-hr):  ')                 # ---------------- start time
         self.btnSpin = wx.SpinButton(self, wx.ID_ANY, wx.DefaultPosition, (-1, 20), wx.SP_VERTICAL)
         starttime = gbl.wxdatetime2timestring(self.start_datetime)
         self.startTime = masked.TimeCtrl(self, wx.ID_ANY, value=starttime,
@@ -248,8 +263,11 @@ class maskMakerPanel(wx.Panel):
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSource1,       self.sources[1])
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSource2,       self.sources[2])
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSourceFPS,     self.sourceFPS)
+        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSourceMMSize,  self.sourceMMSize)
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewSize,   self.previewSize)
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewFPS,    self.previewFPS)
+        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewFont,   self.previewFont)
+        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewRGBColor,self.previewRGBColor)
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeLineThickness, self.lineThickness)
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeOutput,        self.pickOutputBrowser)
         self.Bind(wx.EVT_TEXT_ENTER,        self.onMaskBrowse,          self.pickMaskBrowser)
@@ -268,10 +286,13 @@ class maskMakerPanel(wx.Panel):
         self.sbSizer_maskNoutput    = wx.StaticBoxSizer(self.sb_maskNoutput, wx.VERTICAL)       #   |   |   |   select box
         self.maskBrowserSizer       = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   |   |   mask browser
         self.outputDirSizer         = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   |   |   output dir browser
-        self.right_MiddleSizer        = wx.BoxSizer(wx.HORIZONTAL)                              #   |   |   right_ middle
+        self.right_MiddleSizer      = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   right_ middle
         self.sb_timeSettings        = wx.StaticBox(self, wx.ID_ANY, 'Time Settings')            #   |   |   |   time settings text
         self.sbSizer_timeSettings   = wx.StaticBoxSizer(self.sb_timeSettings, wx.VERTICAL)      #   |   |   |   time settings box
         self.dt_Sizer               = wx.FlexGridSizer(3, 2, 2, 2)                              #   |   |   |   |   |   datetimefps widgets
+        self.sb_SourceParms         = wx.StaticBox(self, wx.ID_ANY, 'Source Parameters')        #   |   |   |   source parameters text
+        self.sbSizer_SourceParms    = wx.StaticBoxSizer(self.sb_SourceParms, wx.VERTICAL)       #   |   |   |   source parameters box
+        self.source_Sizer           = wx.FlexGridSizer(2, 2, 2, 2)                              #   |   |   |   |   |   source options widgets
 #        self.sb_trackingParms       = wx.StaticBox(self, wx.ID_ANY, 'Tracking Parameters')     #   |   |   |   tracking parameters text
 #        self.sbSizer_trackingParms  = wx.StaticBoxSizer(self.sb_trackingParms, wx.VERTICAL)    #   |   |   tracking parameters box
 #        self.trackOptionsSizer      = wx.BoxSizer(wx.VERTICAL)                                 #   |   |   |   |   |   tracking options widgets
@@ -285,23 +306,23 @@ class maskMakerPanel(wx.Panel):
         self.titleSizer             = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   Monitor title
         self.saveNdeleteSizer       = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   save and delete buttons
         self.videoSizer             = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   video panel
-        self.settingsSizer          = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   preview settings
+        self.settingsSizer          = wx.FlexGridSizer(2, 6, 2, 2)                                  #   |   |   preview settings
 
 
         # ------------------------------------------------------------------------------ left_ Side  Video Preview Panel
         #                                      this sizer saves the spot in left_Sizer in case video is changed later
         self.videoSizer.Add(self.previewPanel,                          1, wx.ALL | wx.ALIGN_TOP | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
 
-        self.settingsSizer.AddSpacer(5)
-        self.settingsSizer.Add(self.previewSizeLabel,                   0, wx.ALL | wx.EXPAND, 5)
-        self.settingsSizer.Add(self.previewSize,                        0, wx.ALL | wx.EXPAND, 5)
-        self.settingsSizer.AddSpacer(5)
-        self.settingsSizer.Add(self.previewFPSLabel,                    0, wx.ALL | wx.EXPAND, 5)
-        self.settingsSizer.Add(self.previewFPS,                         0, wx.ALL | wx.EXPAND, 5)
-        self.settingsSizer.AddSpacer(5)
+        self.settingsSizer.Add(self.previewFontLabel,                   0, wx.ALL | wx.EXPAND, 5)
+        self.settingsSizer.Add(self.previewFont,                        0, wx.ALL | wx.EXPAND, 5)
+        self.settingsSizer.Add(self.previewRGBColorLabel,               0, wx.ALL | wx.EXPAND, 5)
+        self.settingsSizer.Add(self.previewRGBColor,                    0, wx.ALL | wx.EXPAND, 5)
         self.settingsSizer.Add(self.lineThicknessLabel,                 0, wx.ALL | wx.EXPAND, 5)
         self.settingsSizer.Add(self.lineThickness,                      0, wx.ALL | wx.EXPAND, 5)
-        self.settingsSizer.AddSpacer(5)
+        self.settingsSizer.Add(self.previewSizeLabel,                   0, wx.ALL | wx.EXPAND, 5)
+        self.settingsSizer.Add(self.previewSize,                        0, wx.ALL | wx.EXPAND, 5)
+        self.settingsSizer.Add(self.previewFPSLabel,                    0, wx.ALL | wx.EXPAND, 5)
+        self.settingsSizer.Add(self.previewFPS,                         0, wx.ALL | wx.EXPAND, 5)
 
         self.saveNdeleteSizer.Add(self.btnSaveCfg,                      1, wx.ALL, 5)
         self.saveNdeleteSizer.Add(self.btnRemoveMonitor,                1, wx.ALL, 5)
@@ -327,20 +348,25 @@ class maskMakerPanel(wx.Panel):
         self.sbSizer_maskNoutput.Add(self.pickMaskBrowser,              1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
         self.sbSizer_maskNoutput.Add(self.pickOutputBrowser,            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
 
-        # --------------------------------------------------------------------------------- time, tracking, buttons row
-        # ------------------------------------------------------------------------ date / time / fps grid
+        # --------------------------------------------------------------------------- time, source, tracking buttons row
+        # ------------------------------------------------------------------------ date / time  grid
         self.dt_Sizer.Add(self.txtDate,                                 0, wx.ALL, 5)
         self.dt_Sizer.Add(self.startDate,                               0, wx.ALL, 5)
 
         self.dt_Sizer.Add(self.txtTime,                                 0, wx.ALL, 5)
         self.addWidgets(self.dt_Sizer, [self.startTime, self.btnSpin])
 
-        self.dt_Sizer.Add(self.sourceFPSLabel,                          0, wx.ALL, 5)
-        self.dt_Sizer.Add(self.sourceFPS,                               0, wx.ALL, 5)
-
         # fill video start date and time box
         self.sbSizer_timeSettings.Add(self.dt_Sizer,                    0, wx.ALL, 5)
 
+        # -------------------------------------------------------------------------------- source options
+        self.source_Sizer.Add(self.txtSourceMMSize,               0, wx.ALL | wx.ALIGN_LEFT, 5)
+        self.source_Sizer.Add(self.sourceMMSize,                  0, wx.ALL | wx.ALIGN_LEFT, 5)
+
+        self.source_Sizer.Add(self.txtSourceFPS,                  0, wx.ALL | wx.ALIGN_LEFT, 5)
+        self.source_Sizer.Add(self.sourceFPS,                     0, wx.ALL | wx.ALIGN_LEFT, 5)
+
+        self.sbSizer_SourceParms.Add(self.source_Sizer)
         """
         # -------------------------------------------------------------------------------- tracking options
         self.trackOptionsSizer.Add(self.trackBox,                       0, wx.ALL | wx.ALIGN_LEFT, 5)
@@ -356,6 +382,7 @@ class maskMakerPanel(wx.Panel):
 
         # fill middle row
         self.right_MiddleSizer.Add(self.sbSizer_timeSettings,           2, wx.ALL | wx.EXPAND, 5)
+        self.right_MiddleSizer.Add(self.sbSizer_SourceParms,                 2, wx.ALL | wx.EXPAND, 5)
 #        self.right_MiddleSizer.Add(self.sbSizer_trackingParms,          2, wx.ALL | wx.EXPAND, 5)
         self.right_MiddleSizer.Add(self.instruction,                    2, wx.ALL | wx.ALIGN_BOTTOM, 5)
         # ---------------------------------------------------------------------------------------------- mask generator
@@ -394,9 +421,9 @@ class maskMakerPanel(wx.Panel):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         for widget in widgets:
             if isinstance(widget, wx.StaticText):
-                sizer.Add(widget,                           0, wx.ALL | wx.CENTER, 1),
+                sizer.Add(widget,                           0, wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, 1)
             else:
-                sizer.Add(widget,                           0, wx.ALL, 1)
+                sizer.Add(widget,                           0, wx.ALL | wx.ALIGN_LEFT | wx.EXPAND, 1)
         mainSizer.Add(sizer)
 
     def onRemoveMonitor(self, event):  # ------------------------------------------------------   Remove current monitor
@@ -500,6 +527,10 @@ class maskMakerPanel(wx.Panel):
                 self.onChangePreviewSize(event)
             elif event.EventObject.Name == 'previewFPS':
                 self.onChangePreviewFPS(event)
+            elif event.EventObject.Name == 'previewFont':
+                self.onChangePreviewFont(event)
+            elif event.EventObject.Name == 'previewRGBColor':
+                self.onChangePreviewRGBPreview(event)
             elif event.EventObject.Name == 'sourceFPS':
                 self.onChangeSourceFPS(event)
             elif event.EventObject.Name == 'lineThickness':
@@ -539,7 +570,7 @@ class maskMakerPanel(wx.Panel):
         if   lastKey == 'Return' and whichCtrl == 'start_date':
             self.startTime.SetFocus()                                      # done with date, proceed to time
         elif lastKey == 'Return' and whichCtrl == 'start_time':
-            self.sourceFPS.SetFocus()                                       # done with time, proceed to fps
+            self.sourceMMSize.SetFocus()                                       # done with time, proceed to fps
         if   lastKey == 'Tab'    and whichCtrl == 'start_date':
             EVT_RIGHT = wx.KeyEvent(47)                         # '/' moves focus to right in datepickerctrl
             self.startDate.HandleAsNavigationKey(EVT_RIGHT)
@@ -558,6 +589,15 @@ class maskMakerPanel(wx.Panel):
 
         gbl.cfg_dict[self.mon_ID]['source_fps'] = gbl.source_fps = gbl.source_fps = input        # update self & cfg_dict
         self.startDate.SetFocus()
+
+    def onChangeSourceMMSize(self, event):
+        input = gbl.correctType(self.sourceMMSize.GetValue(), 'source_mmsize')
+        if not (type(input) == tuple):
+            input = self.source_mmsize                         # don't change the value if input wasn't a number
+            self.sourceMMSize.SetValue(input)
+
+        gbl.cfg_dict[self.mon_ID]['source_mmsize'] = gbl.source_mmsize = gbl.source_mmsize = input        # update self & cfg_dict
+        self.sourceFPS.SetFocus()
 
     def onChangeTrackType(self, event):
         gbl.cfg_dict[self.mon_ID]['track_type'] = gbl.track_type = self.track_type = event.Selection         # update self & cfg_dict
@@ -660,6 +700,26 @@ class maskMakerPanel(wx.Panel):
         gbl.cfg_dict[self.mon_ID]['preview_fps'] = gbl.preview_fps = self.preview_fps = input           # update self & cfg_dict
 
         self.refreshVideo()                                 # close and restart video playback
+        self.previewFont.SetFocus()
+
+    def onChangePreviewFont(self, event):
+        input = gbl.correctType(self.previewFont.GetValue(), 'preview_font')
+        if not (type(input) == int or type(input) == float):
+            input = self.preview_font                        # don't change the value if input wasn't a number
+
+        gbl.cfg_dict[self.mon_ID]['preview_font'] = gbl.preview_font = self.preview_font = input           # update self & cfg_dict
+
+        self.refreshVideo()                                 # close and restart video playback
+        self.previewRGBColor.SetFocus()
+
+    def onChangePreviewRGBColor(self, event):
+        input = gbl.correctType(self.previewRGBColor.GetValue(), 'preview_RGBcolor')                          # keep this incase new value is invalid
+        if type(input) != tuple:
+            input = self.preview_RGBcolor
+
+        gbl.cfg_dict[self.mon_ID]['preview_RGBcolor'] = gbl.preview_RGBcolor = self.preview_RGBcolor = input           # update self & cfg_dict
+
+        self.refreshVideo()                                 # close and restart video playback
         self.lineThickness.SetFocus()
 
     def onChangeLineThickness(self, event):
@@ -683,12 +743,13 @@ class maskMakerPanel(wx.Panel):
 
     def onMaskGen(self, event):
         gbl.genmaskflag = True                              # ROIs need to be read from gbl.ROIs
+        gbl.shouldSaveMask = True
 
         self.mask = []  # holds rows for output to a mask file
         self.ROIs = []  # holds tuples for drawing ROIs
 
         mask_dict = {}
-        mask_keys = ['columns', 'x1', 'x_len', 'x_sep', 'x_tilt', 'rows', 'y1', 'y_len', 'y_sep', 'y_tilt']
+        mask_keys = ['cols', 'x1', 'x_len', 'x_sep', 'x_tilt', 'rows', 'y1', 'y_len', 'y_sep', 'y_tilt']
 
         for count in range(0,5):
             mask_dict[mask_keys[count]] = int(self.X[count+1].GetValue())               # x column
@@ -698,22 +759,30 @@ class maskMakerPanel(wx.Panel):
 
         ROI = 1  # counter; numbers the ROIs
 
-        for row in range(0, int(mask_dict['rows'])):  # y-coordinates change through rows
-            ax = mask_dict['x1'] + row * mask_dict['x_tilt']  # reset x-coordinate start of row
-            bx = ax + mask_dict['x_len']
-            cx = bx
-            dx = ax
-            if row == 0:
-                ay = mask_dict['y1']
-            else:
-                ay = mask_dict['y1'] + row * (mask_dict['y_len'] + mask_dict['y_sep'])  # move down in y
-            by = ay
-            cy = ay + mask_dict['y_len']
-            dy = cy
-            for col in range(0, mask_dict['columns']):  # x-coordinates change through columns
+        # every ROI list will contain:  [(ax,ay),(bx,by),(cx,cy),(dx,dy),(ax,ay)]
+        # number the ROIs vertically for easier use of output since flies of same genotype are unusally loaded vertically
 
-                # ------------------------------------------------------------------------ create the mask coordinates
-                if col == 0 and row == 0:
+        # x-coordinates change through cols
+        # (x1, y1) is the top left corner of the top left ROI
+        for col in range(0, int(mask_dict['cols'])):
+            # x-coordinates change through columns
+            # y-coordinates change through rows
+            for row in range(0, mask_dict['rows']):
+                ax = mask_dict['x1'] + \
+                     col*(mask_dict['x_len'] +mask_dict['x_sep'] + mask_dict['x_tilt']) + \
+                     row*mask_dict['x_tilt']
+                bx = ax + mask_dict['x_len']                # add width
+                cx = bx
+                dx = ax
+                ay = mask_dict['y1'] + \
+                     col*mask_dict['y_tilt'] + \
+                     row*(mask_dict['y_len'] + mask_dict['y_sep'] + mask_dict['y_tilt'])
+                by = ay
+                cy = ay + mask_dict['y_len']                # add height
+                dy = cy
+
+                # --------------------------------------------------- create the mask coordinates for this ROI
+                if row == 0 and col == 0:
                     self.mask.append(  # for saving to mask file
                         '(lp1\n((I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\n' % (ax, ay, bx, by, cx, cy, dx, dy))
                 else:
@@ -721,20 +790,12 @@ class maskMakerPanel(wx.Panel):
                         'ttp%d\na((I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\n' % (
                         ROI, ax, ay, bx, by, cx, cy, dx, dy))
 
-                self.ROIs.append([(ax, ay), (bx, by), (cx, cy), (dx, dy), (ax, ay)])  # for immediate use
+                self.ROIs.append([(ax, ay), (bx, by), (cx, cy), (dx, dy), (ax, ay)])  # for immediate use by program
 
-                ax = bx + mask_dict['x_sep']  # prepare for next time
-                bx = ax + mask_dict['x_len']
-                cx = bx
-                dx = ax
-                ay = ay + mask_dict['y_tilt']
-                by = ay
-                cy = ay + mask_dict['y_len']
-                dy = cy
-                ROI += 1
+                ROI += 1                                    # increment ROI number
 
         self.mask.append('ttp%d\na.(lp1\nI1\n' % (ROI + 1))
-        self.mask.append('aI1\n' * mask_dict['rows'] * (mask_dict['columns'] -1))
+        self.mask.append('aI1\n' * mask_dict['rows'] * (mask_dict['cols'] -1))
         self.mask.append('a.\n\n\n')
 
         self.refreshVideo()
@@ -765,6 +826,8 @@ class maskMakerPanel(wx.Panel):
             with open(self.mask_file, 'a') as mask_file:
                 for roi in self.mask:
                     mask_file.write(roi)                          # write to file line by line
+
+        gbl.shouldSaveMask = False                          # mask is saved
 
         dlg.Destroy()
         mask_file.close()

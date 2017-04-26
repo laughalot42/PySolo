@@ -68,6 +68,13 @@ class mainNotebook(wx.Notebook):
         self.notebookPages.append(maskPanel.maskMakerPanel(self))       # make the monitor page
         self.AddPage(self.notebookPages[gbl.mon_ID], gbl.mon_name)      # add to notebook
 
+    def wantToSaveMask(self):
+        dlg = wx.MessageDialog(self, 'Do you want to save the Mask?',
+                               style=wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+        answer = dlg.ShowModal()
+        dlg.Destroy()
+        return answer
+
     def onPageChanged(self, event):                             # ----- directs event related page changes to onGoToPage
         page_num = event.GetSelection()
         self.onGoToPage(page_num)
@@ -77,6 +84,16 @@ class mainNotebook(wx.Notebook):
         old_ID = gbl.mon_ID
 
         if old_ID != 0:     # ------------------------------------------------------------------ leaving a monitor page
+            if gbl.shouldSaveMask:       # mask generated.  prompt user to save it.
+                answer = self.wantToSaveMask()
+                if answer == wx.ID_YES:
+                    self.notebookPages[old_ID].onSaveMask(None)     # not an event driven call
+                elif answer == wx.ID_CANCEL:
+                    page_num = old_ID           # cancel changing mask file and restore the same page
+                else:
+                    pass                # proceed without saving
+
+            gbl.shouldSaveMask = False
             cfg.mon_nicknames_to_dicts(old_ID)                  # save any changes made to the monitor
             self.notebookPages[old_ID].clearVideo()             # remove video and timer
 
@@ -97,8 +114,6 @@ class mainNotebook(wx.Notebook):
             cfg.cfg_dict_to_nicknames()                         # load configuration page parameters
             self.notebookPages[0].fillTable()                   # update the configuration table
             self.notebookPages[0].scrolledThumbs.refreshThumbGrid()    # update and start the thumbnails window
-#            self.notebookPages[0].scrolledThumbs.SetScrollbars(1,1,1,1)                                                # does not restore scrollbars
-#            self.Layout()
 
         else:          # ---------------------------------------------------------------------- going to a monitor page
             if gbl.mon_ID != 0:
@@ -220,7 +235,7 @@ if __name__ == "__main__":
     app.SetTopWindow(frame_1)                   # Makes this window the main window
     frame_1.Show()                              # Shows the main window
 
-    wx.lib.inspection.InspectionTool().Show()
+#    wx.lib.inspection.InspectionTool().Show()              # starts a GUI inspection tool that helps evaluate structures in a window
 
     app.MainLoop()                              # Begin user interactions.
 

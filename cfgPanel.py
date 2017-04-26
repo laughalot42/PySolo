@@ -326,7 +326,7 @@ class cfgPanel(wx.Panel):
             self.scrolledThumbs.refreshThumbGrid()              # refresh thumbnails
         except:
             self.scrolledThumbs.thumbPanels[1].trackedMonitor
-            self.scrolledThumbs[0].refreshConsoleGrid()              # refresh consoles
+            self.scrolledThumbs.refreshConsoleGrid()              # refresh consoles
 
         self.thumbFPS.SetFocus()
 
@@ -414,7 +414,7 @@ class cfgPanel(wx.Panel):
 
     def onDAMFileScan110X(self, event):
 
-        cmd = os.path.join(os.getcwd(), 'DAMFileScan110X', 'DAMFileScan110.exe')
+        cmd = os.path.join(gbl.exec_dir, 'DAMFileScan110X', 'DAMFileScan110.exe')
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         process.wait()
 

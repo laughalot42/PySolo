@@ -49,8 +49,11 @@ global mon_ID, \
     source_type, \
     source, \
     source_fps, \
+    source_mmsize, \
     preview_size, \
     preview_fps, \
+    preview_font, \
+    preview_RGBcolor, \
     line_thickness, \
     issdmonitor, \
     start_datetime, \
@@ -64,8 +67,11 @@ mon_name = 'Monitor1'
 source_type = 0
 source = None
 source_fps = 0.5
+source_mmsize = (300,300)
 preview_size = (480, 480)
 preview_fps = 1
+preview_font = 24
+preview_RGBcolor = (255, 0, 0)             # red
 line_thickness = 2
 issdmonitor = False
 start_datetime = wx.DateTime_Now()
@@ -89,8 +95,11 @@ cfg_dict = [{                                               # create the default
         'source_type'   : source_type,
         'source'        : source,
         'source_fps'    : source_fps,
+        'source_mmsize' : source_mmsize,
         'preview_size'  : preview_size,
         'preview_fps'   : preview_fps,
+        'preview_font'  : preview_font,
+        'preview_RGBcolor' : preview_RGBcolor,
         'issdmonitor'   : issdmonitor,
         'start_datetime': start_datetime,
         'track'         : track,
@@ -106,10 +115,11 @@ global numberOfTimers
 numberOfTimers = 0
 
 # ------------------------------------------------------------------- miscellaneous globals
-global ROIs, genmaskflag
+global ROIs, genmaskflag, shouldSaveMask
 
 ROIs = []               # temporary storage for ROIs
 genmaskflag = False     # changes to true when new mask is created
+shouldSaveMask = False
 
 
 
@@ -168,7 +178,8 @@ def correctType(r, key):
         if not '(' in r:
             r = '(' + r + ')'
         r = tuple(r[1:-1].split(','))
-        r = (int(r[0]), int(r[1]))
+        if len(r) == 2: r = (int(r[0]), int(r[1]))
+        elif len(r) == 3: r = (int(r[0]), int(r[1]), int(r[2]))
 
         return r
 
@@ -201,27 +212,46 @@ def loadROIsfromMaskFile(mask_file):      # ------------------------------------
 
     return ROIs
 
-def makeMaskFrames(ROIs, size):
+def makeMaskFrames(ROIs, size, font, RGBcolor):
 
-    # creates a transparent frame (2D)
-    # draws the ROIs on the frame  &  returns the frame
-    # mask
+    # creates a transparent 2D frame called mask to wipe out current color values
+    # draws the ROIs and numbers on the frame called RGBmask in colors to lay over the mask
+    # returns both mask and frame
 
     # ---------------------------------------------------------------------------------------- create transparent frame
     npsize = (size[1], size[0])                     # opencv and np use opposite order
     mask_frame = np.ones(npsize, np.uint8)          # binary frame for creating mask
 
     if not ROIs: ROIs = []
-    # ---------------------------------------------------------------------------------------- draw ROIs in red channel
+    # ---------------------------------------------------------------------- draw ROIs and numbers on frame using zeros
+                                # zeros in regions that will be masked, ones in regions that won't
+    roiNum = 0                         # I know it seems backwards, but ones are places where video frame value is used.
+    lastY = 0
     for roi in ROIs:
-        for count in range(0, 4):
-            cv2.line(mask_frame, roi[count], roi[count + 1], 0, line_thickness)        # zeros in regions that will be masked, ones in regions that won't
+        roiNum = roiNum +1                          # use 1-indexed ROI numbers
+        for count in range(0, 4):                   # draw the ROI
+            cv2.line(mask_frame, roi[count], roi[count + 1], 0, line_thickness)
+        # -----------------------------------------------------------------------only number the top row of ROIs
+        if lastY >= roi[0][1] or lastY == 0:                    # indicates a new column has started
+            roiWidth = abs(roi[1][0] - roi[0][0])
+            numPosition = (roi[0][0], roi[0][1] - 5*line_thickness)
+            fontScale = font * roiWidth * 10 / size[0]
+            cv2.putText(mask_frame, str(roiNum), org=numPosition,
+                        fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=fontScale,
+                        color=(0), thickness=line_thickness)
 
-    mask = np.dstack((mask_frame, mask_frame, mask_frame))           # stacks 3 mask_frames so each color has ROIs that won't be covered by other colors
+        lastY = roi[0][1]
+
+    mask = np.dstack((mask_frame, mask_frame, mask_frame))   # stacks 3 mask_frames so each color has ROIs that won't be covered by other colors
     mask = mask.astype(np.uint8)
-    redmask = np.dstack(((1-mask_frame)*255, np.zeros(npsize, np.uint8), np.zeros(npsize, np.uint8)))   # applies mask to red only
 
-    return mask, redmask
+    redmask =   (1-mask_frame) * RGBcolor[0]
+    greenmask = (1-mask_frame) * RGBcolor[1]
+    bluemask =  (1-mask_frame) * RGBcolor[2]
+
+    RGBmask = np.dstack((redmask, greenmask, bluemask))
+
+    return mask, RGBmask
 
 def pydatetime2wxdatetime(pydt):  # ---------------------- convert python datetime.datetime to wx.datetime
     dt_iso = pydt.isoformat()
@@ -263,3 +293,16 @@ def del_started_item(theList, mon_ID):
 
             print('pause')                                                                                                              ###### debug
     except: pass
+
+# ------------------------------------------------------------------------------------------------------------------------------ debug
+def debugimg(img, size=(1200,400), outprefix='test'):
+    mini_image = cv2.resize(img, size)
+    cv2.imshow(outprefix, mini_image)
+    k = cv2.waitKey(0) & 0xFF
+
+    if k == 27:  # wait for ESC key to exit
+        cv2.destroyAllWindows()
+    elif k == ord('s'):  # wait for 's' key to save and exit
+        cv2.imwrite('%s.png' % outprefix, mini_image)
+        cv2.destroyAllWindows()
+
