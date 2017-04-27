@@ -123,7 +123,7 @@ class FileBrowseButton(wx.Panel):
 
     def createTextControl(self):
         """Create the text control"""
-        textControl = wx.TextCtrl(self, -1, name=self.name)
+        textControl = wx.TextCtrl(self, -1, style=wx.TE_PROCESS_ENTER, name=self.name)
         textControl.SetToolTipString(self.toolTip)
         if self.changeCallback:
             textControl.Bind(wx.EVT_TEXT, self.OnChanged)
@@ -331,6 +331,7 @@ class DirBrowseButton(FileBrowseButton):
                  toolTip='Type directory name or browse to select',
                  dialogTitle='',
                  startDirectory='.',
+                 value = '',
                  changeCallback=None,
                  dialogClass=wx.DirDialog,
                  newDirectory=False,
@@ -338,7 +339,7 @@ class DirBrowseButton(FileBrowseButton):
         FileBrowseButton.__init__(self, parent, id, pos, size,
                                   labelText, buttonText, toolTip,
                                   dialogTitle, startDirectory,
-                                  initialValue="", wildcard = "*.*",
+                                  initialValue=value, wildcard = "*.*",
                                   style= wx.FD_OPEN,
                                   changeCallback=changeCallback,
                                   labelWidth = 0, name=name)
