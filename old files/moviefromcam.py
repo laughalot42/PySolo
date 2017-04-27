@@ -1,6 +1,5 @@
 import pysolovideoGlobals
-import cv2, wx
-import cv2.cv as cv
+import cv, wx
 import winsound
 import threading
 
@@ -144,7 +143,7 @@ class mainFrame(wx.Frame):
         mymovie.keepGoing = True
         captureRealCam.PlayMonitor(mymovie)
 
-        mymovie.Close()
+
 
         print('done.')
 

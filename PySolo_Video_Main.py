@@ -49,7 +49,6 @@ class mainNotebook(wx.Notebook):
 
         wx.Notebook.__init__(self, parent, id=wx.ID_ANY, style=wx.NB_LEFT, name='NotebookNameStr') # initialize notebook
 
-        self.mon_ID = 0                                                # looking at config page first, not a monitor
         self.notebookPages = []
 
         self.notebookPages.append(cfgPanel.cfgPanel(self))          # -----configuration page is element 0
@@ -66,85 +65,104 @@ class mainNotebook(wx.Notebook):
         gbl.mon_ID = 0             # set mon_ID to zero which is configuration page
 
     def addMonitorPage(self):
-        cfg.mon_dict_to_nicknames()                                     # load monitor's configuration into globals
         self.notebookPages.append(maskPanel.maskMakerPanel(self))       # make the monitor page
         self.AddPage(self.notebookPages[gbl.mon_ID], gbl.mon_name)      # add to notebook
-        gbl.mon_ID = 0                                                  # monitor was added from config page (0)
+
+    def wantToSaveMask(self):
+        dlg = wx.MessageDialog(self, 'Do you want to save the Mask?',
+                               style=wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+        answer = dlg.ShowModal()
+        dlg.Destroy()
+        return answer
 
     def onPageChanged(self, event):                             # ----- directs event related page changes to onGoToPage
         page_num = event.GetSelection()
         self.onGoToPage(page_num)
 
     def onGoToPage(self, page_num):  # --------------------------------------------- for changing pages without an event
+        gbl.statbar.SetStatusText(' ')
+        old_ID = gbl.mon_ID
 
-        cfg.cfg_nicknames_to_dicts()                              # save any new changes to config or monitor parameters
-        cfg.mon_nicknames_to_dicts()
+        if old_ID != 0:     # ------------------------------------------------------------------ leaving a monitor page
+            if gbl.shouldSaveMask:       # mask generated.  prompt user to save it.
+                answer = self.wantToSaveMask()
+                if answer == wx.ID_YES:
+                    self.notebookPages[old_ID].onSaveMask(None)     # not an event driven call
+                elif answer == wx.ID_CANCEL:
+                    page_num = old_ID           # cancel changing mask file and restore the same page
+                else:
+                    pass                # proceed without saving
 
-        if gbl.mon_ID == 0:  # ---------------------------------------------------------- leaving the configuration page
-            try:
-                for mon_count in range(1, gbl.monitors +1):    # stop all thumbnail video timers
-                    gbl.thumbPanels[mon_count].keepGoing = False            # stops thread timer
+            gbl.shouldSaveMask = False
+            cfg.mon_nicknames_to_dicts(old_ID)                  # save any changes made to the monitor
+            self.notebookPages[old_ID].clearVideo()             # remove video and timer
+
+        if old_ID == 0:  # ---------------------------------------------------------- leaving the configuration page
+            cfg.cfg_nicknames_to_dicts()  # save any new changes to config parameters
+
+            try:   # ------ don't know if thumbnails or console are showing
+                self.notebookPages[0].scrolledThumbs.clearThumbGrid()       # remove all thumbnails, timers, and threads
+            except: pass
+            try:   # ------ don't know if thumbnails or console are showing
+                self.notebookPages[0].scrolledThumbs.clearConsoleGrid()       # remove all thumbnails, timers, and threads
             except: pass
 
-        else:   # ------------------------------------------------------------------------------- leaving a monitor page
-            try:
-                gbl.previewPanel.playTimer.Stop()    # stop current monitor page video timer
-            except: pass
-
-        gbl.mon_ID = page_num                   # update the global mon_ID to the new page number
+        # -------------------------------------------------------------------------------- update to the new page number
+        gbl.mon_ID = page_num
 
         if page_num == 0:         # -------------------------------------------------------- going to configuration page
-            cfg.cfg_dict_to_nicknames()          # load configuration page parameters
-            self.notebookPages[0].fillTable()                     # update the configuration table
+            cfg.cfg_dict_to_nicknames()                         # load configuration page parameters
+            self.notebookPages[0].fillTable()                   # update the configuration table
             self.notebookPages[0].scrolledThumbs.refreshThumbGrid()    # update and start the thumbnails window
-                                                                                                                # TODO: why do scrollbars disappear?
 
         else:          # ---------------------------------------------------------------------- going to a monitor page
-            cfg.mon_dict_to_nicknames()                 # update nicknames to values for the selected monitor
-            gbl.ROIs = gbl.loadROIs(gbl.mask_file)
-            gbl.showROIs = True
-            gbl.previewPanel = self.notebookPages[gbl.mon_ID].previewPanel   # put preview panel in global variable
-            gbl.previewPanel.parent.refreshVideo()                              # start video
+            if gbl.mon_ID != 0:
+                cfg.mon_dict_to_nicknames()                 # update nicknames to values for the selected monitor
 
-        self.SetSelection(gbl.mon_ID)   # -------------------------------------------------------------- change the page
-        self.Layout()
+            self.notebookPages[gbl.mon_ID].previewPanel.parent.refreshVideo()                              # start video
+
+        self.notebookPages[0].scrolledThumbs.EnableScrolling(1, 1)
+        self.notebookPages[0].Layout()
+
+        print('check')
 
     def repaginate(self):     # -------------------------------------- update notebook after number of pages has changed
         # page 0 (config page) will not be affected except for thumbnails               # then go to configuration page
 
-        # ---------------------------------------------------- stop configuration thumbnail timers and delete thumbnails
-        for count in range(1, len(gbl.thumbPanels)):
-            gbl.thumbPanels[count].monPanel.playTimer.Stop()
-        del gbl.thumbPanels
-        gbl.thumbPanels = ['videoMonitors']                                   # initiate a new thumbnail list; element 0 identifies type of list
+        # -------------------------------------------------------------------- delete each page from notebook (except 0)
+        self.Unbind(wx.EVT_NOTEBOOK_PAGE_CHANGED)                   # prevent page changing while deleting pages
+        for gbl.mon_ID in range(len(self.notebookPages)-1, 0, -1):
+            self.notebookPages[gbl.mon_ID].clearVideo()      # stop & remove video, timer, and thread for monitor pages
+#            self.notebookPages.pop(gbl.mon_ID)               # remove page from list of pages
+            del self.notebookPages[gbl.mon_ID]               # remove page from list of pages
+            self.DeletePage(gbl.mon_ID)                      # remove page from notebook object
 
-        # ------------------------------------- stop current monitor preview and delete notebook monitor pages from list
-        try: gbl.previewPanel.playTimer.Stop()                                   # stop preview panel in globals
+        # ---------------------------------------------------- stop configuration page thumbnail and console timers
+        try:    # ------ don't know if thumbnails or console are showing
+            self.notebookPages[0].scrolledThumbs.clearThumbGrid()
+        except: pass
+        try:    # ------ don't know if thumbnails or console are showing
+            self.notebookPages[0].scrolledThumbs.clearConsoleGrid()
         except: pass
 
-        for count in range(1, len(self.notebookPages)):
-            self.notebookPages[1].previewPanel.playTimer.Stop()             # stop any running previewPanel
-            del self.notebookPages[1]                                       # remove each page from notebookPages list
+        # ------------------------------------------------------------------------------------- recreate notebook pages
+        cfg.cfg_dict_to_nicknames()                  # load configuration parameters into globals
+        self.notebookPages[0].scrolledThumbs.thumbPanels = ['videoMonitors']  # initiate a new thumbnail list; element 0 identifies type of list
 
-        # -------------------------------------------------------------------- delete each page from notebook (except 0)
-        pgcount = self.GetPageCount()
-        self.Unbind(wx.EVT_NOTEBOOK_PAGE_CHANGED)                   # prevent page changing while deleting pages
-        for count in range(1, pgcount):
-            self.DeletePage(1)
-
-        # -------------------------------------------------------------------------------------------- add monitor pages
-        for gbl.mon_ID in range(1, gbl.monitors+1):
-            cfg.mon_dict_to_nicknames()                                  # load monitor parameters to globals
-            self.addMonitorPage()                                        # create and add a monitor page to the notebook
+        # ----------------------------------------------------------------------------------- add back each monitor page
+        for gbl.mon_ID in range(1, gbl.monitors+1):                 # monitor pages are numbered by monitor number
+            cfg.mon_dict_to_nicknames()                                   # load monitor configuration into globals
+            self.addMonitorPage()                                         # add monitor page to notebook
 
         self.notebookPages[0].fillTable()                                # update the configuration table
         self.notebookPages[0].scrolledThumbs.refreshThumbGrid()               # update the scrolled thumbs window
 
-        gbl.mon_ID = 0                          # set mon_ID to configuration panel
-        self.onGoToPage(gbl.mon_ID)             # go to configuration panel & update table and thumbnails
+        gbl.mon_ID = 0          # ------------------------------------------------------------ go to configuration page
+        cfg.cfg_dict_to_nicknames()
+        self.SetSelection(gbl.mon_ID)
+        self.Layout()
 
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged)     # restore binding
-
 
 class mainFrame(wx.Frame):
 
@@ -155,13 +173,13 @@ class mainFrame(wx.Frame):
 
         self.config = cfg.Configuration(self)                   # let user select a configuration to load before starting
 
-        self.statbar = wx.StatusBar(self, wx.ID_ANY)
-        self.SetStatusBar(self.statbar)
-        self.statbar.SetStatusText('status bar')
+        gbl.statbar = wx.StatusBar(self, wx.ID_ANY)  # status bar
+        self.SetStatusBar(gbl.statbar)
+        gbl.statbar.SetStatusText('Status Bar')
 
         self.theNotebook = mainNotebook(self)
 
-        self.__set_properties("pySolo Video", 0.9)  # set title and frame/screen ratio
+        self.__set_properties("pySolo Video", 0.95)  # set title and frame/screen ratio
         self.__do_layout()
 
         mainSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -217,7 +235,7 @@ if __name__ == "__main__":
     app.SetTopWindow(frame_1)                   # Makes this window the main window
     frame_1.Show()                              # Shows the main window
 
-    wx.lib.inspection.InspectionTool().Show()
+#    wx.lib.inspection.InspectionTool().Show()              # starts a GUI inspection tool that helps evaluate structures in a window
 
     app.MainLoop()                              # Begin user interactions.
 
