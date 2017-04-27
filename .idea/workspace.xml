@@ -7,7 +7,14 @@
     <option name="CUSTOM_SCOPE_NAME" value="Open Files" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="854fad10-5ac9-415b-ae6e-44a004f4e670" name="Default" comment="" />
+    <list default="true" id="854fad10-5ac9-415b-ae6e-44a004f4e670" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maskPanel.py" afterPath="$PROJECT_DIR$/maskPanel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pysolovideoGlobals.py" afterPath="$PROJECT_DIR$/pysolovideoGlobals.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/track.py" afterPath="$PROJECT_DIR$/track.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/videoMonitor.py" afterPath="$PROJECT_DIR$/videoMonitor.py" />
+    </list>
+    <list id="141ff1d8-66a1-4159-9b02-8ae49345f906" name="set status bar in frame" comment="strange date behaviors&#10;tracking adjusts to locate fly" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,23 +27,17 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cfgPanel.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cfgPanel.py">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="videoMonitor.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/videoMonitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="99" column="58" lean-forward="false" selection-start-line="99" selection-start-column="49" selection-end-line="99" selection-end-column="58" />
+            <state relative-caret-position="331">
+              <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
               <folding>
-                <element signature="e#5324#5461#0" expanded="false" />
-                <element signature="e#5809#6614#0" expanded="false" />
-                <element signature="e#6656#7431#0" expanded="false" />
-                <element signature="e#7467#8297#0" expanded="false" />
-                <element signature="e#8337#8807#0" expanded="false" />
-                <element signature="e#8938#9619#0" expanded="false" />
-                <element signature="e#9745#13061#0" expanded="false" />
-                <element signature="e#13511#15728#0" expanded="false" />
-                <element signature="e#15770#16324#0" expanded="false" />
-                <element signature="e#16512#18960#0" expanded="false" />
+                <element signature="e#17365#17479#0" expanded="false" />
+                <element signature="e#17514#17779#0" expanded="false" />
+                <element signature="e#17558#17779#0" expanded="false" />
+                <element signature="e#17813#18221#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -45,20 +46,21 @@
       <file leaf-file-name="track.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/track.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="50" column="0" lean-forward="true" selection-start-line="44" selection-start-column="50" selection-end-line="50" selection-end-column="0" />
+            <state relative-caret-position="336">
+              <caret line="368" column="62" lean-forward="false" selection-start-line="368" selection-start-column="62" selection-end-line="368" selection-end-column="62" />
               <folding>
-                <element signature="e#1196#1212#0" expanded="true" />
+                <element signature="n#!!doc" expanded="false" />
+                <element signature="e#1195#1204#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tryThreading.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/old files/tryThreading.py">
+      <file leaf-file-name="pysolovideo.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../old code/LL-Developing/Applications/pysolo-video-1.1/pysolovideo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="15" column="62" lean-forward="false" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="62" />
+            <state relative-caret-position="407">
+              <caret line="983" column="11" lean-forward="true" selection-start-line="983" selection-start-column="11" selection-end-line="983" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -67,14 +69,12 @@
       <file leaf-file-name="PySolo_Video_Main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PySolo_Video_Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="140" column="45" lean-forward="false" selection-start-line="140" selection-start-column="45" selection-end-line="140" selection-end-column="45" />
+            <state relative-caret-position="84">
+              <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
               <folding>
+                <element signature="n#!!doc" expanded="false" />
                 <element signature="e#1195#1204#0" expanded="true" />
-                <element signature="e#1655#2722#0" expanded="false" />
-                <element signature="e#2762#3168#0" expanded="false" />
-                <element signature="e#3299#3364#0" expanded="false" />
-                <element signature="e#9948#10194#0" expanded="false" />
+                <element signature="e#1520#1612#1" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -83,33 +83,129 @@
       <file leaf-file-name="pysolovideoGlobals.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pysolovideoGlobals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="49" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+            <state relative-caret-position="195">
+              <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
               <folding>
-                <element signature="e#127#181#0" expanded="true" />
-                <element signature="e#2269#2684#0" expanded="false" />
-                <element signature="e#2694#3339#0" expanded="false" />
-                <element signature="e#3477#4995#0" expanded="false" />
-                <element signature="e#5026#5894#0" expanded="false" />
-                <element signature="e#6007#6116#0" expanded="false" />
+                <element signature="e#11175#11470#0" expanded="false" />
+                <element signature="e#11665#11991#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="videoMonitor.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/videoMonitor.py">
+      <file leaf-file-name="configurator.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/configurator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="271" column="51" lean-forward="true" selection-start-line="271" selection-start-column="51" selection-end-line="271" selection-end-column="51" />
+            <state relative-caret-position="275">
+              <caret line="202" column="0" lean-forward="false" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="maskPanel.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/maskPanel.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="181">
+              <caret line="583" column="0" lean-forward="false" selection-start-line="583" selection-start-column="0" selection-end-line="583" selection-end-column="0" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
-                <element signature="e#359#3200#0" expanded="false" />
-                <element signature="e#3358#5727#0" expanded="false" />
-                <element signature="e#5884#7792#0" expanded="false" />
-                <element signature="e#13380#13549#0" expanded="false" />
-                <element signature="e#14268#14533#0" expanded="false" />
+                <element signature="e#300#403#0" expanded="false" />
+                <element signature="e#611#612#0" expanded="false" />
+                <element signature="e#880#2087#0" expanded="false" />
+                <element signature="e#2121#2172#0" expanded="false" />
+                <element signature="e#4600#4755#0" expanded="false" />
+                <element signature="e#5411#5957#0" expanded="false" />
+                <element signature="e#5535#5643#0" expanded="false" />
+                <element signature="e#6200#7298#0" expanded="false" />
+                <element signature="e#6228#6348#0" expanded="false" />
+                <element signature="e#7308#7417#0" expanded="false" />
+                <element signature="e#7522#7709#0" expanded="false" />
+                <element signature="e#7855#7937#0" expanded="false" />
+                <element signature="e#8027#8148#0" expanded="false" />
+                <element signature="e#8206#8342#0" expanded="false" />
+                <element signature="e#8369#8490#0" expanded="false" />
+                <element signature="e#12451#13747#1" expanded="false" />
+                <element signature="e#14321#14698#0" expanded="false" />
+                <element signature="e#14973#15070#0" expanded="false" />
+                <element signature="e#15833#15926#0" expanded="false" />
+                <element signature="e#20159#20295#0" expanded="false" />
+                <element signature="e#22472#22584#0" expanded="false" />
+                <element signature="e#24603#24724#0" expanded="false" />
+                <element signature="e#25168#25403#0" expanded="false" />
+                <element signature="e#25890#26002#0" expanded="false" />
+                <element signature="e#27123#27824#1" expanded="false" />
+                <element signature="e#28053#28151#0" expanded="false" />
+                <element signature="e#28440#28779#0" expanded="false" />
+                <element signature="e#30636#31003#0" expanded="false" />
+                <element signature="e#30714#30974#0" expanded="false" />
+                <element signature="e#31135#32981#0" expanded="false" />
+                <element signature="e#31252#31377#0" expanded="false" />
+                <element signature="e#31595#31705#0" expanded="false" />
+                <element signature="e#32132#32199#0" expanded="false" />
+                <element signature="e#33528#34191#0" expanded="false" />
+                <element signature="e#33528#33588#0" expanded="false" />
+                <element signature="e#33813#33987#0" expanded="false" />
+                <element signature="e#34016#34074#0" expanded="false" />
+                <element signature="e#34229#34898#0" expanded="false" />
+                <element signature="e#39330#39765#0" expanded="false" />
+                <element signature="e#39468#39608#0" expanded="false" />
+                <element signature="e#39818#40252#0" expanded="false" />
+                <element signature="e#39940#40086#0" expanded="false" />
+                <element signature="e#40302#40427#0" expanded="false" />
+                <element signature="e#40470#41386#0" expanded="false" />
+                <element signature="e#41527#42645#0" expanded="false" />
+                <element signature="e#41527#41643#0" expanded="false" />
+                <element signature="e#42006#42144#0" expanded="false" />
+                <element signature="e#42693#43883#0" expanded="false" />
+                <element signature="e#42852#42983#0" expanded="false" />
+                <element signature="e#42985#43101#0" expanded="false" />
+                <element signature="e#43931#45117#0" expanded="false" />
+                <element signature="e#44089#44220#0" expanded="false" />
+                <element signature="e#44222#44337#0" expanded="false" />
+                <element signature="e#45169#45637#0" expanded="false" />
+                <element signature="e#45688#46187#0" expanded="false" />
+                <element signature="e#46239#46748#0" expanded="false" />
+                <element signature="e#46804#47299#0" expanded="false" />
+                <element signature="e#47353#47871#0" expanded="false" />
+                <element signature="e#48001#48114#0" expanded="false" />
+                <element signature="e#48245#48483#0" expanded="false" />
+                <element signature="e#48525#51276#0" expanded="false" />
+                <element signature="e#49219#49292#0" expanded="false" />
+                <element signature="e#49587#51070#0" expanded="false" />
+                <element signature="e#49587#49625#0" expanded="false" />
+                <element signature="e#49742#51070#0" expanded="false" />
+                <element signature="e#50498#50659#0" expanded="false" />
+                <element signature="e#50702#50868#0" expanded="false" />
+                <element signature="e#51407#52816#0" expanded="false" />
+                <element signature="e#51407#51487#1" expanded="false" />
+                <element signature="e#51548#51632#0" expanded="false" />
+                <element signature="e#52124#52552#0" expanded="false" />
+                <element signature="e#52436#52552#0" expanded="false" />
+                <element signature="e#52860#52981#0" expanded="false" />
+                <element signature="e#52985#53099#0" expanded="false" />
+                <element signature="e#53191#53379#0" expanded="false" />
+                <element signature="e#53235#53379#0" expanded="false" />
+                <element signature="e#53413#53764#0" expanded="false" />
+                <marker date="1493264515123" expanded="false" signature="34938:35277" ph="..." />
+                <marker date="1493264515123" expanded="false" signature="35043:35149" ph="..." />
+                <marker date="1493264515123" expanded="false" signature="35176:35277" ph="..." />
+                <marker date="1493264515123" expanded="true" signature="35326:37253" ph="..." />
+                <marker date="1493264515123" expanded="true" signature="35568:36929" ph="..." />
+                <marker date="1493264515123" expanded="false" signature="35794:35997" ph="..." />
+                <marker date="1493264515123" expanded="false" signature="36964:37078" ph="..." />
+                <marker date="1493264515123" expanded="false" signature="38806:39011" ph="..." />
+                <marker date="1493264515123" expanded="false" signature="39075:39244" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cfgPanel.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cfgPanel.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="255" column="49" lean-forward="false" selection-start-line="255" selection-start-column="49" selection-end-line="255" selection-end-column="49" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -125,39 +221,38 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>timer</find>
-      <find>interval</find>
-      <find>fps</find>
-      <find>mask</find>
-      <find>thumbnail size</find>
-      <find>thumbfps</find>
-      <find>onstart</find>
-      <find>self.onStart</find>
-      <find>scrolle</find>
-      <find>scrolled</find>
-      <find>scrolledThumbs</find>
-      <find>scrolledPanels</find>
-      <find>['']</find>
-      <find>acquireThread</find>
-      <find>scrolledthumbs</find>
-      <find>self.thumbpanels</find>
-      <find>monThread</find>
-      <find>max</find>
-      <find>scrol</find>
-      <find>start</find>
-      <find>acquirepanel</find>
-      <find>refreshGrid</find>
-      <find>tracker</find>
-      <find>panelT</find>
       <find>thread</find>
       <find>monpanel</find>
       <find>panelthread</find>
       <find>monPanel</find>
       <find>time</find>
       <find>playtimer</find>
+      <find>clicking</find>
+      <find>table</find>
+      <find>video</find>
+      <find>sizer</find>
+      <find>instru</find>
+      <find>bind</find>
+      <find>return</find>
+      <find>masked</find>
+      <find>24</find>
+      <find>timectrl</find>
+      <find>1970</find>
+      <find>skip</find>
+      <find>a</find>
+      <find>addt</find>
+      <find>writea</find>
+      <find>datepicker</find>
+      <find>timepi</find>
+      <find>addts</find>
+      <find>d</find>
+      <find>date</find>
+      <find>save</find>
+      <find>btnsavecfg</find>
+      <find>saveas</find>
+      <find>change</find>
     </findStrings>
     <replaceStrings>
-      <replace>getImage</replace>
       <replace>startMonitor()</replace>
       <replace>onRemoveMonitor</replace>
       <replace>gbl.mon_</replace>
@@ -187,7 +282,11 @@
       <replace>refreshThumbGrid</replace>
       <replace>self_monitor</replace>
       <replace>clearThumbGrid</replace>
+      <replace>self.date</replace>
     </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -215,21 +314,25 @@
         <option value="$PROJECT_DIR$/thread_example.py" />
         <option value="$PROJECT_DIR$/myScrolledWindow.py" />
         <option value="$PROJECT_DIR$/Empty Main.py" />
-        <option value="$PROJECT_DIR$/maskPanel.py" />
         <option value="$PROJECT_DIR$/acquirePanel.py" />
-        <option value="$PROJECT_DIR$/PySolo_Video_Main.py" />
-        <option value="$PROJECT_DIR$/pysolovideoGlobals.py" />
         <option value="$PROJECT_DIR$/cfgPanel.py" />
         <option value="$PROJECT_DIR$/old files/tryThreading.py" />
         <option value="$PROJECT_DIR$/videoMonitor.py" />
+        <option value="$PROJECT_DIR$/PySolo_Video_Main.py" />
+        <option value="$PROJECT_DIR$/../old code/old files/crazy_dates.py" />
+        <option value="$PROJECT_DIR$/../crazy_dates.py" />
+        <option value="$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py" />
+        <option value="$PROJECT_DIR$/../timectrl_LL.py" />
         <option value="$PROJECT_DIR$/track.py" />
+        <option value="$PROJECT_DIR$/maskPanel.py" />
+        <option value="$PROJECT_DIR$/pysolovideoGlobals.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="69" />
+    <option name="x" value="73" />
     <option name="y" value="-9" />
-    <option name="width" value="1860" />
+    <option name="width" value="1856" />
     <option name="height" value="1098" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -264,8 +367,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -278,93 +379,46 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pysolo_monpages" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pysolo_monpages" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="old files" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pysolo_modular/pysolovideo.py" />
+    <property name="settings.editor.selected.configurable" value="debugger.stepping" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../old code/LL-Developing/Applications/pysolo-video-1.1/pysolovideo.py" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myShowDebugConsoleByDefault" value="true" />
   </component>
   <component name="PyDebuggerOptionsProvider">
     <option name="mySaveCallSignatures" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Lori\PycharmProjects\pysolo_monpages\old files" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Lori\Documents\PycharmProjects" />
       <recent name="C:\Users\Lori\Documents\PycharmProjects\pysolo_monpages" />
       <recent name="C:\Users\Lori\Documents\PycharmProjects\pysolo_modular" />
       <recent name="C:\Users\Lori\PycharmProjects\pysolo_monpages" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Lori\PycharmProjects\pysolo_monpages\old files" />
-    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager" selected="Python.PySolo_Video_Main">
-    <configuration default="false" name="moviefromcam" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/old files" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/old files/moviefromcam.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="DAM32colSplitter" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DAM32colSplitter.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="thread_example" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../pysolo_modular" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../pysolo_modular/thread_example.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="thread_example (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -380,6 +434,7 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/thread_example.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
     <configuration default="false" name="myScrolledWindow" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -397,6 +452,61 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/myScrolledWindow.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="crazy_dates" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../old code/old files" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pysolo_monpages" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../old code/old files/crazy_dates.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="crazy_dates (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pysolo_monpages" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../crazy_dates.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="timectrl_LL" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pysolo_monpages" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../timectrl_LL.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -414,6 +524,7 @@
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
@@ -426,25 +537,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="pysolo_monpages" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -476,15 +568,10 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -497,16 +584,9 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="py.test">
@@ -519,18 +599,10 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="testToRun" value="" />
-      <option name="keywords" value="" />
-      <option name="params" value="" />
-      <option name="USE_PARAM" value="false" />
-      <option name="USE_KEYWORD" value="false" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
     <configuration default="false" name="PySolo_Video_Main" type="PythonConfigurationType" factoryName="Python">
@@ -548,25 +620,45 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PySolo_Video_Main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.PySolo_Video_Main" />
-      <item index="1" class="java.lang.String" itemvalue="Python.moviefromcam" />
-      <item index="2" class="java.lang.String" itemvalue="Python.DAM32colSplitter" />
-      <item index="3" class="java.lang.String" itemvalue="Python.thread_example" />
-      <item index="4" class="java.lang.String" itemvalue="Python.thread_example (1)" />
-      <item index="5" class="java.lang.String" itemvalue="Python.myScrolledWindow" />
+      <item index="1" class="java.lang.String" itemvalue="Python.thread_example (1)" />
+      <item index="2" class="java.lang.String" itemvalue="Python.myScrolledWindow" />
+      <item index="3" class="java.lang.String" itemvalue="Python.crazy_dates" />
+      <item index="4" class="java.lang.String" itemvalue="Python.crazy_dates (1)" />
+      <item index="5" class="java.lang.String" itemvalue="Python.timectrl_LL" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.myScrolledWindow" />
-        <item index="1" class="java.lang.String" itemvalue="Python.thread_example (1)" />
-        <item index="2" class="java.lang.String" itemvalue="Python.thread_example" />
-        <item index="3" class="java.lang.String" itemvalue="Python.DAM32colSplitter" />
-        <item index="4" class="java.lang.String" itemvalue="Python.moviefromcam" />
+        <item index="0" class="java.lang.String" itemvalue="Python.timectrl_LL" />
+        <item index="1" class="java.lang.String" itemvalue="Python.crazy_dates (1)" />
+        <item index="2" class="java.lang.String" itemvalue="Python.crazy_dates" />
+        <item index="3" class="java.lang.String" itemvalue="Python.myScrolledWindow" />
+        <item index="4" class="java.lang.String" itemvalue="Python.thread_example (1)" />
       </list>
     </recent_temporary>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pysolo_monpages" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -585,28 +677,49 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="69" y="-9" width="1860" height="1098" extended-state="6" />
-    <editor active="false" />
+    <frame x="73" y="-9" width="1856" height="1098" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11129207" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3792" sideWeight="0.5519685" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.53556037" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2777778" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37068966" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13710555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3792" sideWeight="0.5519685" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31034482" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44504312" sideWeight="0.49564743" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2661638" sideWeight="0.24387947" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30064654" sideWeight="0.7561205" order="11" side_tool="true" content_ui="tabs" x="82" y="382" width="1838" height="315" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31681034" sideWeight="0.44803149" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="FLOATING" visible="false" show_stripe_button="false" weight="0.26713818" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="238" y="36" width="1525" height="1008" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25754312" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.5021763" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.68135595" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.49782372" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26293105" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.014145811" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25754312" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4676724" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41810346" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.108029194" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-    </layout>
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34051725" sideWeight="0.8411317" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="FLOATING" visible="false" show_stripe_button="false" weight="0.26713818" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="238" y="36" width="1525" height="1008" />
+    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -614,11 +727,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>341</line>
-          <option name="timeStamp" value="951" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../pysolo_modular/thread_example.py</url>
           <line>31</line>
@@ -651,7 +759,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>439</line>
+          <line>462</line>
           <option name="timeStamp" value="988" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -661,13 +769,179 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/track.py</url>
-          <line>68</line>
+          <line>69</line>
           <option name="timeStamp" value="1029" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/track.py</url>
-          <line>51</line>
+          <line>52</line>
           <option name="timeStamp" value="1035" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>99</line>
+          <option name="timeStamp" value="1038" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>82</line>
+          <option name="timeStamp" value="1040" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>134</line>
+          <option name="timeStamp" value="1042" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>149</line>
+          <option name="timeStamp" value="1044" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="1045" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>87</line>
+          <option name="timeStamp" value="1046" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>105</line>
+          <option name="timeStamp" value="1047" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>139</line>
+          <option name="timeStamp" value="1048" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>92</line>
+          <option name="timeStamp" value="1051" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>90</line>
+          <option name="timeStamp" value="1052" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="1054" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../crazy_dates.py</url>
+          <line>67</line>
+          <option name="timeStamp" value="1056" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
+          <line>676</line>
+          <option name="timeStamp" value="1059" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
+          <line>794</line>
+          <option name="timeStamp" value="1061" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
+          <line>765</line>
+          <option name="timeStamp" value="1062" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
+          <line>1064</line>
+          <option name="timeStamp" value="1063" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
+          <line>1265</line>
+          <option name="timeStamp" value="1064" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
+          <line>148</line>
+          <option name="timeStamp" value="1087" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
+          <line>152</line>
+          <option name="timeStamp" value="1088" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
+          <line>127</line>
+          <option name="timeStamp" value="1094" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
+          <line>121</line>
+          <option name="timeStamp" value="1095" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
+          <line>111</line>
+          <option name="timeStamp" value="1098" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="1100" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/maskPanel.py</url>
+          <line>590</line>
+          <option name="timeStamp" value="1101" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/track.py</url>
+          <line>365</line>
+          <option name="timeStamp" value="1102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/maskPanel.py</url>
+          <line>194</line>
+          <option name="timeStamp" value="1103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysolovideoGlobals.py</url>
+          <line>147</line>
+          <option name="timeStamp" value="1104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <condition expression="key == 'start_datetime'" language="Python" />
+          <url>file://$PROJECT_DIR$/configurator.py</url>
+          <line>202</line>
+          <option name="timeStamp" value="1106" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/configurator.py</url>
+          <line>36</line>
+          <option name="timeStamp" value="1108" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/maskPanel.py</url>
+          <line>484</line>
+          <option name="timeStamp" value="1109" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/maskPanel.py</url>
+          <line>595</line>
+          <option name="timeStamp" value="1110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/maskPanel.py</url>
+          <line>583</line>
+          <option name="timeStamp" value="1111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysolovideoGlobals.py</url>
+          <line>259</line>
+          <option name="timeStamp" value="1112" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -680,75 +954,19 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="1036" />
+      <option name="time" value="1113" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="gbl" language="Python" />
-        <watch expression="self.thumbGridSizer" />
+        <watch expression="self.start_datetime" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tryglobalmain.py" />
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx-3.0-msw/wx/grid.py" />
-    <entry file="file://$PROJECT_DIR$/../pysolo_modular/configurator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="269" column="0" lean-forward="false" selection-start-line="253" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/ConfigParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx-3.0-msw/wx/_misc.py" />
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pvg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="277" column="7" lean-forward="true" selection-start-line="162" selection-start-column="0" selection-end-line="277" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/subprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="710" column="0" lean-forward="false" selection-start-line="710" selection-start-column="0" selection-end-line="710" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pysolovideo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pvg_options.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pvg_common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/original pvg_acquire.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2567">
-          <caret line="42" column="25" lean-forward="true" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pvg_options.py" />
+    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pvg_common.py" />
+    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/original pvg_acquire.py" />
     <entry file="file://$PROJECT_DIR$/tryThreading.py" />
     <entry file="file://$PROJECT_DIR$/trymultiprocessing.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2016.3/system/python_stubs/1798840446/cv2/cv.py" />
@@ -780,7 +998,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="647" column="0" lean-forward="false" selection-start-line="647" selection-start-column="0" selection-end-line="647" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -806,18 +1023,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_windows.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="579" column="0" lean-forward="false" selection-start-line="579" selection-start-column="0" selection-end-line="579" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DAM32colSplitter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="70" column="61" lean-forward="false" selection-start-line="70" selection-start-column="61" selection-end-line="70" selection-end-column="61" />
+        <state relative-caret-position="168">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="26" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -829,60 +1039,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../pysolo_modular/doTracking.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="93" column="32" lean-forward="true" selection-start-line="93" selection-start-column="32" selection-end-line="93" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../pysolo_modular/acquirePanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Dropbox/Janelia/climbing_assay_program/climbing_assay.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="67" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/climbing_assay.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="43" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../pysolo_modular/doTracking.py" />
+    <entry file="file://$PROJECT_DIR$/../pysolo_modular/acquirePanel.py" />
+    <entry file="file://$USER_HOME$/Dropbox/Janelia/climbing_assay_program/climbing_assay.py" />
+    <entry file="file://$PROJECT_DIR$/climbing_assay.py" />
     <entry file="file://$PROJECT_DIR$/tracking.py" />
-    <entry file="file://$PROJECT_DIR$/../pysolo_modular/thread_example.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding>
-            <element signature="e#19#35#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/thread_example.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="62" column="26" lean-forward="true" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
-          <folding>
-            <element signature="e#19#28#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../pysolo_modular/thread_example.py" />
+    <entry file="file://$PROJECT_DIR$/thread_example.py" />
     <entry file="file://$USER_HOME$/Anaconda2/Lib/threading.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="662">
           <caret line="800" column="0" lean-forward="false" selection-start-line="800" selection-start-column="0" selection-end-line="800" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -890,154 +1057,258 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
           <caret line="182" column="0" lean-forward="false" selection-start-line="182" selection-start-column="0" selection-end-line="182" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="14456" column="0" lean-forward="false" selection-start-line="14456" selection-start-column="0" selection-end-line="14456" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myScrolledWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="10" column="12" lean-forward="false" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Empty Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acquirePanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../pysolo_modular/pysolovideo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="174" column="52" lean-forward="true" selection-start-line="174" selection-start-column="8" selection-end-line="174" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maskPanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="462" column="0" lean-forward="false" selection-start-line="462" selection-start-column="0" selection-end-line="462" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#54#0" expanded="true" />
-            <element signature="e#29170#32020#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/configurator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="210" column="24" lean-forward="false" selection-start-line="201" selection-start-column="38" selection-end-line="210" selection-end-column="24" />
-          <folding>
-            <element signature="e#569#623#0" expanded="true" />
-            <element signature="e#3420#4918#1" expanded="false" />
-            <element signature="e#5901#7228#0" expanded="false" />
-            <element signature="e#7358#8668#0" expanded="false" />
-            <element signature="e#8795#9762#0" expanded="false" />
-            <element signature="e#14571#14983#0" expanded="false" />
-            <element signature="e#15114#15633#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PySolo_Video_Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="140" column="45" lean-forward="false" selection-start-line="140" selection-start-column="45" selection-end-line="140" selection-end-column="45" />
-          <folding>
-            <element signature="e#1195#1204#0" expanded="true" />
-            <element signature="e#1655#2722#0" expanded="false" />
-            <element signature="e#2762#3168#0" expanded="false" />
-            <element signature="e#3299#3364#0" expanded="false" />
-            <element signature="e#9948#10194#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pysolovideoGlobals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="49" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding>
-            <element signature="e#127#181#0" expanded="true" />
-            <element signature="e#2269#2684#0" expanded="false" />
-            <element signature="e#2694#3339#0" expanded="false" />
-            <element signature="e#3477#4995#0" expanded="false" />
-            <element signature="e#5026#5894#0" expanded="false" />
-            <element signature="e#6007#6116#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/myScrolledWindow.py" />
+    <entry file="file://$PROJECT_DIR$/Empty Main.py" />
+    <entry file="file://$PROJECT_DIR$/acquirePanel.py" />
+    <entry file="file://$PROJECT_DIR$/../pysolo_modular/pysolovideo.py" />
     <entry file="file://$PROJECT_DIR$/old files/tryThreading.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="15" column="62" lean-forward="false" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scrollingWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1659">
+          <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../old code/old files/crazy_dates.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="139" column="0" lean-forward="false" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_windows.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../crazy_dates.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_controls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="6518" column="45" lean-forward="false" selection-start-line="6514" selection-start-column="17" selection-end-line="6518" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1035">
+          <caret line="732" column="10" lean-forward="true" selection-start-line="732" selection-start-column="10" selection-end-line="732" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/maskededit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="3015" column="0" lean-forward="false" selection-start-line="3015" selection-start-column="0" selection-end-line="3015" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../timectrl_LL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="97" column="0" lean-forward="true" selection-start-line="91" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+          <folding>
+            <element signature="e#334#343#0" expanded="true" />
+            <element signature="e#7901#7954#0" expanded="false" />
+            <element signature="e#8078#8564#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../old code/LL-Developing/Applications/pysolo-video-1.1/pysolovideo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="983" column="11" lean-forward="true" selection-start-line="983" selection-start-column="11" selection-end-line="983" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cfgPanel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="99" column="58" lean-forward="false" selection-start-line="99" selection-start-column="49" selection-end-line="99" selection-end-column="58" />
+        <state relative-caret-position="192">
+          <caret line="255" column="49" lean-forward="false" selection-start-line="255" selection-start-column="49" selection-end-line="255" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PySolo_Video_Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
           <folding>
-            <element signature="e#5324#5461#0" expanded="false" />
-            <element signature="e#5809#6614#0" expanded="false" />
-            <element signature="e#6656#7431#0" expanded="false" />
-            <element signature="e#7467#8297#0" expanded="false" />
-            <element signature="e#8337#8807#0" expanded="false" />
-            <element signature="e#8938#9619#0" expanded="false" />
-            <element signature="e#9745#13061#0" expanded="false" />
-            <element signature="e#13511#15728#0" expanded="false" />
-            <element signature="e#15770#16324#0" expanded="false" />
-            <element signature="e#16512#18960#0" expanded="false" />
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#1195#1204#0" expanded="true" />
+            <element signature="e#1520#1612#1" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configurator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="202" column="0" lean-forward="false" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/videoMonitor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="271" column="51" lean-forward="true" selection-start-line="271" selection-start-column="51" selection-end-line="271" selection-end-column="51" />
+        <state relative-caret-position="331">
+          <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <element signature="e#359#3200#0" expanded="false" />
-            <element signature="e#3358#5727#0" expanded="false" />
-            <element signature="e#5884#7792#0" expanded="false" />
-            <element signature="e#13380#13549#0" expanded="false" />
-            <element signature="e#14268#14533#0" expanded="false" />
+            <element signature="e#17365#17479#0" expanded="false" />
+            <element signature="e#17514#17779#0" expanded="false" />
+            <element signature="e#17558#17779#0" expanded="false" />
+            <element signature="e#17813#18221#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="7951" column="0" lean-forward="false" selection-start-line="7951" selection-start-column="0" selection-end-line="7951" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pysolovideoGlobals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+          <folding>
+            <element signature="e#11175#11470#0" expanded="false" />
+            <element signature="e#11665#11991#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maskPanel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="583" column="0" lean-forward="false" selection-start-line="583" selection-start-column="0" selection-end-line="583" selection-end-column="0" />
+          <folding>
+            <element signature="e#300#403#0" expanded="false" />
+            <element signature="e#611#612#0" expanded="false" />
+            <element signature="e#880#2087#0" expanded="false" />
+            <element signature="e#2121#2172#0" expanded="false" />
+            <element signature="e#4600#4755#0" expanded="false" />
+            <element signature="e#5411#5957#0" expanded="false" />
+            <element signature="e#5535#5643#0" expanded="false" />
+            <element signature="e#6200#7298#0" expanded="false" />
+            <element signature="e#6228#6348#0" expanded="false" />
+            <element signature="e#7308#7417#0" expanded="false" />
+            <element signature="e#7522#7709#0" expanded="false" />
+            <element signature="e#7855#7937#0" expanded="false" />
+            <element signature="e#8027#8148#0" expanded="false" />
+            <element signature="e#8206#8342#0" expanded="false" />
+            <element signature="e#8369#8490#0" expanded="false" />
+            <element signature="e#12451#13747#1" expanded="false" />
+            <element signature="e#14321#14698#0" expanded="false" />
+            <element signature="e#14973#15070#0" expanded="false" />
+            <element signature="e#15833#15926#0" expanded="false" />
+            <element signature="e#20159#20295#0" expanded="false" />
+            <element signature="e#22472#22584#0" expanded="false" />
+            <element signature="e#24603#24724#0" expanded="false" />
+            <element signature="e#25168#25403#0" expanded="false" />
+            <element signature="e#25890#26002#0" expanded="false" />
+            <element signature="e#27123#27824#1" expanded="false" />
+            <element signature="e#28053#28151#0" expanded="false" />
+            <element signature="e#28440#28779#0" expanded="false" />
+            <element signature="e#30636#31003#0" expanded="false" />
+            <element signature="e#30714#30974#0" expanded="false" />
+            <element signature="e#31135#32981#0" expanded="false" />
+            <element signature="e#31252#31377#0" expanded="false" />
+            <element signature="e#31595#31705#0" expanded="false" />
+            <element signature="e#32132#32199#0" expanded="false" />
+            <element signature="e#33528#34191#0" expanded="false" />
+            <element signature="e#33528#33588#0" expanded="false" />
+            <element signature="e#33813#33987#0" expanded="false" />
+            <element signature="e#34016#34074#0" expanded="false" />
+            <element signature="e#34229#34898#0" expanded="false" />
+            <element signature="e#39330#39765#0" expanded="false" />
+            <element signature="e#39468#39608#0" expanded="false" />
+            <element signature="e#39818#40252#0" expanded="false" />
+            <element signature="e#39940#40086#0" expanded="false" />
+            <element signature="e#40302#40427#0" expanded="false" />
+            <element signature="e#40470#41386#0" expanded="false" />
+            <element signature="e#41527#42645#0" expanded="false" />
+            <element signature="e#41527#41643#0" expanded="false" />
+            <element signature="e#42006#42144#0" expanded="false" />
+            <element signature="e#42693#43883#0" expanded="false" />
+            <element signature="e#42852#42983#0" expanded="false" />
+            <element signature="e#42985#43101#0" expanded="false" />
+            <element signature="e#43931#45117#0" expanded="false" />
+            <element signature="e#44089#44220#0" expanded="false" />
+            <element signature="e#44222#44337#0" expanded="false" />
+            <element signature="e#45169#45637#0" expanded="false" />
+            <element signature="e#45688#46187#0" expanded="false" />
+            <element signature="e#46239#46748#0" expanded="false" />
+            <element signature="e#46804#47299#0" expanded="false" />
+            <element signature="e#47353#47871#0" expanded="false" />
+            <element signature="e#48001#48114#0" expanded="false" />
+            <element signature="e#48245#48483#0" expanded="false" />
+            <element signature="e#48525#51276#0" expanded="false" />
+            <element signature="e#49219#49292#0" expanded="false" />
+            <element signature="e#49587#51070#0" expanded="false" />
+            <element signature="e#49587#49625#0" expanded="false" />
+            <element signature="e#49742#51070#0" expanded="false" />
+            <element signature="e#50498#50659#0" expanded="false" />
+            <element signature="e#50702#50868#0" expanded="false" />
+            <element signature="e#51407#52816#0" expanded="false" />
+            <element signature="e#51407#51487#1" expanded="false" />
+            <element signature="e#51548#51632#0" expanded="false" />
+            <element signature="e#52124#52552#0" expanded="false" />
+            <element signature="e#52436#52552#0" expanded="false" />
+            <element signature="e#52860#52981#0" expanded="false" />
+            <element signature="e#52985#53099#0" expanded="false" />
+            <element signature="e#53191#53379#0" expanded="false" />
+            <element signature="e#53235#53379#0" expanded="false" />
+            <element signature="e#53413#53764#0" expanded="false" />
+            <marker date="1493264515123" expanded="false" signature="34938:35277" ph="..." />
+            <marker date="1493264515123" expanded="false" signature="35043:35149" ph="..." />
+            <marker date="1493264515123" expanded="false" signature="35176:35277" ph="..." />
+            <marker date="1493264515123" expanded="true" signature="35326:37253" ph="..." />
+            <marker date="1493264515123" expanded="true" signature="35568:36929" ph="..." />
+            <marker date="1493264515123" expanded="false" signature="35794:35997" ph="..." />
+            <marker date="1493264515123" expanded="false" signature="36964:37078" ph="..." />
+            <marker date="1493264515123" expanded="false" signature="38806:39011" ph="..." />
+            <marker date="1493264515123" expanded="false" signature="39075:39244" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/track.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="50" column="0" lean-forward="true" selection-start-line="44" selection-start-column="50" selection-end-line="50" selection-end-column="0" />
+        <state relative-caret-position="336">
+          <caret line="368" column="62" lean-forward="false" selection-start-line="368" selection-start-column="62" selection-end-line="368" selection-end-column="62" />
           <folding>
-            <element signature="e#1196#1212#0" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#1195#1204#0" expanded="true" />
           </folding>
         </state>
       </provider>

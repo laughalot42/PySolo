@@ -55,9 +55,9 @@ class maskMakerPanel(wx.Panel):
         # TODO: add PySolo single ROI drawing
 
     # ------------------------------------------------------------------------------------------------------------ Title
-        self.title = wx.StaticText(self, -1, "\n %s" % self.mon_name)  # title
-        font = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)
-        self.title.SetFont(font)
+#        self.title = wx.StaticText(self, -1, "\n %s" % self.mon_name)  # title
+#        font = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)
+#        self.title.SetFont(font)
 
     # -------------------------------------------------------------------------------------------- video display options
         self.previewPanel = VM.monitorPanel(self, mon_ID=self.mon_ID, panelType='preview', loop=True)
@@ -182,20 +182,27 @@ class maskMakerPanel(wx.Panel):
         self.sourceMMSize = wx.TextCtrl (self, wx.ID_ANY, str(self.source_mmsize),
                                               style=wx.TE_PROCESS_ENTER, name='sourceMMSize')
 
+        # ------------------------------------------------------------------------------------------- Date & Time
+        # I prefer the wx.datepickerctrl and masked.timectrl widgets, but the date and time handling in wxDateTime is
+        # buggy.
+        #       1. if the month didn't change, wxDateTime.GetValue() fails
+        #       2. wx.DateTime.AddTS() resets the date to 1/1/1970
+        #
+        # Therefore, dates and times are converted to python datetime for manipulation.
+
         self.txtDate = wx.StaticText(self, wx.ID_ANY, "Date: ")                        # ---------------- start date
-        self.startDate = wx.DatePickerCtrl(self, wx.ID_ANY, dt=self.start_datetime,
+        wxdt = gbl.pydatetime2wxdatetime(self.start_datetime)
+        self.startDate = wx.DatePickerCtrl(self, wx.ID_ANY, dt=wxdt,
                                             style=wx.DP_DROPDOWN | wx.DP_SHOWCENTURY | wx.TE_PROCESS_ENTER, name='start_date')
 
 
         self.txtTime = wx.StaticText(self, wx.ID_ANY, 'Time (24-hr):  ')                 # ---------------- start time
         self.btnSpin = wx.SpinButton(self, wx.ID_ANY, wx.DefaultPosition, (-1, 20), wx.SP_VERTICAL)
-        starttime = gbl.wxdatetime2timestring(self.start_datetime)
+        starttime = gbl.wxdatetime2timestring(wxdt)
         self.startTime = masked.TimeCtrl(self, wx.ID_ANY, value=starttime,
                                           name='time: \n24 hour control', fmt24hr=True,
                                           spinButton=self.btnSpin, style=wx.TE_PROCESS_ENTER)
 
-        self.instruction = wx.StaticText(self, wx.ID_ANY,
-                'Clicking on the video will change top left coordinate values.')
         """
     # ------------------------------------------------------------------------------------------------ activate tracking
         self.trackBox = wx.CheckBox(self, wx.ID_ANY, 'Activate Tracking')
@@ -225,6 +232,9 @@ class maskMakerPanel(wx.Panel):
         self.diagramctl = wx.StaticBitmap(self, -1, self.diagram)
 
         # --------------------------------------------------------------------------------------- ROI Coordinates Input Grid
+        self.instruction = wx.StaticText(self, wx.ID_ANY,
+                'Click on video to select top left coordinates.')
+
         self.rowLabels = [wx.StaticText(self, -1, ' '),
                            wx.StaticText(self, -1, 'Number'),  # row labels
                            wx.StaticText(self, -1, 'Top Left'),
@@ -272,9 +282,15 @@ class maskMakerPanel(wx.Panel):
         self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeOutput,        self.pickOutputBrowser)
         self.Bind(wx.EVT_TEXT_ENTER,        self.onMaskBrowse,          self.pickMaskBrowser)
 
-        # date and time fields require special event handling
-        self.startDate.Bind(wx.EVT_KEY_UP, self.whichKey)
-        self.Bind(wx.EVT_NAVIGATION_KEY, self.whichField)
+
+        self.Bind(wx.EVT_TEXT_ENTER, self.onChangeDateTime, self.startDate)
+        self.Bind(wx.EVT_TEXT_ENTER, self.onChangeDateTime, self.startTime)
+
+# date and time fields require special event handling
+        self.startDate.Bind(wx.EVT_KEY_UP,          self.onChangeDateTime)
+        self.startDate.Bind(wx.EVT_NAVIGATION_KEY,  self.onChangeDateTime)
+        self.startTime.Bind(wx.EVT_KEY_UP,          self.onChangeDateTime)
+        self.startTime.Bind(wx.EVT_NAVIGATION_KEY,  self.onChangeDateTime)
 
     def sizers(self):
         self.mainSizer              = wx.BoxSizer(wx.HORIZONTAL)                                #   Main
@@ -297,21 +313,26 @@ class maskMakerPanel(wx.Panel):
 #        self.sbSizer_trackingParms  = wx.StaticBoxSizer(self.sb_trackingParms, wx.VERTICAL)    #   |   |   tracking parameters box
 #        self.trackOptionsSizer      = wx.BoxSizer(wx.VERTICAL)                                 #   |   |   |   |   |   tracking options widgets
         self.calcbox_sizer          = wx.BoxSizer(wx.VERTICAL)                                  #   |   |   |   |   |   calculations widgets
-        self.right_BottomSizer        = wx.BoxSizer(wx.HORIZONTAL)                              #   |   |   right_ bottom
+#        self.right_BottomSizer      = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   right_ bottom
+        self.sb_MaskGen             = wx.StaticBox(self, wx.ID_ANY, 'Mask Generator')           #   |   |   |   mask generator text
+        self.sbSizer_MaskGen        = wx.StaticBoxSizer(self.sb_MaskGen, wx.HORIZONTAL)         #   |   |   |   mask generator box
         self.diagramSizer           = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   |   diagram
-        self.tableSizer             = wx.FlexGridSizer(6, 3, 1, 5)                              #   |   |   |   table
-        self.button_sizer           = wx.BoxSizer(wx.VERTICAL)                                  #   |   |   |   buttons column
-
-        self.left_Sizer             = wx.BoxSizer(wx.VERTICAL)                                  #   |   left_
-        self.titleSizer             = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   Monitor title
+        self.tableSizer             = wx.BoxSizer(wx.VERTICAL)                                  #   |   |   |   table
+        self.coordSizer             = wx.FlexGridSizer(6, 3, 1, 5)                              #   |   |   |   |   cooridnates
+        self.button_sizer           = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   |   |   buttons
+#        self.left_Sizer             = wx.BoxSizer(wx.VERTICAL)                                  #   |   left_
+        self.sb_Monitor             = wx.StaticBox(self, wx.ID_ANY, self.mon_name)              #   |   |   |   mask generator text
+        self.sbSizer_Monitor        = wx.StaticBoxSizer(self.sb_Monitor, wx.VERTICAL)           #   |   |   |   mask generator box
+#        self.titleSizer             = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   Monitor title
+        self.videoSizer             = wx.BoxSizer(wx.VERTICAL)                                #   |   |   video panel
+        self.settingsSizer          = wx.FlexGridSizer(2, 6, 2, 2)                              #   |   |   preview settings
         self.saveNdeleteSizer       = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   save and delete buttons
-        self.videoSizer             = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   video panel
-        self.settingsSizer          = wx.FlexGridSizer(2, 6, 2, 2)                                  #   |   |   preview settings
 
 
         # ------------------------------------------------------------------------------ left_ Side  Video Preview Panel
         #                                      this sizer saves the spot in left_Sizer in case video is changed later
-        self.videoSizer.Add(self.previewPanel,                          1, wx.ALL | wx.ALIGN_TOP | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
+        self.videoSizer.Add(self.previewPanel,                          1, wx.ALL | wx.ALIGN_TOP |
+                                                                wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.settingsSizer.Add(self.previewFontLabel,                   0, wx.ALL | wx.EXPAND, 5)
         self.settingsSizer.Add(self.previewFont,                        0, wx.ALL | wx.EXPAND, 5)
@@ -328,10 +349,10 @@ class maskMakerPanel(wx.Panel):
         self.saveNdeleteSizer.Add(self.btnRemoveMonitor,                1, wx.ALL, 5)
 
 
-        self.left_Sizer.Add(self.title,                                 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 1)
-        self.left_Sizer.Add(self.videoSizer,                            1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
-        self.left_Sizer.Add(self.settingsSizer,                         0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
-        self.left_Sizer.Add(self.saveNdeleteSizer,                      0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND | wx.ALIGN_BOTTOM, 5)
+ #       self.sbSizer_Monitor.Add(self.title,                                 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 1)
+        self.sbSizer_Monitor.Add(self.videoSizer,                            1, wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, 5)
+        self.sbSizer_Monitor.Add(self.settingsSizer,                         0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
+        self.sbSizer_Monitor.Add(self.saveNdeleteSizer,                      0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND | wx.ALIGN_BOTTOM, 5)
 # ------------------------------------------------------------------------------------------------------------right_ SIDE
     # -------------------------------------------------------------------------------------------- select source box
 
@@ -384,33 +405,35 @@ class maskMakerPanel(wx.Panel):
         self.right_MiddleSizer.Add(self.sbSizer_timeSettings,           2, wx.ALL | wx.EXPAND, 5)
         self.right_MiddleSizer.Add(self.sbSizer_SourceParms,                 2, wx.ALL | wx.EXPAND, 5)
 #        self.right_MiddleSizer.Add(self.sbSizer_trackingParms,          2, wx.ALL | wx.EXPAND, 5)
-        self.right_MiddleSizer.Add(self.instruction,                    2, wx.ALL | wx.ALIGN_BOTTOM, 5)
         # ---------------------------------------------------------------------------------------------- mask generator
         self.diagramSizer.Add(self.diagramctl,                          0, wx.ALL | wx.ALIGN_CENTER, 2)
 
-        # -------------------------------------------------------------------- Apply each row to the table
-        for row in range(0, len(self.rowLabels)):
-            self.tableSizer.Add(self.rowLabels[row],                    1, wx.ALL | wx.EXPAND, 5)  # column headers
-            self.tableSizer.Add(self.X[row],                            1, wx.ALL | wx.EXPAND, 5)  # X column entries
-            self.tableSizer.Add(self.Y[row],                            1, wx.ALL | wx.EXPAND, 5)  # Y column entries
 
-        # -------------------------------------------------------------------------------------- button column
+        for row in range(0, len(self.rowLabels)):
+            self.coordSizer.Add(self.rowLabels[row],                    1, wx.ALL | wx.EXPAND, 5)  # column headers
+            self.coordSizer.Add(self.X[row],                            1, wx.ALL | wx.EXPAND, 5)  # X column entries
+            self.coordSizer.Add(self.Y[row],                            1, wx.ALL | wx.EXPAND, 5)  # Y column entries
+
         self.button_sizer.Add(self.btnMaskGen,                          1, wx.ALL, 5)
         self.button_sizer.Add(self.btnSaveMask,                         1, wx.ALL, 5)
 
-        # fill right_ bottom
-        self.right_BottomSizer.Add(self.diagramSizer,                   0, wx.ALL | wx.ALIGN_CENTER, 2)
-        self.right_BottomSizer.Add(self.tableSizer,                     0, wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, 2)
-        self.right_BottomSizer.Add(self.button_sizer,                   1, wx.ALL | wx.ALIGN_BOTTOM, 5)
+        self.tableSizer.Add(self.instruction,                           0, wx.ALL | wx.ALIGN_BOTTOM | wx.ALIGN_CENTER_HORIZONTAL, 2)
+        self.tableSizer.Add(self.coordSizer,                            1, wx.ALL | wx.ALIGN_TOP | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 2)
+        self.tableSizer.Add(self.button_sizer,                          0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        self.right_Sizer.Add(self.sbSizer_selectsource,                 1, wx.ALL | wx.EXPAND,   5)
-        self.right_Sizer.Add(self.sbSizer_maskNoutput,                  1, wx.ALL | wx.EXPAND,   5)
-        self.right_Sizer.Add(self.right_MiddleSizer,                    1, wx.ALL | wx.EXPAND,   5)
-        self.right_Sizer.Add(self.right_BottomSizer,                    1, wx.ALL | wx.EXPAND,   5)
+
+        # ------------------------------------------------------------------------------------------ fill right_ bottom
+        self.sbSizer_MaskGen.Add(self.diagramSizer,                   0, wx.ALL | wx.ALIGN_CENTER, 2)
+        self.sbSizer_MaskGen.Add(self.tableSizer,                     0, wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, 2)
+
+        self.right_Sizer.Add(self.sbSizer_selectsource,               1, wx.ALL | wx.EXPAND,   5)
+        self.right_Sizer.Add(self.sbSizer_maskNoutput,                1, wx.ALL | wx.EXPAND,   5)
+        self.right_Sizer.Add(self.right_MiddleSizer,                  1, wx.ALL | wx.EXPAND,   5)
+        self.right_Sizer.Add(self.sbSizer_MaskGen,                    1, wx.ALL | wx.EXPAND,   5)
 
    # ------------------------------------------------------------------------------------------- right_ & left_ sides
-        self.mainSizer.Add(self.left_Sizer,                             1, wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, 2)
-        self.mainSizer.Add(self.right_Sizer,                            1, wx.ALL | wx.ALIGN_LEFT | wx.EXPAND, 2)
+        self.mainSizer.Add(self.sbSizer_Monitor,                       1, wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, 2)
+        self.mainSizer.Add(self.right_Sizer,                           1, wx.ALL | wx.ALIGN_LEFT | wx.EXPAND, 2)
 
         self.SetSizer(self.mainSizer)
         self.Layout()
@@ -496,6 +519,7 @@ class maskMakerPanel(wx.Panel):
 
         gbl.timersStarted.append([self.mon_ID, 'preview panel'])                                                                  ###### debug
 
+    """
     def whichKey(self, event):
             code = event.GetKeyCode()
             event.Skip()
@@ -552,22 +576,31 @@ class maskMakerPanel(wx.Panel):
 
         else:
             self.onChangeDateTime(event, whichObjectstr, lastKey)
+    """
 
-    def onChangeDateTime(self, event, whichCtrl, lastKey):
-
+#    def onChangeDateTime(self, event, whichCtrl, lastKey):
+    def onChangeDateTime(self, event):
+        # ---------------------------------------------------------------- get the date and time values from the widgets
+        event.Skip()
         try:      # ------ bug in wxDateTimePickerCtrl: m_date not in sync occurs if month not changed
-            stdate = self.startDate.GetValue()
+            newdate = self.startDate.GetValue()
         except:
-            stdate = self.start_datetime
+            newdate = self.start_datetime
+        newdate = newdate.FormatISODate()                     # converts date to string
 
-        sttime = self.startTime.GetValue(as_wxTimeSpan=True)
+        newtime = self.startTime.GetValue()         # gets time as string
+
+        # cannot use wxDateTime.AddTS because it changes date to 1/1/1970.  Instead, convert date & time to strings,
+        # then convert back to python datetime for manipulations
+
+        self.start_datetime = gbl.strdatetime2pydatetime(newdate, newtime)  # combine string date & time into python datetime object
 
         #  update all datetime values
-        self.start_datetime = gbl.start_datetime = gbl.cfg_dict[self.mon_ID]['start_datetime'] = stdate.AddTS(sttime)
+        gbl.start_datetime = gbl.cfg_dict[self.mon_ID]['start_datetime'] = self.start_datetime
 
-
+        """
         # -------- navigation for date & time controls
-        if   lastKey == 'Return' and whichCtrl == 'start_date':
+        if  lastKey == 'Return' and whichCtrl == 'start_date':
             self.startTime.SetFocus()                                      # done with date, proceed to time
         elif lastKey == 'Return' and whichCtrl == 'start_time':
             self.sourceMMSize.SetFocus()                                       # done with time, proceed to fps
@@ -580,6 +613,7 @@ class maskMakerPanel(wx.Panel):
             self.startTime.HandleAsNavigationKey(EVT_RIGHT)
 
         print('check')
+        """
 
     def onChangeSourceFPS(self, event):
         input = gbl.correctType(self.sourceFPS.GetValue(), 'source_fps')

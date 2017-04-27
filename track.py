@@ -39,6 +39,7 @@ import pysolovideoGlobals as gbl
 import configurator as cfg
 import videoMonitor as VM
 import math
+import datetime
 from itertools import repeat  # generate tab-delimited zeroes to fill in extra columns
 import winsound
 
@@ -338,11 +339,16 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         return totalDists
 
     def colSplit32(self, array):                                                                                        # TODO: didn't fill 2nd file
+        # cannot use wxDateTime.AddTS because it changes date to 1/1/1970.  Instead, convert date & time to strings,
+        # concatenate, then convert back to wxDateTime
+
         self.parent.trackedConsoles[self.mon_ID].writemsg('Splitting monitor %d' % self.mon_ID)                         # TODO: third file not needed
         self.parent.trackedConsoles[self.mon_ID].SetFocus()
 
+        oneMinute = datetime.timedelta(minutes = 1)
+
         monitorDateTime = self.start_datetime
-        oneMinute = wx.TimeSpan(0,1,0,0)
+
         rownum = 1
 
         # ----------------------------------------------------------- determine how many files are needed and prep array
@@ -357,11 +363,11 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         for rowdata in array:
             # ------------------------------------------------------------------------- create first 10 columns (prefix)
             if rownum <> 1:
-                monitorDateTime = monitorDateTime.AddTS(oneMinute)            # get the date and time for this row of data
+                monitorDateTime = monitorDateTime + oneMinute            # get the date and time for this row of data
 
-            prefix = str(rownum) + '\t' + monitorDateTime.Format('%d %b %y')           # column 0 is the row number, column 1 is the date
-            prefix = prefix + '\t' + monitorDateTime.Format('%H:%M:%S')                # column 2 is the time
-            prefix = prefix + '\t1\t1\t0\t0\t0\t0\t0'                               # next 7 columns are not used but DAMFileScan110X does not take 0000000 or 1111111
+            prefix = str(rownum) + '\t' + datetime.datetime.strftime(monitorDateTime, '%d %b %y\t%H:%M:%S')
+                                                                    # column 0 is the row number, column 1 is the date
+            prefix = prefix + '\t1\t1\t0\t0\t0\t0\t0'     # next 7 columns are not used but DAMFileScan110X does not take 0000000 or 1111111
 
             # ------------------------------------ split row into 32 column listofFilesContents and write to the files with the prefix
             #                                           last 32 or fewer columns will be handled after this loop

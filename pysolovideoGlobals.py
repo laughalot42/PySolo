@@ -74,7 +74,7 @@ preview_font = 24
 preview_RGBcolor = (255, 0, 0)             # red
 line_thickness = 2
 issdmonitor = False
-start_datetime = wx.DateTime_Now()
+start_datetime = datetime.datetime.now()
 track_type = 0
 track = True
 mask_file = None
@@ -134,18 +134,16 @@ def correctType(r, key):
 #    self.start_date.SetValue(gbl.start_datetime)
 
     if key == 'start_datetime':  # order of conditional test is important! do this first!
-        if type(r) == type(wx.DateTime.Now()):
+        if type(r) == type(datetime.datetime.now()):
             pass
         elif type(r) == type(''):  # string -> datetime value
             try:    # ------  string may not be decipherable
-                r = string2wxdatetime(r)
+                r = datetime.datetime.strptime(r, '%Y-%m-%d %H:%M:%S')
             except:
-                r = wx.DateTime.Now()
-        elif type(r) == type(datetime.datetime.now()):
-                r = pydatetime2wxdatetime(r)
+                r = datetime.datetime.now()
         else:
             print('$$$$$$ could not interpret start_datetime value')
-            r = wx.DateTime.Now()
+            r = datetime.datetime.now()
 
         return r
 
@@ -259,6 +257,19 @@ def pydatetime2wxdatetime(pydt):  # ---------------------- convert python dateti
     wxdt.ParseISOCombined(dt_iso, sep='T')
     return wxdt
 
+def strdatetime2pydatetime(date, time):          # ---------------------------------- convert strings to python datetime
+    pydt = datetime.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M:%S')
+    return pydt
+
+def wxdatetime2timestring(datetime):
+    strdt = datetime.FormatISOTime()
+    return strdt
+
+"""
+def string2pydatetime(strdt):
+    pydt = datetime.strptime(strdt, '%b %d %Y %I:%M%p')
+
+
 def string2wxdatetime(strdt):  # ---------------------------------------- convert string to wx.datetime
     wxdt = wx.DateTime()
     wxdt.ParseDateTime(strdt)
@@ -274,16 +285,14 @@ def string2wxdatetime(strdt):  # ---------------------------------------- conver
 
     return wxdt                     ###### -1 year fixed
 
-def wxdatetime2timestring(datetime):
-    strdt = datetime.FormatISOTime()
-    return strdt
 
-def get_DateTime(date, time):   #---------------------------------- convert string date and string time to wx.datetime
-    date = date.GetValue()
-    time = time.GetValue(as_wxTimeSpan=True)
-    wxdt = date.AddTS(time)
-    return wxdt                                             # return changes the date!  ???
 
+#def get_DateTime(date, time):   #---------------------------------- convert string date and string time to wx.datetime
+#    date = date.GetValue()
+#    time = time.GetValue(as_wxTimeSpan=True)
+#    wxdt = date.AddTS(time)                    # AddTS is buggy
+#    return wxdt                                             # return changes the date!  ???
+"""
 
 def del_started_item(theList, mon_ID):
     try:
