@@ -3,14 +3,229 @@
   <component name="AnalysisUIOptions">
     <option name="SPLITTER_PROPORTION" value="0.663144" />
     <option name="GROUP_BY_SEVERITY" value="true" />
-    <option name="SCOPE_TYPE" value="8" />
     <option name="CUSTOM_SCOPE_NAME" value="Open Files" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="854fad10-5ac9-415b-ae6e-44a004f4e670" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/filebrowser_LL.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/DAM32colSplitter.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/DAM_scamp.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/SCAMP_paths.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/SCAMP_withpaths.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Instructions 2016_07_07.pdf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/State_Stability_Plot_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/fly_acthisto_cut_180.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/fly_acthisto_cut_180_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/fly_acthisto_for_65.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/fly_histo_3hr_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/fly_histo_cut_180.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/fly_histo_cut_180_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/fly_sleepthresh_for_65_v2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/sfreq_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/sleepcalc3hr.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/smax_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/3h calcs/smeandur_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_analyze.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_analyze_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/acplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/autoco.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/blurb.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/butt_filter.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/chisq.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/d_mesa.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/dam_hist.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/dam_hist_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/dam_panels.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/dam_panels_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/findpeaks.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/flyplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/mesagraph.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/mesaplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/mybox.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/notrend.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/per_mesa.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/pgram.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/reverse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/rindex_raw.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/dam_panels/slope.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/figfonts.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/figpropty.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/ralf/actogram.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/ralf/dam_actogram.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/Circadian Analysis/ralf/ralf.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/DayNightbargraph2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/DayNightbargraph3.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/DayNightbargraphnew.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/DayNightbargraphnew3hr.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/EnvMonData.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/LL_scamp.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/MeanWakeDur_v2/MeanWakeDur_v2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/MeanWakeDur_v2/fly_acthisto.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/MeanWakeDur_v2/fly_sleepthresh.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_hist/dam_hist.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_hist/dam_hist_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/dam_assemble.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/dam_cleanup.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/dam_file.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/dam_load.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/dam_names.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/dam_read.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/dam_read_names.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/empty_daylight.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_load/incubator_char.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_merge.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_select.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/dam_truncate.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/fset/fly_histo.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/fset/fset.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/fset_v2/fset_v2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarAllD/grouperrorbarAllD.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarAllD/grouperrorbarAllD2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarAllD/grouperrorbarAllD2amean.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarAllD/nanmean.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarAllD/nansem.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarAllD/nanstd.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarDOIcolor.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/grouperrorbarDOIcolor2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/phaseshiftanalyses/build_fake_dam.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/phaseshiftanalyses/dam_flyplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/phaseshiftanalyses/manualpeaks_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/phaseshiftanalyses/peakphaseplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/phaseshiftanalyses/peakphaseplot_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/scamp.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepcalc/nanmax.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepcalc/nanmean.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepcalc/nanmedian.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepcalc/nansum.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepcalc/sleepcalc.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepcalc/sleepcalc2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepcalc/sleepcalc2EDIT.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepplotDiffgroupsGOI/rasterplots.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepplotDiffgroupsGOI/sleepplotDiffgroupsGOI.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepralph/actogram2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepralph/dam_actogram2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepralph/fly_sleepthresh.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepralph/sleepralph.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/sleepralph/sleepralph2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/Vecsey Sleep and Circadian Analysis MATLAB Program (SCAMP)/Vecsey SCAMP Scripts 2016_07_07/xticklabel_rotate.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/State_Stability_Plot_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/fly_acthisto_cut_180.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/fly_acthisto_cut_180_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/fly_acthisto_for_65.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/fly_histo_3hr_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/fly_histo_cut_180.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/fly_histo_cut_180_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/fly_sleepthresh_for_65_v2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/sfreq_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/sleepcalc3hr.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/smax_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/3h calcs/smeandur_3h.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_analyze.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_analyze_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/acplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/autoco.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/blurb.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/butt_filter.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/chisq.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/d_mesa.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/dam_hist.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/dam_hist_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/dam_panels.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/dam_panels_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/findpeaks.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/flyplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/mesagraph.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/mesaplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/mybox.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/notrend.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/per_mesa.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/pgram.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/reverse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/rindex_raw.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/dam_panels/slope.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/figfonts.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/figpropty.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/ralf/actogram.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/ralf/dam_actogram.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/Circadian Analysis/ralf/ralf.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/DAM_scamp.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/DayNightbargraph2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/DayNightbargraph3.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/DayNightbargraphnew.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/DayNightbargraphnew3hr.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/EnvMonData.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/MeanWakeDur_v2/MeanWakeDur_v2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/MeanWakeDur_v2/fly_acthisto.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/MeanWakeDur_v2/fly_sleepthresh.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_hist/dam_hist.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_hist/dam_hist_par.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/dam_assemble.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/dam_cleanup.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/dam_file.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/dam_load.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/dam_names.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/dam_read.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/dam_read_names.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/empty_daylight.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_load/incubator_char.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_merge.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_select.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/dam_truncate.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/fset/fly_histo.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/fset/fset.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/fset_v2/fset_v2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarAllD/grouperrorbarAllD.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarAllD/grouperrorbarAllD2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarAllD/grouperrorbarAllD2amean.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarAllD/nanmean.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarAllD/nansem.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarAllD/nanstd.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarDOIcolor.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/grouperrorbarDOIcolor2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/phaseshiftanalyses/build_fake_dam.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/phaseshiftanalyses/dam_flyplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/phaseshiftanalyses/manualpeaks_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/phaseshiftanalyses/peakphaseplot.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/phaseshiftanalyses/peakphaseplot_new.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/scamp.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/scamp_test.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/scamp_test_main.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepcalc/nanmax.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepcalc/nanmean.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepcalc/nanmedian.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepcalc/nansum.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepcalc/sleepcalc.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepcalc/sleepcalc2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepcalc/sleepcalc2EDIT.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepplotDiffgroupsGOI/rasterplots.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepplotDiffgroupsGOI/sleepplotDiffgroupsGOI.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepralph/actogram2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepralph/dam_actogram2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepralph/fly_sleepthresh.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepralph/sleepralph.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/sleepralph/sleepralph2.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SCAMP/scripts/xticklabel_rotate.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/fly_coords.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/getCamList.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/monitorPanel.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/moviefromcam.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/projectPanel.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/pysolovideo.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/tryThreading.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/tryglobalini.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/tryglobalmain.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/tryglobalscript.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/old files/trymultiprocessing.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/~$cumentation.docx" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/documentation.docx" afterPath="$PROJECT_DIR$/documentation.docx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PySolo_Video_Main.py" afterPath="$PROJECT_DIR$/PySolo_Video_Main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cfgPanel.py" afterPath="$PROJECT_DIR$/cfgPanel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/configurator.py" afterPath="$PROJECT_DIR$/configurator.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maskPanel.py" afterPath="$PROJECT_DIR$/maskPanel.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pysolovideoGlobals.py" afterPath="$PROJECT_DIR$/pysolovideoGlobals.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scrollingWindow.py" afterPath="$PROJECT_DIR$/scrollingWindow.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/track.py" afterPath="$PROJECT_DIR$/track.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/videoMonitor.py" afterPath="$PROJECT_DIR$/videoMonitor.py" />
     </list>
@@ -28,39 +243,42 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="videoMonitor.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/videoMonitor.py">
+      <file leaf-file-name="maskPanel.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/maskPanel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
-              <folding>
-                <element signature="e#17365#17479#0" expanded="false" />
-                <element signature="e#17514#17779#0" expanded="false" />
-                <element signature="e#17558#17779#0" expanded="false" />
-                <element signature="e#17813#18221#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="track.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/track.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="368" column="62" lean-forward="false" selection-start-line="368" selection-start-column="62" selection-end-line="368" selection-end-column="62" />
+            <state relative-caret-position="36">
+              <caret line="920" column="0" lean-forward="true" selection-start-line="920" selection-start-column="0" selection-end-line="920" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="false" />
-                <element signature="e#1195#1204#0" expanded="true" />
+                <element signature="e#1210#1264#0" expanded="true" />
+                <element signature="e#38313#38637#0" expanded="false" />
+                <element signature="e#38689#39892#0" expanded="false" />
+                <element signature="e#39948#41180#0" expanded="false" />
+                <element signature="e#41234#42435#0" expanded="false" />
+                <element signature="e#42487#43333#0" expanded="false" />
+                <element signature="e#43384#44381#0" expanded="false" />
+                <element signature="e#44512#45062#0" expanded="false" />
+                <element signature="e#45107#46483#0" expanded="false" />
+                <element signature="e#46528#47510#0" expanded="false" />
+                <element signature="e#47681#48409#0" expanded="false" />
+                <element signature="e#48462#49101#0" expanded="false" />
+                <element signature="e#49167#49347#0" expanded="false" />
+                <element signature="e#49390#50467#0" expanded="false" />
+                <element signature="e#50619#51714#0" expanded="false" />
+                <element signature="e#51827#52614#0" expanded="false" />
+                <element signature="e#52735#53486#0" expanded="false" />
+                <element signature="e#53730#53928#0" expanded="false" />
+                <element signature="e#57027#57211#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pysolovideo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../old code/LL-Developing/Applications/pysolo-video-1.1/pysolovideo.py">
+      <file leaf-file-name="_windows.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_windows.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="983" column="11" lean-forward="true" selection-start-line="983" selection-start-column="11" selection-end-line="983" selection-end-column="11" />
+            <state relative-caret-position="197">
+              <caret line="804" column="0" lean-forward="false" selection-start-line="804" selection-start-column="0" selection-end-line="804" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -69,12 +287,12 @@
       <file leaf-file-name="PySolo_Video_Main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PySolo_Video_Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
+            <state relative-caret-position="331">
+              <caret line="93" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
               <folding>
-                <element signature="n#!!doc" expanded="false" />
-                <element signature="e#1195#1204#0" expanded="true" />
-                <element signature="e#1520#1612#1" expanded="false" />
+                <element signature="e#1211#1220#0" expanded="true" />
+                <element signature="e#3038#3299#0" expanded="false" />
+                <element signature="e#3894#3993#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -83,118 +301,11 @@
       <file leaf-file-name="pysolovideoGlobals.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pysolovideoGlobals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+            <state relative-caret-position="242">
+              <caret line="167" column="0" lean-forward="false" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
               <folding>
-                <element signature="e#11175#11470#0" expanded="false" />
-                <element signature="e#11665#11991#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="configurator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/configurator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="202" column="0" lean-forward="false" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="maskPanel.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/maskPanel.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="583" column="0" lean-forward="false" selection-start-line="583" selection-start-column="0" selection-end-line="583" selection-end-column="0" />
-              <folding>
-                <element signature="e#300#403#0" expanded="false" />
-                <element signature="e#611#612#0" expanded="false" />
-                <element signature="e#880#2087#0" expanded="false" />
-                <element signature="e#2121#2172#0" expanded="false" />
-                <element signature="e#4600#4755#0" expanded="false" />
-                <element signature="e#5411#5957#0" expanded="false" />
-                <element signature="e#5535#5643#0" expanded="false" />
-                <element signature="e#6200#7298#0" expanded="false" />
-                <element signature="e#6228#6348#0" expanded="false" />
-                <element signature="e#7308#7417#0" expanded="false" />
-                <element signature="e#7522#7709#0" expanded="false" />
-                <element signature="e#7855#7937#0" expanded="false" />
-                <element signature="e#8027#8148#0" expanded="false" />
-                <element signature="e#8206#8342#0" expanded="false" />
-                <element signature="e#8369#8490#0" expanded="false" />
-                <element signature="e#12451#13747#1" expanded="false" />
-                <element signature="e#14321#14698#0" expanded="false" />
-                <element signature="e#14973#15070#0" expanded="false" />
-                <element signature="e#15833#15926#0" expanded="false" />
-                <element signature="e#20159#20295#0" expanded="false" />
-                <element signature="e#22472#22584#0" expanded="false" />
-                <element signature="e#24603#24724#0" expanded="false" />
-                <element signature="e#25168#25403#0" expanded="false" />
-                <element signature="e#25890#26002#0" expanded="false" />
-                <element signature="e#27123#27824#1" expanded="false" />
-                <element signature="e#28053#28151#0" expanded="false" />
-                <element signature="e#28440#28779#0" expanded="false" />
-                <element signature="e#30636#31003#0" expanded="false" />
-                <element signature="e#30714#30974#0" expanded="false" />
-                <element signature="e#31135#32981#0" expanded="false" />
-                <element signature="e#31252#31377#0" expanded="false" />
-                <element signature="e#31595#31705#0" expanded="false" />
-                <element signature="e#32132#32199#0" expanded="false" />
-                <element signature="e#33528#34191#0" expanded="false" />
-                <element signature="e#33528#33588#0" expanded="false" />
-                <element signature="e#33813#33987#0" expanded="false" />
-                <element signature="e#34016#34074#0" expanded="false" />
-                <element signature="e#34229#34898#0" expanded="false" />
-                <element signature="e#39330#39765#0" expanded="false" />
-                <element signature="e#39468#39608#0" expanded="false" />
-                <element signature="e#39818#40252#0" expanded="false" />
-                <element signature="e#39940#40086#0" expanded="false" />
-                <element signature="e#40302#40427#0" expanded="false" />
-                <element signature="e#40470#41386#0" expanded="false" />
-                <element signature="e#41527#42645#0" expanded="false" />
-                <element signature="e#41527#41643#0" expanded="false" />
-                <element signature="e#42006#42144#0" expanded="false" />
-                <element signature="e#42693#43883#0" expanded="false" />
-                <element signature="e#42852#42983#0" expanded="false" />
-                <element signature="e#42985#43101#0" expanded="false" />
-                <element signature="e#43931#45117#0" expanded="false" />
-                <element signature="e#44089#44220#0" expanded="false" />
-                <element signature="e#44222#44337#0" expanded="false" />
-                <element signature="e#45169#45637#0" expanded="false" />
-                <element signature="e#45688#46187#0" expanded="false" />
-                <element signature="e#46239#46748#0" expanded="false" />
-                <element signature="e#46804#47299#0" expanded="false" />
-                <element signature="e#47353#47871#0" expanded="false" />
-                <element signature="e#48001#48114#0" expanded="false" />
-                <element signature="e#48245#48483#0" expanded="false" />
-                <element signature="e#48525#51276#0" expanded="false" />
-                <element signature="e#49219#49292#0" expanded="false" />
-                <element signature="e#49587#51070#0" expanded="false" />
-                <element signature="e#49587#49625#0" expanded="false" />
-                <element signature="e#49742#51070#0" expanded="false" />
-                <element signature="e#50498#50659#0" expanded="false" />
-                <element signature="e#50702#50868#0" expanded="false" />
-                <element signature="e#51407#52816#0" expanded="false" />
-                <element signature="e#51407#51487#1" expanded="false" />
-                <element signature="e#51548#51632#0" expanded="false" />
-                <element signature="e#52124#52552#0" expanded="false" />
-                <element signature="e#52436#52552#0" expanded="false" />
-                <element signature="e#52860#52981#0" expanded="false" />
-                <element signature="e#52985#53099#0" expanded="false" />
-                <element signature="e#53191#53379#0" expanded="false" />
-                <element signature="e#53235#53379#0" expanded="false" />
-                <element signature="e#53413#53764#0" expanded="false" />
-                <marker date="1493264515123" expanded="false" signature="34938:35277" ph="..." />
-                <marker date="1493264515123" expanded="false" signature="35043:35149" ph="..." />
-                <marker date="1493264515123" expanded="false" signature="35176:35277" ph="..." />
-                <marker date="1493264515123" expanded="true" signature="35326:37253" ph="..." />
-                <marker date="1493264515123" expanded="true" signature="35568:36929" ph="..." />
-                <marker date="1493264515123" expanded="false" signature="35794:35997" ph="..." />
-                <marker date="1493264515123" expanded="false" signature="36964:37078" ph="..." />
-                <marker date="1493264515123" expanded="false" signature="38806:39011" ph="..." />
-                <marker date="1493264515123" expanded="false" signature="39075:39244" ph="..." />
+                <element signature="e#1210#1260#0" expanded="true" />
+                <element signature="e#12829#12938#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -203,9 +314,53 @@
       <file leaf-file-name="cfgPanel.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cfgPanel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="255" column="49" lean-forward="false" selection-start-line="255" selection-start-column="49" selection-end-line="255" selection-end-column="49" />
+            <state relative-caret-position="121">
+              <caret line="355" column="0" lean-forward="true" selection-start-line="355" selection-start-column="0" selection-end-line="355" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="scrollingWindow.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scrollingWindow.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="142">
+              <caret line="139" column="73" lean-forward="false" selection-start-line="139" selection-start-column="73" selection-end-line="139" selection-end-column="73" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="track.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/track.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="227">
+              <caret line="135" column="18" lean-forward="false" selection-start-line="135" selection-start-column="18" selection-end-line="135" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="videoMonitor.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/videoMonitor.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="352">
+              <caret line="489" column="26" lean-forward="false" selection-start-line="489" selection-start-column="26" selection-end-line="489" selection-end-column="26" />
+              <folding>
+                <element signature="e#1577#1586#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="filebrowser_LL.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/filebrowser_LL.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="273">
+              <caret line="13" column="15" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="15" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -221,46 +376,38 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>thread</find>
-      <find>monpanel</find>
-      <find>panelthread</find>
-      <find>monPanel</find>
-      <find>time</find>
+      <find>ontab</find>
+      <find>initialsize</find>
+      <find>maskbrowse</find>
+      <find>ROI</find>
+      <find>gROIs</find>
+      <find>gbROIs</find>
+      <find>gblROIs</find>
+      <find>gbl.ROIs</find>
+      <find>onmaskbrowse</find>
+      <find>onmaskgen</find>
+      <find>monit</find>
+      <find>monitorP</find>
+      <find>m</find>
+      <find>moni</find>
+      <find>monitor</find>
+      <find>monitorPan</find>
+      <find>monitorPane</find>
+      <find>monitorPanel</find>
+      <find>vmonitorPanel</find>
+      <find>vmmonitorPanel</find>
+      <find>vm.monitorPanel</find>
+      <find>p</find>
+      <find>play</find>
+      <find>gbl.havemask</find>
       <find>playtimer</find>
-      <find>clicking</find>
-      <find>table</find>
-      <find>video</find>
-      <find>sizer</find>
-      <find>instru</find>
-      <find>bind</find>
-      <find>return</find>
-      <find>masked</find>
-      <find>24</find>
-      <find>timectrl</find>
-      <find>1970</find>
-      <find>skip</find>
-      <find>a</find>
-      <find>addt</find>
-      <find>writea</find>
-      <find>datepicker</find>
-      <find>timepi</find>
-      <find>addts</find>
-      <find>d</find>
-      <find>date</find>
-      <find>save</find>
-      <find>btnsavecfg</find>
-      <find>saveas</find>
-      <find>change</find>
+      <find>R</find>
+      <find>ROIs</find>
+      <find>ROIs=</find>
+      <find>havemask</find>
+      <find>self</find>
     </findStrings>
     <replaceStrings>
-      <replace>startMonitor()</replace>
-      <replace>onRemoveMonitor</replace>
-      <replace>gbl.mon_</replace>
-      <replace>cv2</replace>
-      <replace>initial_size</replace>
-      <replace>maskGenbtn</replace>
-      <replace>saveMaskBtn</replace>
-      <replace>Btn</replace>
       <replace>self_ROIs</replace>
       <replace>btnSpin</replace>
       <replace>10</replace>
@@ -283,10 +430,21 @@
       <replace>self_monitor</replace>
       <replace>clearThumbGrid</replace>
       <replace>self.date</replace>
+      <replace>trkdConsList</replace>
+      <replace>self.should</replace>
+      <replace>panelSize</replace>
+      <replace>self_MP.haveMask</replace>
+      <replace>self.haveMask</replace>
+      <replace>ChangeValue</replace>
+      <replace>onChangeMask</replace>
+      <replace>self_MP</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="PUSH_TAGS">
+      <GitPushTagMode />
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -308,31 +466,34 @@
         <option value="$PROJECT_DIR$/DAM32colSplitter.py" />
         <option value="$PROJECT_DIR$/../pysolo_modular/doTracking.py" />
         <option value="$PROJECT_DIR$/tracking.py" />
-        <option value="$PROJECT_DIR$/configurator.py" />
-        <option value="$PROJECT_DIR$/filebrowsebutton_LL.py" />
         <option value="$PROJECT_DIR$/../pysolo_modular/thread_example.py" />
         <option value="$PROJECT_DIR$/thread_example.py" />
         <option value="$PROJECT_DIR$/myScrolledWindow.py" />
         <option value="$PROJECT_DIR$/Empty Main.py" />
         <option value="$PROJECT_DIR$/acquirePanel.py" />
-        <option value="$PROJECT_DIR$/cfgPanel.py" />
         <option value="$PROJECT_DIR$/old files/tryThreading.py" />
-        <option value="$PROJECT_DIR$/videoMonitor.py" />
-        <option value="$PROJECT_DIR$/PySolo_Video_Main.py" />
         <option value="$PROJECT_DIR$/../old code/old files/crazy_dates.py" />
         <option value="$PROJECT_DIR$/../crazy_dates.py" />
         <option value="$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py" />
         <option value="$PROJECT_DIR$/../timectrl_LL.py" />
-        <option value="$PROJECT_DIR$/track.py" />
-        <option value="$PROJECT_DIR$/maskPanel.py" />
+        <option value="$PROJECT_DIR$/configurator.py" />
+        <option value="$PROJECT_DIR$/../old code/old files/Empty Main.py" />
+        <option value="$PROJECT_DIR$/filebrowsebutton_LL.py" />
+        <option value="$PROJECT_DIR$/filebrowser_LL.py" />
+        <option value="$PROJECT_DIR$/PySolo_Video_Main.py" />
         <option value="$PROJECT_DIR$/pysolovideoGlobals.py" />
+        <option value="$PROJECT_DIR$/cfgPanel.py" />
+        <option value="$PROJECT_DIR$/track.py" />
+        <option value="$PROJECT_DIR$/scrollingWindow.py" />
+        <option value="$PROJECT_DIR$/videoMonitor.py" />
+        <option value="$PROJECT_DIR$/maskPanel.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="73" />
+    <option name="x" value="70" />
     <option name="y" value="-9" />
-    <option name="width" value="1856" />
+    <option name="width" value="1859" />
     <option name="height" value="1098" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -353,7 +514,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Project Files" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -367,6 +528,21 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="pysolo_monpages">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -381,13 +557,12 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="debugger.stepping" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../old code/LL-Developing/Applications/pysolo-video-1.1/pysolovideo.py" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myShowDebugConsoleByDefault" value="true" />
@@ -396,14 +571,14 @@
     <option name="mySaveCallSignatures" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Lori\PycharmProjects\pysolo_monpages\old files" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Lori\Documents\PycharmProjects" />
       <recent name="C:\Users\Lori\Documents\PycharmProjects\pysolo_monpages" />
+      <recent name="C:\Users\Lori\Documents\PycharmProjects" />
       <recent name="C:\Users\Lori\Documents\PycharmProjects\pysolo_modular" />
       <recent name="C:\Users\Lori\PycharmProjects\pysolo_monpages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Lori\PycharmProjects\pysolo_monpages\old files" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -419,42 +594,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.PySolo_Video_Main">
-    <configuration default="false" name="thread_example (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/thread_example.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="myScrolledWindow" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pysolo_monpages" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/myScrolledWindow.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="crazy_dates" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -504,6 +643,42 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="pysolo_monpages" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../timectrl_LL.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="videoMonitor" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pysolo_monpages" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/videoMonitor.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="filebrowser_LL" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pysolo_monpages" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/filebrowser_LL.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -625,19 +800,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.PySolo_Video_Main" />
-      <item index="1" class="java.lang.String" itemvalue="Python.thread_example (1)" />
-      <item index="2" class="java.lang.String" itemvalue="Python.myScrolledWindow" />
-      <item index="3" class="java.lang.String" itemvalue="Python.crazy_dates" />
-      <item index="4" class="java.lang.String" itemvalue="Python.crazy_dates (1)" />
-      <item index="5" class="java.lang.String" itemvalue="Python.timectrl_LL" />
+      <item index="1" class="java.lang.String" itemvalue="Python.crazy_dates" />
+      <item index="2" class="java.lang.String" itemvalue="Python.crazy_dates (1)" />
+      <item index="3" class="java.lang.String" itemvalue="Python.timectrl_LL" />
+      <item index="4" class="java.lang.String" itemvalue="Python.videoMonitor" />
+      <item index="5" class="java.lang.String" itemvalue="Python.filebrowser_LL" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.timectrl_LL" />
-        <item index="1" class="java.lang.String" itemvalue="Python.crazy_dates (1)" />
-        <item index="2" class="java.lang.String" itemvalue="Python.crazy_dates" />
-        <item index="3" class="java.lang.String" itemvalue="Python.myScrolledWindow" />
-        <item index="4" class="java.lang.String" itemvalue="Python.thread_example (1)" />
+        <item index="0" class="java.lang.String" itemvalue="Python.filebrowser_LL" />
+        <item index="1" class="java.lang.String" itemvalue="Python.videoMonitor" />
+        <item index="2" class="java.lang.String" itemvalue="Python.timectrl_LL" />
+        <item index="3" class="java.lang.String" itemvalue="Python.crazy_dates (1)" />
+        <item index="4" class="java.lang.String" itemvalue="Python.crazy_dates" />
       </list>
     </recent_temporary>
     <configuration default="true" type="tests" factoryName="Attests">
@@ -677,47 +852,47 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="73" y="-9" width="1856" height="1098" extended-state="6" />
+    <frame x="70" y="-9" width="1859" height="1098" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13710555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13090712" sideWeight="0.449069" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3792" sideWeight="0.5519685" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31034482" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44504312" sideWeight="0.49564743" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37823275" sideWeight="0.5519685" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29202586" sideWeight="0.56056494" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2661638" sideWeight="0.24387947" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36745688" sideWeight="0.3938077" order="7" side_tool="false" content_ui="tabs" x="946" y="183" width="972" height="729" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36961207" sideWeight="0.12873438" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30064654" sideWeight="0.7561205" order="11" side_tool="true" content_ui="tabs" x="82" y="382" width="1838" height="315" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3900862" sideWeight="0.4394351" order="11" side_tool="true" content_ui="tabs" x="82" y="382" width="1838" height="315" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="FLOATING" visible="false" show_stripe_button="false" weight="0.26713818" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="238" y="36" width="1525" height="1008" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25754312" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46943232" sideWeight="0.6603053" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.5021763" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.68135595" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.49782372" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26293105" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.014145811" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37823275" sideWeight="0.5519685" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36745688" sideWeight="0.3938077" order="7" side_tool="false" content_ui="tabs" x="946" y="183" width="972" height="729" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36961207" sideWeight="0.12873438" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11678436" sideWeight="0.449069" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4676724" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41810346" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.108029194" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46943232" sideWeight="0.6603053" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47090518" sideWeight="0.49755567" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34051725" sideWeight="0.8411317" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33189654" sideWeight="0.5024443" order="11" side_tool="true" content_ui="tabs" x="82" y="382" width="1838" height="315" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="FLOATING" visible="false" show_stripe_button="false" weight="0.26713818" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="238" y="36" width="1525" height="1008" />
     </layout-to-restore>
   </component>
@@ -728,220 +903,44 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../pysolo_modular/thread_example.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="973" />
+          <url>file://$PROJECT_DIR$/cfgPanel.py</url>
+          <line>350</line>
+          <option name="timeStamp" value="1423" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../pysolo_modular/thread_example.py</url>
-          <line>10</line>
-          <option name="timeStamp" value="974" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../pysolo_modular/thread_example.py</url>
-          <line>16</line>
-          <option name="timeStamp" value="975" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../pysolo_modular/thread_example.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="976" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/thread_example.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="983" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/thread_example.py</url>
-          <line>25</line>
-          <option name="timeStamp" value="984" />
+          <url>file://$PROJECT_DIR$/filebrowsebutton_LL.py</url>
+          <line>167</line>
+          <option name="timeStamp" value="1433" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>462</line>
-          <option name="timeStamp" value="988" />
+          <line>789</line>
+          <option name="timeStamp" value="1434" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/PySolo_Video_Main.py</url>
-          <line>140</line>
-          <option name="timeStamp" value="1021" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/track.py</url>
-          <line>69</line>
-          <option name="timeStamp" value="1029" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/track.py</url>
-          <line>52</line>
-          <option name="timeStamp" value="1035" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>99</line>
-          <option name="timeStamp" value="1038" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>82</line>
-          <option name="timeStamp" value="1040" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>134</line>
-          <option name="timeStamp" value="1042" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>149</line>
-          <option name="timeStamp" value="1044" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>57</line>
-          <option name="timeStamp" value="1045" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>87</line>
-          <option name="timeStamp" value="1046" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>105</line>
-          <option name="timeStamp" value="1047" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>139</line>
-          <option name="timeStamp" value="1048" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>92</line>
-          <option name="timeStamp" value="1051" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>90</line>
-          <option name="timeStamp" value="1052" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../old code/old files/crazy_dates.py</url>
-          <line>76</line>
-          <option name="timeStamp" value="1054" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../crazy_dates.py</url>
-          <line>67</line>
-          <option name="timeStamp" value="1056" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
-          <line>676</line>
-          <option name="timeStamp" value="1059" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
-          <line>794</line>
-          <option name="timeStamp" value="1061" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
-          <line>765</line>
-          <option name="timeStamp" value="1062" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
-          <line>1064</line>
-          <option name="timeStamp" value="1063" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/timectrl.py</url>
-          <line>1265</line>
-          <option name="timeStamp" value="1064" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
-          <line>148</line>
-          <option name="timeStamp" value="1087" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
-          <line>152</line>
-          <option name="timeStamp" value="1088" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
-          <line>127</line>
-          <option name="timeStamp" value="1094" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
-          <line>121</line>
-          <option name="timeStamp" value="1095" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
-          <line>111</line>
-          <option name="timeStamp" value="1098" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../timectrl_LL.py</url>
-          <line>89</line>
-          <option name="timeStamp" value="1100" />
+          <url>file://$PROJECT_DIR$/filebrowser_LL.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="1440" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>590</line>
-          <option name="timeStamp" value="1101" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/track.py</url>
-          <line>365</line>
-          <option name="timeStamp" value="1102" />
+          <line>925</line>
+          <option name="timeStamp" value="1465" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>194</line>
-          <option name="timeStamp" value="1103" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pysolovideoGlobals.py</url>
-          <line>147</line>
-          <option name="timeStamp" value="1104" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <condition expression="key == 'start_datetime'" language="Python" />
-          <url>file://$PROJECT_DIR$/configurator.py</url>
-          <line>202</line>
-          <option name="timeStamp" value="1106" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/configurator.py</url>
-          <line>36</line>
-          <option name="timeStamp" value="1108" />
+          <line>856</line>
+          <option name="timeStamp" value="1466" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>484</line>
-          <option name="timeStamp" value="1109" />
+          <line>891</line>
+          <option name="timeStamp" value="1489" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>595</line>
-          <option name="timeStamp" value="1110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/maskPanel.py</url>
-          <line>583</line>
-          <option name="timeStamp" value="1111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pysolovideoGlobals.py</url>
-          <line>259</line>
-          <option name="timeStamp" value="1112" />
+          <line>914</line>
+          <option name="timeStamp" value="1490" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -954,44 +953,20 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="1113" />
+      <option name="time" value="1491" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
+        <watch expression="gbl.mon_ID" />
         <watch expression="gbl" language="Python" />
-        <watch expression="self.start_datetime" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pvg_options.py" />
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/pvg_common.py" />
-    <entry file="file://$PROJECT_DIR$/../LL-Developing/Applications/pysolo-video-1.1/original pvg_acquire.py" />
-    <entry file="file://$PROJECT_DIR$/tryThreading.py" />
-    <entry file="file://$PROJECT_DIR$/trymultiprocessing.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2016.3/system/python_stubs/1798840446/cv2/cv.py" />
     <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx-3.0-msw/wx/lib/inspection.py" />
-    <entry file="file://$PROJECT_DIR$/old files/getCamList.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="12" column="30" lean-forward="false" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/old files/monitorPanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="36" column="88" lean-forward="false" selection-start-line="36" selection-start-column="88" selection-end-line="36" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydevd_bundle/pydevd_exec.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/old files/getCamList.py" />
+    <entry file="file://$PROJECT_DIR$/old files/monitorPanel.py" />
     <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx-3.0-msw/wx/_controls.py" />
     <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx-3.0-msw/wx/_core.py" />
     <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_gdi.py">
@@ -1009,13 +984,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/old files/moviefromcam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="112" column="0" lean-forward="true" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/old files/moviefromcam.py" />
     <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/filebrowsebutton.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-462">
@@ -1023,22 +992,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DAM32colSplitter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="26" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/DAM32colSplitter.py" />
     <entry file="file://$PROJECT_DIR$/doTracking.py" />
-    <entry file="file://$PROJECT_DIR$/old files/pysolovideo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10890">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/old files/pysolovideo.py" />
     <entry file="file://$PROJECT_DIR$/../pysolo_modular/doTracking.py" />
     <entry file="file://$PROJECT_DIR$/../pysolo_modular/acquirePanel.py" />
     <entry file="file://$USER_HOME$/Dropbox/Janelia/climbing_assay_program/climbing_assay.py" />
@@ -1046,52 +1002,15 @@
     <entry file="file://$PROJECT_DIR$/tracking.py" />
     <entry file="file://$PROJECT_DIR$/../pysolo_modular/thread_example.py" />
     <entry file="file://$PROJECT_DIR$/thread_example.py" />
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/threading.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="662">
-          <caret line="800" column="0" lean-forward="false" selection-start-line="800" selection-start-column="0" selection-end-line="800" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/filebrowsebutton_LL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="182" column="0" lean-forward="false" selection-start-line="182" selection-start-column="0" selection-end-line="182" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myScrolledWindow.py" />
     <entry file="file://$PROJECT_DIR$/Empty Main.py" />
     <entry file="file://$PROJECT_DIR$/acquirePanel.py" />
     <entry file="file://$PROJECT_DIR$/../pysolo_modular/pysolovideo.py" />
-    <entry file="file://$PROJECT_DIR$/old files/tryThreading.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="62" lean-forward="false" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scrollingWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1659">
-          <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/old files/tryThreading.py" />
     <entry file="file://$PROJECT_DIR$/../old code/old files/crazy_dates.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
           <caret line="139" column="0" lean-forward="false" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_windows.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1099,15 +1018,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_controls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="6518" column="45" lean-forward="false" selection-start-line="6514" selection-start-column="17" selection-end-line="6518" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1115,15 +1025,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1035">
           <caret line="732" column="10" lean-forward="true" selection-start-line="732" selection-start-column="10" selection-end-line="732" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/maskededit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="3015" column="0" lean-forward="false" selection-start-line="3015" selection-start-column="0" selection-end-line="3015" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1131,66 +1032,107 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="97" column="0" lean-forward="true" selection-start-line="91" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
-          <folding>
-            <element signature="e#334#343#0" expanded="true" />
-            <element signature="e#7901#7954#0" expanded="false" />
-            <element signature="e#8078#8564#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../old code/LL-Developing/Applications/pysolo-video-1.1/pysolovideo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="983" column="11" lean-forward="true" selection-start-line="983" selection-start-column="11" selection-end-line="983" selection-end-column="11" />
+        <state relative-caret-position="20538">
+          <caret line="983" column="11" lean-forward="false" selection-start-line="983" selection-start-column="11" selection-end-line="983" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/IPython/core/interactiveshell.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="49">
+          <caret line="2880" column="0" lean-forward="false" selection-start-line="2880" selection-start-column="0" selection-end-line="2880" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydevd_bundle/pydevd_exec.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_misc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="1323" column="0" lean-forward="false" selection-start-line="1323" selection-start-column="0" selection-end-line="1323" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cfgPanel.py">
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/lib/masked/maskededit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="255" column="49" lean-forward="false" selection-start-line="255" selection-start-column="49" selection-end-line="255" selection-end-column="49" />
-          <folding />
+        <state relative-caret-position="200">
+          <caret line="3914" column="0" lean-forward="false" selection-start-line="3914" selection-start-column="0" selection-end-line="3914" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PySolo_Video_Main.py">
+    <entry file="file://$PROJECT_DIR$/../old code/old files/Empty Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="e#1195#1204#0" expanded="true" />
-            <element signature="e#1520#1612#1" expanded="false" />
-          </folding>
+        <state relative-caret-position="42">
+          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/configurator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="202" column="0" lean-forward="false" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
+        <state relative-caret-position="590">
+          <caret line="345" column="0" lean-forward="true" selection-start-line="332" selection-start-column="0" selection-end-line="345" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#1211#1277#0" expanded="false" />
+            <element signature="e#2160#2280#0" expanded="false" />
+            <element signature="e#3043#3301#0" expanded="false" />
+            <element signature="e#3464#4562#0" expanded="false" />
+            <element signature="e#7112#8498#0" expanded="false" />
+            <element signature="e#8656#10616#0" expanded="false" />
+            <element signature="e#9606#9633#0" expanded="false" />
+            <element signature="e#10810#12407#0" expanded="false" />
+            <element signature="e#11052#11140#0" expanded="false" />
+            <element signature="e#12569#13797#0" expanded="false" />
+            <element signature="e#16187#16262#0" expanded="false" />
+            <element signature="e#16543#17387#0" expanded="false" />
+            <element signature="e#21526#21747#0" expanded="false" />
+            <element signature="e#21570#21747#0" expanded="false" />
+            <element signature="e#21781#22132#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_controls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="192" column="0" lean-forward="false" selection-start-line="192" selection-start-column="0" selection-end-line="192" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/videoMonitor.py">
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/genericpath.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
+        <state relative-caret-position="195">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/filebrowsebutton_LL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="444" column="14" lean-forward="false" selection-start-line="444" selection-start-column="14" selection-end-line="444" selection-end-column="14" />
           <folding>
-            <element signature="e#17365#17479#0" expanded="false" />
-            <element signature="e#17514#17779#0" expanded="false" />
-            <element signature="e#17558#17779#0" expanded="false" />
-            <element signature="e#17813#18221#0" expanded="false" />
+            <element signature="e#658#667#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
+        <state relative-caret-position="142">
           <caret line="7951" column="0" lean-forward="false" selection-start-line="7951" selection-start-column="0" selection-end-line="7951" selection-end-column="0" />
           <folding />
         </state>
@@ -1198,117 +1140,112 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pysolovideoGlobals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+        <state relative-caret-position="242">
+          <caret line="167" column="0" lean-forward="false" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
           <folding>
-            <element signature="e#11175#11470#0" expanded="false" />
-            <element signature="e#11665#11991#0" expanded="false" />
+            <element signature="e#1210#1260#0" expanded="true" />
+            <element signature="e#12829#12938#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cfgPanel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="355" column="0" lean-forward="true" selection-start-line="355" selection-start-column="0" selection-end-line="355" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/threading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="800" column="0" lean-forward="false" selection-start-line="800" selection-start-column="0" selection-end-line="800" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/track.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="135" column="18" lean-forward="false" selection-start-line="135" selection-start-column="18" selection-end-line="135" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/filebrowser_LL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="13" column="15" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PySolo_Video_Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="93" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+          <folding>
+            <element signature="e#1211#1220#0" expanded="true" />
+            <element signature="e#3038#3299#0" expanded="false" />
+            <element signature="e#3894#3993#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scrollingWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="139" column="73" lean-forward="false" selection-start-line="139" selection-start-column="73" selection-end-line="139" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/wx/_windows.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="804" column="0" lean-forward="false" selection-start-line="804" selection-start-column="0" selection-end-line="804" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/videoMonitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="489" column="26" lean-forward="false" selection-start-line="489" selection-start-column="26" selection-end-line="489" selection-end-column="26" />
+          <folding>
+            <element signature="e#1577#1586#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/maskPanel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="583" column="0" lean-forward="false" selection-start-line="583" selection-start-column="0" selection-end-line="583" selection-end-column="0" />
-          <folding>
-            <element signature="e#300#403#0" expanded="false" />
-            <element signature="e#611#612#0" expanded="false" />
-            <element signature="e#880#2087#0" expanded="false" />
-            <element signature="e#2121#2172#0" expanded="false" />
-            <element signature="e#4600#4755#0" expanded="false" />
-            <element signature="e#5411#5957#0" expanded="false" />
-            <element signature="e#5535#5643#0" expanded="false" />
-            <element signature="e#6200#7298#0" expanded="false" />
-            <element signature="e#6228#6348#0" expanded="false" />
-            <element signature="e#7308#7417#0" expanded="false" />
-            <element signature="e#7522#7709#0" expanded="false" />
-            <element signature="e#7855#7937#0" expanded="false" />
-            <element signature="e#8027#8148#0" expanded="false" />
-            <element signature="e#8206#8342#0" expanded="false" />
-            <element signature="e#8369#8490#0" expanded="false" />
-            <element signature="e#12451#13747#1" expanded="false" />
-            <element signature="e#14321#14698#0" expanded="false" />
-            <element signature="e#14973#15070#0" expanded="false" />
-            <element signature="e#15833#15926#0" expanded="false" />
-            <element signature="e#20159#20295#0" expanded="false" />
-            <element signature="e#22472#22584#0" expanded="false" />
-            <element signature="e#24603#24724#0" expanded="false" />
-            <element signature="e#25168#25403#0" expanded="false" />
-            <element signature="e#25890#26002#0" expanded="false" />
-            <element signature="e#27123#27824#1" expanded="false" />
-            <element signature="e#28053#28151#0" expanded="false" />
-            <element signature="e#28440#28779#0" expanded="false" />
-            <element signature="e#30636#31003#0" expanded="false" />
-            <element signature="e#30714#30974#0" expanded="false" />
-            <element signature="e#31135#32981#0" expanded="false" />
-            <element signature="e#31252#31377#0" expanded="false" />
-            <element signature="e#31595#31705#0" expanded="false" />
-            <element signature="e#32132#32199#0" expanded="false" />
-            <element signature="e#33528#34191#0" expanded="false" />
-            <element signature="e#33528#33588#0" expanded="false" />
-            <element signature="e#33813#33987#0" expanded="false" />
-            <element signature="e#34016#34074#0" expanded="false" />
-            <element signature="e#34229#34898#0" expanded="false" />
-            <element signature="e#39330#39765#0" expanded="false" />
-            <element signature="e#39468#39608#0" expanded="false" />
-            <element signature="e#39818#40252#0" expanded="false" />
-            <element signature="e#39940#40086#0" expanded="false" />
-            <element signature="e#40302#40427#0" expanded="false" />
-            <element signature="e#40470#41386#0" expanded="false" />
-            <element signature="e#41527#42645#0" expanded="false" />
-            <element signature="e#41527#41643#0" expanded="false" />
-            <element signature="e#42006#42144#0" expanded="false" />
-            <element signature="e#42693#43883#0" expanded="false" />
-            <element signature="e#42852#42983#0" expanded="false" />
-            <element signature="e#42985#43101#0" expanded="false" />
-            <element signature="e#43931#45117#0" expanded="false" />
-            <element signature="e#44089#44220#0" expanded="false" />
-            <element signature="e#44222#44337#0" expanded="false" />
-            <element signature="e#45169#45637#0" expanded="false" />
-            <element signature="e#45688#46187#0" expanded="false" />
-            <element signature="e#46239#46748#0" expanded="false" />
-            <element signature="e#46804#47299#0" expanded="false" />
-            <element signature="e#47353#47871#0" expanded="false" />
-            <element signature="e#48001#48114#0" expanded="false" />
-            <element signature="e#48245#48483#0" expanded="false" />
-            <element signature="e#48525#51276#0" expanded="false" />
-            <element signature="e#49219#49292#0" expanded="false" />
-            <element signature="e#49587#51070#0" expanded="false" />
-            <element signature="e#49587#49625#0" expanded="false" />
-            <element signature="e#49742#51070#0" expanded="false" />
-            <element signature="e#50498#50659#0" expanded="false" />
-            <element signature="e#50702#50868#0" expanded="false" />
-            <element signature="e#51407#52816#0" expanded="false" />
-            <element signature="e#51407#51487#1" expanded="false" />
-            <element signature="e#51548#51632#0" expanded="false" />
-            <element signature="e#52124#52552#0" expanded="false" />
-            <element signature="e#52436#52552#0" expanded="false" />
-            <element signature="e#52860#52981#0" expanded="false" />
-            <element signature="e#52985#53099#0" expanded="false" />
-            <element signature="e#53191#53379#0" expanded="false" />
-            <element signature="e#53235#53379#0" expanded="false" />
-            <element signature="e#53413#53764#0" expanded="false" />
-            <marker date="1493264515123" expanded="false" signature="34938:35277" ph="..." />
-            <marker date="1493264515123" expanded="false" signature="35043:35149" ph="..." />
-            <marker date="1493264515123" expanded="false" signature="35176:35277" ph="..." />
-            <marker date="1493264515123" expanded="true" signature="35326:37253" ph="..." />
-            <marker date="1493264515123" expanded="true" signature="35568:36929" ph="..." />
-            <marker date="1493264515123" expanded="false" signature="35794:35997" ph="..." />
-            <marker date="1493264515123" expanded="false" signature="36964:37078" ph="..." />
-            <marker date="1493264515123" expanded="false" signature="38806:39011" ph="..." />
-            <marker date="1493264515123" expanded="false" signature="39075:39244" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/track.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="368" column="62" lean-forward="false" selection-start-line="368" selection-start-column="62" selection-end-line="368" selection-end-column="62" />
+        <state relative-caret-position="36">
+          <caret line="920" column="0" lean-forward="true" selection-start-line="920" selection-start-column="0" selection-end-line="920" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="false" />
-            <element signature="e#1195#1204#0" expanded="true" />
+            <element signature="e#1210#1264#0" expanded="true" />
+            <element signature="e#38313#38637#0" expanded="false" />
+            <element signature="e#38689#39892#0" expanded="false" />
+            <element signature="e#39948#41180#0" expanded="false" />
+            <element signature="e#41234#42435#0" expanded="false" />
+            <element signature="e#42487#43333#0" expanded="false" />
+            <element signature="e#43384#44381#0" expanded="false" />
+            <element signature="e#44512#45062#0" expanded="false" />
+            <element signature="e#45107#46483#0" expanded="false" />
+            <element signature="e#46528#47510#0" expanded="false" />
+            <element signature="e#47681#48409#0" expanded="false" />
+            <element signature="e#48462#49101#0" expanded="false" />
+            <element signature="e#49167#49347#0" expanded="false" />
+            <element signature="e#49390#50467#0" expanded="false" />
+            <element signature="e#50619#51714#0" expanded="false" />
+            <element signature="e#51827#52614#0" expanded="false" />
+            <element signature="e#52735#53486#0" expanded="false" />
+            <element signature="e#53730#53928#0" expanded="false" />
+            <element signature="e#57027#57211#0" expanded="false" />
           </folding>
         </state>
       </provider>

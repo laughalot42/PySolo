@@ -1,32 +1,66 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#       Major revisions by Caitlin A Laughrey and Loretta E Laughrey in 2016-2017.
+#
+#       pvg_acquire.py
+#
+#       Copyright 2011 Giorgio Gilestro <giorgio@gilest.ro>
+#
+#       This program is free software; you can redistribute it and/or modify
+#       it under the terms of the GNU General Public License as published by
+#       the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+#
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#       GNU General Public License for more details.
+#
+#       You should have received a copy of the GNU General Public License
+#       along with this program; if not, write to the Free Software
+#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#       MA 02110-1301, USA.
+#
+#
+
+__author__ = "Giorgio Gilestro <giorgio@gilest.ro>"
+__version__ = "$Revision: 1.0 $"
+__date__ = "$Date: 2011/08/16 21:57:19 $"
+__copyright__ = "Copyright (c) 2011 Giorgio Gilestro"
+__license__ = "Python"
+
+
 import wx                               # GUI controls
 import os
 import winsound
 import wx.lib.masked as masked
-from filebrowsebutton_LL import FileBrowseButton, DirBrowseButton
+from filebrowser_LL import filebrowser_LL, folderbrowser_LL
 from wx.lib.masked import NumCtrl
 
 import configurator as cfg
 import videoMonitor as VM
 import pysolovideoGlobals as gbl
 
-# TODO: datetimes are not working.  they look fine on the maskpanel, but are wrong in the configuration
-#                   they change randomly when unrelated statements are executed.
-# TODO: removed live camera option.  tracking doesn't stop because camera doesn't stop.
+# TODO:  tab controls are still a little out of order.  Date and videoOn cause problems
 
-
-class maskMakerPanel(wx.Panel):
-    #
-    # cfg settings won't change unless configuration is changed, which will kill this object
-    # mon settings may change due to threading, so these settings will be assigned here and cfg_dict updated after any changes
-    #
-
+""" ================================================================================= Create monitor configuration panel
+"""
+class monCfgPanel(wx.Panel):
+    """
+    A monitor configuration page.
+    cfg settings won't change unless configuration is changed, which will kill this object
+    mon settings may change due to threading, so these settings will be assigned here and cfg_dict updated 
+        after any changes
+    """
+    # ------------------------------------------------------------------------ initialize the monitor configuration page
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, wx.ID_ANY, size=(640,480), name=gbl.mon_name)
 
         self.parent =           parent
         self.mon_ID =           gbl.mon_ID
-        cfg.cfg_dict_to_nicknames()       # set all nicknames for this monitor.  use these so changes will be saved on page change.
-        cfg.mon_dict_to_nicknames()
+        cfg.cfg_dict_to_nicknames()                             # update program configuation
+        cfg.mon_dict_to_nicknames()                             # load information for current monitor
         self.start_datetime =   gbl.start_datetime
         self.mon_name =         gbl.mon_name
         self.preview_size =     gbl.preview_size
@@ -34,25 +68,27 @@ class maskMakerPanel(wx.Panel):
         self.preview_font =     gbl.preview_font
         self.preview_RGBcolor = gbl.preview_RGBcolor
         self.line_thickness =   gbl.line_thickness
+        self.video_on =         gbl.video_on
         self.source =           gbl.source
         self.monitors =         gbl.monitors
         self.data_folder =      gbl.data_folder
         self.source_type =      gbl.source_type
         self.source_fps =       gbl.source_fps
         self.source_mmsize =    gbl.source_mmsize
-        self.issdmonitor =      gbl.issdmonitor
+#        self.issdmonitor =      gbl.issdmonitor        # NOT IN USE
         self.track_type =       gbl.track_type
         self.track =            gbl.track
         self.mask_file =        gbl.mask_file
+        self.ROIs =             []
+        self.shouldSaveMask =   False
+        self.shouldSaveCfg =    False
 
         self.widgets()
         self.binders()
         self.sizers()
 
+    # order of creation dictates order of tab movement
     def widgets(self):
-
-        # TODO: get coordinate values by clicking the mouse
-        # TODO: add PySolo single ROI drawing
 
     # ------------------------------------------------------------------------------------------------------------ Title
 #        self.title = wx.StaticText(self, -1, "\n %s" % self.mon_name)  # title
@@ -60,15 +96,8 @@ class maskMakerPanel(wx.Panel):
 #        self.title.SetFont(font)
 
     # -------------------------------------------------------------------------------------------- video display options
-        self.previewPanel = VM.monitorPanel(self, mon_ID=self.mon_ID, panelType='preview', loop=True)
-
-        self.previewSizeLabel = wx.StaticText(self, wx.ID_ANY, 'frame size =')           # ------ preview frame size
-        self.previewSize = wx.TextCtrl (self, wx.ID_ANY, str(self.preview_size),
-                                            style=wx.TE_PROCESS_ENTER, name='previewSize')
-
-        self.previewFPSLabel = wx.StaticText(self, wx.ID_ANY, 'preview fps =')         # --------- preview video fps
-        self.previewFPS = wx.TextCtrl(self, wx.ID_ANY, str(self.preview_fps),
-                                              style=wx.TE_PROCESS_ENTER, name='previewFPS')
+        self.previewPanel = VM.monitorPanel(self, mon_ID=self.mon_ID, panelType='preview', loop=True, ROIs=[])
+    # TODO: add PySolo single ROI drawing
 
         self.previewFontLabel = wx.StaticText(self, wx.ID_ANY, 'preview font =')         # --------- preview video fps
         self.previewFont = wx.TextCtrl(self, wx.ID_ANY, str(self.preview_font),
@@ -82,105 +111,16 @@ class maskMakerPanel(wx.Panel):
         self.lineThickness = wx.TextCtrl(self, wx.ID_ANY, str(self.line_thickness),
                                               style=wx.TE_PROCESS_ENTER, name='lineThickness')
 
-        # ---------------------------------------------------------------------------------------  Save Configuration Button
-        self.btnSaveCfg = wx.Button(self, wx.ID_ANY, label='Save Configuration', size=(130, 25))
-        if self.source != '':
-            self.btnSaveCfg.Enable(True)  # don't allow save if no source is selected
-        else:
-            self.btnSaveCfg.Enable(False)
+        self.previewSizeLabel = wx.StaticText(self, wx.ID_ANY, 'frame size =')           # ------ preview frame size
+        self.previewSize = wx.TextCtrl (self, wx.ID_ANY, str(self.preview_size),
+                                            style=wx.TE_PROCESS_ENTER, name='previewSize')
 
-            # ---------------------------------------------------------------------------------------  Delete Monitor Button
-        self.btnRemoveMonitor = wx.Button(self, wx.ID_ANY, label='Delete Monitor', size=(130, 25))
-        if self.monitors == 1:  # don't allow last monitor to be deleted
-            self.btnRemoveMonitor.Enable(False)
-        else:
-            self.btnRemoveMonitor.Enable(True)
+        self.previewFPSLabel = wx.StaticText(self, wx.ID_ANY, 'preview fps =')         # --------- preview video fps
+        self.previewFPS = wx.TextCtrl(self, wx.ID_ANY, str(self.preview_fps),
+                                              style=wx.TE_PROCESS_ENTER, name='previewFPS')
 
-        # -------------------------------------------------------------------------------------------------------- source
-        self.txt_source = wx.StaticText(self, wx.ID_ANY, "Source:  ")
-        if self.source is not None:
-            self.currentSource = wx.TextCtrl(self, wx.ID_ANY, self.source, style=wx.TE_READONLY)  # get current source
-        else:
-            self.currentSource = wx.TextCtrl(self, wx.ID_ANY, 'None Selected', style=wx.TE_READONLY)  # get current source
 
-            # -------------------------------------------------------------------------------  Webcam selection combobox
-        #        if len(gbl.webcams_inuse) >= gbl.webcams:                          # only one webcam implemented at this time
-        #            self.WebcamsList = ['No more webcams available.']
-        #        else:
-        #        self.WebcamsList = ['Webcam %s' % (int(w) + 1) for w in range(gbl.webcams)]
-#        self.WebcamsList = ['Webcam 1']
 
-        # ------------------------------------------------------------------------------------------- source options
-        self.source_IDs = [wx.ID_ANY, wx.ID_ANY, wx.ID_ANY]
-        self.sources = ['placeholder for webcams',
-#                         (wx.ComboBox(self, id=self.source_IDs[0], choices=self.WebcamsList, name='sources0',  # webcam
-#                                     style=wx.EXPAND | wx.CB_DROPDOWN | wx.CB_READONLY | wx.CB_SORT)),
-                        (FileBrowseButton(self, id=self.source_IDs[1],  # video file
-                                          name='sources1', buttonText='Browse',
-                                          toolTip='Type filename or click browse to choose video file',
-                                          dialogTitle='Choose a video file',
-                                          startDirectory=self.data_folder,
-                                          wildcard='*.*', style=wx.ALL, changeCallback=self.onChangeSource1)),
-                        (DirBrowseButton(self, id=self.source_IDs[2], name='sources2',  # folder of images
-                                         style=wx.DD_DIR_MUST_EXIST,
-                                         startDirectory=self.data_folder, changeCallback=self.onChangeSource2))
-                        ]
-
-        # --------------------------------------------------------------------------------  source type radio buttons
-#        self.rbs = [(wx.RadioButton(self, wx.ID_ANY, 'Camera', style=wx.RB_GROUP)),
-        self.rbs = ['placeholder for camera radiobutton',
-                    (wx.RadioButton(self, wx.ID_ANY, 'File')),
-                    (wx.RadioButton(self, wx.ID_ANY, 'Folder'))
-                    ]
-
-        # ------------------------------------------------------------------------------------------------ mask file browser
-        wildcard = 'PySolo Video mask file (*.msk)|*.msk|' \
-                   'All files (*.*)|*.*'  # adding space in here will mess it up!
-
-        if self.mask_file is None:
-            startDirectory = self.data_folder  # Default directory for file dialog startup
-            initialValue = 'None Selected'
-        elif os.path.isfile(self.mask_file):
-            startDirectory = os.path.split(self.mask_file)[0]  # Default directory for file dialog startup
-            initialValue = self.mask_file
-        else:
-            startDirectory = self.data_folder  # Default directory for file dialog startup
-            initialValue = 'None Selected'
-
-        self.pickMaskBrowser = FileBrowseButton(self, id=wx.ID_ANY,
-                                                labelText='Mask File:         ', buttonText='Browse',
-                                                toolTip='Type filename or click browse to choose mask file',
-                                                dialogTitle='Choose a mask file',
-                                                startDirectory=startDirectory, initialValue=initialValue,
-                                                wildcard=wildcard, style=wx.ALL,
-                                                changeCallback=self.onMaskBrowse,
-                                                name='pickMaskBrowser')
-
-        # -------------------------------------------------------------------------------------------- output folder browser
-        if self.data_folder is None:
-            startDirectory = self.data_folder = gbl.cfg_path  # Default directory is config directory
-        elif os.path.isdir(self.data_folder):
-            startDirectory = self.data_folder               # Default directory from config file
-        else:
-            startDirectory = self.data_folder = gbl.cfg_path  # Default directory is config directory
-
-        self.pickOutputBrowser = DirBrowseButton(self, id=wx.ID_ANY,
-                                                 style=wx.TAB_TRAVERSAL,
-                                                 labelText='Output Folder:  ',
-                                                 dialogTitle='Choose an output folder',
-                                                 startDirectory=self.data_folder,
-                                                 value=gbl.data_folder,
-                                                 changeCallback=self.onChangeOutput,
-                                                 name='pickOutputBrowser')
-
-   # ------------------------------------------------------------------------------------------------- video attributes
-        self.txtSourceFPS = wx.StaticText(self, wx.ID_ANY, 'Speed (fps) =')           # ---------------- source fps
-        self.sourceFPS = wx.TextCtrl (self, wx.ID_ANY, str(self.source_fps),
-                                              style=wx.TE_PROCESS_ENTER, name='sourceFPS')
-
-        self.txtSourceMMSize = wx.StaticText(self, wx.ID_ANY, 'Frame Size (mm)')           # ---------------- source fps
-        self.sourceMMSize = wx.TextCtrl (self, wx.ID_ANY, str(self.source_mmsize),
-                                              style=wx.TE_PROCESS_ENTER, name='sourceMMSize')
 
         # ------------------------------------------------------------------------------------------- Date & Time
         # I prefer the wx.datepickerctrl and masked.timectrl widgets, but the date and time handling in wxDateTime is
@@ -193,7 +133,7 @@ class maskMakerPanel(wx.Panel):
         self.txtDate = wx.StaticText(self, wx.ID_ANY, "Date: ")                        # ---------------- start date
         wxdt = gbl.pydatetime2wxdatetime(self.start_datetime)
         self.startDate = wx.DatePickerCtrl(self, wx.ID_ANY, dt=wxdt,
-                                            style=wx.DP_DROPDOWN | wx.DP_SHOWCENTURY | wx.TE_PROCESS_ENTER, name='start_date')
+                                            style=wx.DP_DROPDOWN | wx.DP_SHOWCENTURY | wx.TE_PROCESS_ENTER, name='startDate')
 
 
         self.txtTime = wx.StaticText(self, wx.ID_ANY, 'Time (24-hr):  ')                 # ---------------- start time
@@ -203,16 +143,26 @@ class maskMakerPanel(wx.Panel):
                                           name='time: \n24 hour control', fmt24hr=True,
                                           spinButton=self.btnSpin, style=wx.TE_PROCESS_ENTER)
 
-        """
+        # -------------------------------------------------------------------------------------- source video attributes
+        self.txtSourceMMSize = wx.StaticText(self, wx.ID_ANY, 'Frame Size (mm)')  # ---------- source field size in mm
+        self.sourceMMSize = wx.TextCtrl(self, wx.ID_ANY, str(self.source_mmsize),
+                                        style=wx.TE_PROCESS_ENTER, name='sourceMMSize')
+
+        self.txtSourceFPS = wx.StaticText(self, wx.ID_ANY, 'Speed (fps) =')  # ---------------------------- source fps
+        self.sourceFPS = wx.TextCtrl(self, wx.ID_ANY, str(self.source_fps),
+                                     style=wx.TE_PROCESS_ENTER, name='sourceFPS')
+
+
+        """     NOT IN USE
     # ------------------------------------------------------------------------------------------------ activate tracking
         self.trackBox = wx.CheckBox(self, wx.ID_ANY, 'Activate Tracking')
         self.trackBox.Enable(True)
-        self.trackBox.SetValue(str(self.track))
+        self.trackBox.ChangeValue(str(self.track))
 
     # ---------------------------------------------------------------------------------------- sleep deprivation monitor
         self.isSDMonitor = wx.CheckBox(self, wx.ID_ANY, 'Sleep Deprivation Monitor')
         self.isSDMonitor.Enable(True)
-        self.isSDMonitor.SetValue(str(self.issdmonitor))
+        self.isSDMonitor.ChangeValue(str(self.issdmonitor))
 
     # ---------------------------------------------------------------------------------------------------- tracking type
         self.trackChoice = [(wx.RadioButton(self, wx.ID_ANY, 'Activity as distance traveled', style=wx.RB_GROUP)),
@@ -222,9 +172,9 @@ class maskMakerPanel(wx.Panel):
         for count in range(0, len(self.trackChoice)):
             self.trackChoice[count].Enable(True)
             if self.trackType == count:
-                self.trackChoice[count].SetValue(True)
+                self.trackChoice[count].ChangeValue(True)
             else:
-                self.trackChoice[count].SetValue(False)
+                self.trackChoice[count].ChangeValue(False)
         """
 
         # -------------------------------------------------------------------------------------------- instructional diagram
@@ -247,8 +197,8 @@ class maskMakerPanel(wx.Panel):
         self.X.append(wx.StaticText(self, wx.ID_ANY, "Columns (X)"))  # column header for columns
         self.Y.append(wx.StaticText(self, wx.ID_ANY, "Rows (Y)"))  # column header for rows
         for cnt in range(0, 5):
-            self.X.append(NumCtrl(self, wx.ID_ANY, 0))
-            self.Y.append(NumCtrl(self, wx.ID_ANY, 0))
+            self.X.append(NumCtrl(self, wx.ID_ANY, 0, name='xy'))
+            self.Y.append(NumCtrl(self, wx.ID_ANY, 0, name='xy'))
 
         # ------------------------------------------------------------------------------------ mask generator & save buttons
         self.btnMaskGen = wx.Button(self, wx.ID_ANY, label="Generate Mask", size=(130, 25))
@@ -257,47 +207,158 @@ class maskMakerPanel(wx.Panel):
         self.btnSaveMask = wx.Button(self, wx.ID_ANY, label="Save Mask", size=(130, 25))
         self.btnSaveMask.Enable(True)
 
+        # ---------------------------------------------------------------------------------------  Save Configuration Button
+        self.btnSaveCfg = wx.Button(self, wx.ID_ANY, label='Save Configuration', size=(130, 25))
+        if self.source != '':
+            self.btnSaveCfg.Enable(True)  # don't allow save if no source is selected
+        else:
+            self.btnSaveCfg.Enable(False)
+
+        # ---------------------------------------------------------------------------------------  Delete Monitor Button
+
+        self.btnRemoveMonitor = wx.Button(self, wx.ID_ANY, label='Delete Monitor', size=(130, 25))
+        if self.monitors == 1:  # don't allow last monitor to be deleted
+            self.btnRemoveMonitor.Enable(False)
+        else:
+            self.btnRemoveMonitor.Enable(True)
+
+        # -------------------------------------------------------------------------------------------------------- source
+        self.txt_source = wx.StaticText(self, wx.ID_ANY, "Source:  ")
+        if self.source is not None:  # get current source
+            self.currentSource = wx.TextCtrl(self, wx.ID_ANY, self.source, style=wx.TE_READONLY, name='currentSource')
+        else:
+            self.currentSource = wx.TextCtrl(self, wx.ID_ANY, 'None Selected', style=wx.TE_READONLY)
+
+            # -------------------------------------------------------------------------------  Webcam selection combobox
+            #        if len(gbl.webcams_inuse) >= gbl.webcams:                          # only one webcam implemented at this time
+            #            self.WebcamsList = ['No more webcams available.']
+            #        else:
+            #        self.WebcamsList = ['Webcam %s' % (int(w) + 1) for w in range(gbl.webcams)]
+            #        self.WebcamsList = ['Webcam 1']
+
+        # ------------------------------------------------------------------------------------------- source options
+        self.source_IDs = [wx.ID_ANY, wx.ID_ANY, wx.ID_ANY]
+        self.sources = ['placeholder for webcams',
+                        #                         (wx.ComboBox(self, id=self.source_IDs[0], choices=self.WebcamsList, name='sources0',  # webcam
+                        #                                     style=wx.EXPAND | wx.CB_DROPDOWN | wx.CB_READONLY | wx.CB_SORT)),
+                        (filebrowser_LL(self, id=self.source_IDs[1],                    # video file - source[1]
+                                          name='sources1',
+                                          btn_label='Browse', label_label='',
+                                          message='Choose a video file',
+                                          defaultDir=self.data_folder,
+                                          defaultFile='',
+                                          wildcard='*.*', dlg_style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST,
+                                          changeCallback=self.onChangeSource1
+                                          )),
+                        (folderbrowser_LL(self, id=self.source_IDs[2],
+                                          name='sources2',                              # folder of images - source[2]
+                                          btn_label='Browse', label_label='',
+                                          message='Choose a video file',
+                                          defaultDir=self.data_folder,
+                                          changeCallback=self.onChangeSource2
+                                         ))
+                        ]
+
+        # --------------------------------------------------------------------------------  source type radio buttons
+        #        self.rbs = [(wx.RadioButton(self, wx.ID_ANY, 'Camera', style=wx.RB_GROUP)),
+        self.rbs = ['placeholder for camera radiobutton',
+                    (wx.RadioButton(self, wx.ID_ANY, 'File')),
+                    (wx.RadioButton(self, wx.ID_ANY, 'Folder'))
+                    ]
+
+        # ------------------------------------------------------------------------------------------------ mask file browser
+        wildcard = 'PySolo Video mask file (*.msk)|*.msk|' \
+                   'All files (*.*)|*.*'  # adding space in here will mess it up!
+
+        if self.mask_file is None:
+            startDirectory = self.data_folder  # Default directory for file dialog startup
+            initialValue = 'None Selected'
+        elif os.path.isfile(self.mask_file):
+            startDirectory = os.path.split(self.mask_file)[0]  # Default directory for file dialog startup
+            initialValue = self.mask_file
+        else:
+            startDirectory = self.data_folder  # Default directory for file dialog startup
+            initialValue = 'None Selected'
+
+        self.pickMaskBrowser = filebrowser_LL(self, id=wx.ID_ANY,
+                                          name='pickMaskBrowser',
+                                          btn_label='Browse', label_label='Mask File: ',
+                                          message='Choose a mask file',
+                                          defaultDir=startDirectory,
+                                          defaultFile=initialValue,
+                                          wildcard=wildcard, dlg_style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST,
+                                          changeCallback=self.onChangeMask)
+
+        # -------------------------------------------------------------------------------------------- output folder browser
+        if self.data_folder is None:
+            startDirectory = self.data_folder = gbl.cfg_path  # Default directory is config directory
+        elif os.path.isdir(self.data_folder):
+            startDirectory = self.data_folder  # Default directory from config file
+        else:
+            startDirectory = self.data_folder = gbl.cfg_path  # Default directory is config directory
+
+        self.pickOutputBrowser = folderbrowser_LL(self, id=wx.ID_ANY,
+                                               name='pickOutputBrowser',
+                                               btn_label='Browse', label_label='Output Folder:  ',
+                                               message='Choose an output folder',
+                                               defaultDir=self.data_folder,
+                                               changeCallback=self.onChangeOutput)
+
+        # ------------------------------------------------------------------ turns on frame-by-frame video for debugging
+        self.videoOn = wx.CheckBox(self, id=wx.ID_ANY, label='Watch Video Tracking',
+                                   name='videoOn')  # ---- watch video frame-by-frame while tracking
+
     def binders(self):  # -------------------------------------------------------------------------------- Event Binders
 
-#        self.Bind(wx.EVT_RADIOBUTTON,       self.onChangeRb,            self.rbs[0])
-        self.Bind(wx.EVT_RADIOBUTTON,       self.onChangeRb,            self.rbs[1])
-        self.Bind(wx.EVT_RADIOBUTTON,       self.onChangeRb,            self.rbs[2])
-#        self.Bind(wx.EVT_RADIOBUTTON,       self.onChangeTrackType,     self.trackChoice[0])
-#        self.Bind(wx.EVT_RADIOBUTTON,       self.onChangeTrackType,     self.trackChoice[1])
-#        self.Bind(wx.EVT_RADIOBUTTON,       self.onChangeTrackType,     self.trackChoice[2])
-        self.Bind(wx.EVT_BUTTON,            self.onSaveCfg,             self.btnSaveCfg)
-        self.Bind(wx.EVT_BUTTON,            self.onRemoveMonitor,       self.btnRemoveMonitor)
-        self.Bind(wx.EVT_BUTTON,            self.onMaskGen,             self.btnMaskGen)
-        self.Bind(wx.EVT_BUTTON,            self.onSaveMask,            self.btnSaveMask)
-#        self.Bind(wx.EVT_COMBOBOX,          self.onChangeSource0,       self.sources[0])
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSource1,       self.sources[1])
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSource2,       self.sources[2])
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSourceFPS,     self.sourceFPS)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeSourceMMSize,  self.sourceMMSize)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewSize,   self.previewSize)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewFPS,    self.previewFPS)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewFont,   self.previewFont)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangePreviewRGBColor,self.previewRGBColor)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeLineThickness, self.lineThickness)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onChangeOutput,        self.pickOutputBrowser)
-        self.Bind(wx.EVT_TEXT_ENTER,        self.onMaskBrowse,          self.pickMaskBrowser)
+#        self.Bind(wx.EVT_RADIOBUTTON,   self.onChangeRb,               self.rbs[0])       # webcams NOT IN USE
+#        self.Bind(wx.EVT_COMBOBOX,      self.onChangeSource0,          self.sources[0])       # Webcams NOT IN USE
+#        self.Bind(wx.EVT_RADIOBUTTON,   self.onChangeTrackType,        self.trackChoice[0])   # only track distance is used
+#        self.Bind(wx.EVT_RADIOBUTTON,   self.onChangeTrackType,        self.trackChoice[1])
+#        self.Bind(wx.EVT_RADIOBUTTON,   self.onChangeTrackType,        self.trackChoice[2])
+        self.Bind(wx.EVT_RADIOBUTTON,   self.onChangeRb,               self.rbs[1])
+        self.Bind(wx.EVT_RADIOBUTTON,   self.onChangeRb,               self.rbs[2])
+        self.Bind(wx.EVT_BUTTON,        self.onSaveCfg,                self.btnSaveCfg)
+        self.Bind(wx.EVT_BUTTON,        self.onRemoveMonitor,          self.btnRemoveMonitor)
+        self.Bind(wx.EVT_BUTTON,        self.onMaskGen,                self.btnMaskGen)
+        self.Bind(wx.EVT_BUTTON,        self.onSaveMask,               self.btnSaveMask)
+        self.Bind(wx.EVT_CHECKBOX,      self.onChangeVideoOn,          self.videoOn)
+
+        # ------------------------------------------------------------------------------------- process enter keys
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangePreviewFont,      self.previewFont)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangePreviewRGBColor,  self.previewRGBColor)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeLineThickness,    self.lineThickness)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangePreviewSize,      self.previewSize)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangePreviewFPS,       self.previewFPS)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeSourceMMSize,     self.sourceMMSize)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeSourceFPS,        self.sourceFPS)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeDate,             self.startDate)
+        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeTime,             self.startTime)
+#        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeSource1,          self.sources[1])
+#        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeSource2,          self.sources[2])
+#        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeMask,             self.pickMaskBrowser)
+#        self.Bind(wx.EVT_TEXT_ENTER,    self.onChangeOutput,           self.pickOutputBrowser)
+
+        # -------------------------------------------------------------------------------- process other navigation keys
 
 
-        self.Bind(wx.EVT_TEXT_ENTER, self.onChangeDateTime, self.startDate)
-        self.Bind(wx.EVT_TEXT_ENTER, self.onChangeDateTime, self.startTime)
-
-# date and time fields require special event handling
-        self.startDate.Bind(wx.EVT_KEY_UP,          self.onChangeDateTime)
-        self.startDate.Bind(wx.EVT_NAVIGATION_KEY,  self.onChangeDateTime)
-        self.startTime.Bind(wx.EVT_KEY_UP,          self.onChangeDateTime)
-        self.startTime.Bind(wx.EVT_NAVIGATION_KEY,  self.onChangeDateTime)
+        self.previewFont.Bind(wx.EVT_KILL_FOCUS,        self.onChangePreviewFont)
+        self.previewRGBColor.Bind(wx.EVT_KILL_FOCUS,    self.onChangePreviewRGBColor)
+        self.lineThickness.Bind(wx.EVT_KILL_FOCUS,      self.onChangeLineThickness)
+        self.previewSize.Bind(wx.EVT_KILL_FOCUS,        self.onChangePreviewSize)
+        self.previewFPS.Bind(wx.EVT_KILL_FOCUS,         self.onChangePreviewFPS)
+        self.sourceMMSize.Bind(wx.EVT_KILL_FOCUS,       self.onChangeSourceMMSize)
+        self.sourceFPS.Bind(wx.EVT_KILL_FOCUS,          self.onChangeSourceFPS)
+        self.startDate.Bind(wx.EVT_KILL_FOCUS,          self.onChangeDate)
+        self.startTime.Bind(wx.EVT_KILL_FOCUS,          self.onChangeTime)
 
     def sizers(self):
         self.mainSizer              = wx.BoxSizer(wx.HORIZONTAL)                                #   Main
-        self.right_Sizer              = wx.BoxSizer(wx.VERTICAL)                                #   |   right_
+        self.right_Sizer            = wx.BoxSizer(wx.VERTICAL)                                  #   |   right_
         self.sb_selectsource        = wx.StaticBox(self, wx.ID_ANY, 'Select Source')            #   |   |   source selection text
         self.sbSizer_selectsource   = wx.StaticBoxSizer(self.sb_selectsource, wx.VERTICAL)      #   |   |   select box
         self.sourceGridSizer        = wx.FlexGridSizer(5, 2, 2, 2)                              #   |   |   |   |   grid of rbs & sources
+        self.sourceGridSizer.SetFlexibleDirection(wx.HORIZONTAL)
+        self.sourceGridSizer.AddGrowableCol(1)
         self.sb_maskNoutput         = wx.StaticBox(self, wx.ID_ANY, '')                         #   |   |   monitor selection text
         self.sbSizer_maskNoutput    = wx.StaticBoxSizer(self.sb_maskNoutput, wx.VERTICAL)       #   |   |   |   select box
         self.maskBrowserSizer       = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   |   |   mask browser
@@ -320,19 +381,18 @@ class maskMakerPanel(wx.Panel):
         self.tableSizer             = wx.BoxSizer(wx.VERTICAL)                                  #   |   |   |   table
         self.coordSizer             = wx.FlexGridSizer(6, 3, 1, 5)                              #   |   |   |   |   cooridnates
         self.button_sizer           = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   |   |   buttons
-#        self.left_Sizer             = wx.BoxSizer(wx.VERTICAL)                                  #   |   left_
+#        self.left_Sizer             = wx.BoxSizer(wx.VERTICAL)                                 #   |   left_
         self.sb_Monitor             = wx.StaticBox(self, wx.ID_ANY, self.mon_name)              #   |   |   |   mask generator text
         self.sbSizer_Monitor        = wx.StaticBoxSizer(self.sb_Monitor, wx.VERTICAL)           #   |   |   |   mask generator box
-#        self.titleSizer             = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   Monitor title
-        self.videoSizer             = wx.BoxSizer(wx.VERTICAL)                                #   |   |   video panel
+#        self.titleSizer             = wx.BoxSizer(wx.HORIZONTAL)                               #   |   |   Monitor title
+        self.videoSizer             = wx.BoxSizer(wx.VERTICAL)                                  #   |   |   video panel
         self.settingsSizer          = wx.FlexGridSizer(2, 6, 2, 2)                              #   |   |   preview settings
         self.saveNdeleteSizer       = wx.BoxSizer(wx.HORIZONTAL)                                #   |   |   save and delete buttons
 
-
         # ------------------------------------------------------------------------------ left_ Side  Video Preview Panel
         #                                      this sizer saves the spot in left_Sizer in case video is changed later
-        self.videoSizer.Add(self.previewPanel,                          1, wx.ALL | wx.ALIGN_TOP |
-                                                                wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
+        self.videoSizer.Add(self.previewPanel,                          1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL |
+                                                                                    wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.settingsSizer.Add(self.previewFontLabel,                   0, wx.ALL | wx.EXPAND, 5)
         self.settingsSizer.Add(self.previewFont,                        0, wx.ALL | wx.EXPAND, 5)
@@ -344,6 +404,8 @@ class maskMakerPanel(wx.Panel):
         self.settingsSizer.Add(self.previewSize,                        0, wx.ALL | wx.EXPAND, 5)
         self.settingsSizer.Add(self.previewFPSLabel,                    0, wx.ALL | wx.EXPAND, 5)
         self.settingsSizer.Add(self.previewFPS,                         0, wx.ALL | wx.EXPAND, 5)
+        self.settingsSizer.AddSpacer(10)
+        self.settingsSizer.Add(self.videoOn,                            0, wx.ALL , 5)
 
         self.saveNdeleteSizer.Add(self.btnSaveCfg,                      1, wx.ALL, 5)
         self.saveNdeleteSizer.Add(self.btnRemoveMonitor,                1, wx.ALL, 5)
@@ -388,7 +450,8 @@ class maskMakerPanel(wx.Panel):
         self.source_Sizer.Add(self.sourceFPS,                     0, wx.ALL | wx.ALIGN_LEFT, 5)
 
         self.sbSizer_SourceParms.Add(self.source_Sizer)
-        """
+
+        """ NOT IN USE
         # -------------------------------------------------------------------------------- tracking options
         self.trackOptionsSizer.Add(self.trackBox,                       0, wx.ALL | wx.ALIGN_LEFT, 5)
         self.trackOptionsSizer.Add(self.isSDMonitor,                    0, wx.ALL | wx.ALIGN_LEFT, 5)
@@ -423,8 +486,8 @@ class maskMakerPanel(wx.Panel):
 
 
         # ------------------------------------------------------------------------------------------ fill right_ bottom
-        self.sbSizer_MaskGen.Add(self.diagramSizer,                   0, wx.ALL | wx.ALIGN_CENTER, 2)
         self.sbSizer_MaskGen.Add(self.tableSizer,                     0, wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, 2)
+        self.sbSizer_MaskGen.Add(self.diagramSizer,                   0, wx.ALL | wx.ALIGN_CENTER, 2)
 
         self.right_Sizer.Add(self.sbSizer_selectsource,               1, wx.ALL | wx.EXPAND,   5)
         self.right_Sizer.Add(self.sbSizer_maskNoutput,                1, wx.ALL | wx.EXPAND,   5)
@@ -437,7 +500,6 @@ class maskMakerPanel(wx.Panel):
 
         self.SetSizer(self.mainSizer)
         self.Layout()
-        print('check')
 
     def addWidgets(self, mainSizer ,widgets):       # ---------------------------------------  used for datetime widgets
 
@@ -450,6 +512,7 @@ class maskMakerPanel(wx.Panel):
         mainSizer.Add(sizer)
 
     def onRemoveMonitor(self, event):  # ------------------------------------------------------   Remove current monitor
+        self.shouldSaveCfg = True
 
         if self.monitors < 1:                                                    # don't remove the last monitor
             self.TopLevelParent.SetStatusText('Cannot remove last monitor.')
@@ -482,13 +545,17 @@ class maskMakerPanel(wx.Panel):
         self.parent.repaginate()            # this will delete the notebook pages and recreate the notebook
 
     def onSaveCfg(self, event):
+        if self.shouldSaveMask:
+            self.Q_shouldSaveMask(self.mon_ID)      # if masked changed, see if it should be saved.
+
         cfg.cfg_nicknames_to_dicts()  # -------------------------------------------------- update config dictionary
         r = self.TopLevelParent.config.cfgSaveAs(self)
         if r:                                                               # TODO: progress indicator of some sort?
             self.TopLevelParent.SetStatusText('Configuration saved.')
+            winsound.Beep(300,200)
         else:
             self.TopLevelParent.SetStatusText('Configuration not saved.')
-        winsound.Beep(600, 200)
+            winsound.Beep(600, 200)
 
     def clearVideo(self):
         # don't save nicknames, you don't know whose been using them
@@ -498,143 +565,213 @@ class maskMakerPanel(wx.Panel):
             self.previewPanel.playTimer.Stop()
             self.previewPanel.Hide()                            # don't destroy the panel
         except:
-            print('preview panel can''t be cleared.')
+            gbl.statbar.SetStatusText('Preview panel can''t be cleared.')
+            winsound.Beep(600,200)
             pass
 
         self.videoSizer.Clear()
 
-        gbl.del_started_item(gbl.timersStarted, self.mon_ID)  ###### for debugging
-
     def refreshVideo(self):
-        self.clearVideo()
-        self.previewPanel = VM.monitorPanel(self, mon_ID=self.mon_ID, panelType='preview', loop=True)        # make new monitor panel
+        # if new video has different size than previous, mask may be outside the image and won't show in previewpanel
+        self.Q_shouldSaveMask(self.mon_ID)
+        self.previewPanel = VM.monitorPanel(self, mon_ID=self.mon_ID, panelType='preview', loop=True, ROIs=self.ROIs)
 
+        self.previewPanel.ROIs = self.ROIs
         self.previewPanel.PlayMonitor()
         self.videoSizer.Add(self.previewPanel, 1, wx.ALL | wx.ALIGN_CENTER, 5)
-        self.previewPanel.playTimer.Start(1000 / float(self.previewFPS.GetValue()))
-        gbl.numberOfTimers = gbl.numberOfTimers +1
-        self.videoSizer.SetMinSize(self.previewPanel.size)
+
+        if self.previewPanel.playTimer.IsRunning():
+            self.previewPanel.playTimer.Stop()
+            self.previewPanel.playTimer.Start(1000 / float(self.previewFPS.GetValue()))
+
+        self.videoSizer.SetMinSize(self.previewPanel.panelSize)
         self.SetSizer(self.mainSizer)
         self.Layout()
 
-        gbl.timersStarted.append([self.mon_ID, 'preview panel'])                                                                  ###### debug
+    def screenUpdate(self, event):
+        # does not update preview panel.  call refreshVideo() to do that.
+        try: event.Skip()                                        # continue processing of event
+        except: pass
+        self.SetSizer(self.mainSizer)
+        self.Update()
+        self.Layout()                                       # refresh the display
 
-    """
-    def whichKey(self, event):
-            code = event.GetKeyCode()
-            event.Skip()
-            if code == 370 or code == 13:
-                lastkey = 'Return'
-                self.whichField(event, lastkey)
-                return
-            if code == 47:
-                lastkey = '/'
-                self.whichField(event, lastkey)
-                return
+    def onChangePreviewFont(self, event):
+        input = gbl.correctType(self.previewFont.GetValue(), 'preview_font')        # get new value
 
-    def whichField(self, event, lastKey='Nav'):     # ------ distributes control to correct function after navitation key is pressed
-        whichObject = event.EventObject
-        whichObjectstr = str(whichObject)
-        whichObjectstr = whichObjectstr[1:9]
+        if not (type(input) == int or type(input) == float):    # revert the value if input wasn't a number
+            self.previewFont.ChangeValue(self.preview_font)
 
-        if lastKey == 'Nav':                        # -----------   command event was triggered
-            if whichObjectstr == 'maskPane':
-                self.onChangeDateTime(event, 'start_date', 'Tab')
+        elif input <> self.preview_font:                        # update the variables
+            gbl.cfg_dict[self.mon_ID]['preview_font'] = gbl.preview_font = self.preview_font = input
 
-            elif whichObjectstr == 'TimeCtrl':
-                if event.IsFromTab():
-                    self.onChangeDateTime(event, 'start_time', 'Tab')
-                else:
-                    self.onChangeDateTime(event, 'start_time', 'Return')
+            self.previewPanel.preview_font = input              # change previewPanel setting
+                                                                # make new masks with new font size
+            self.previewPanel.ROIframe, self.previewPanel.RGBmask = \
+            self.previewPanel.makeMaskFrames(self.previewPanel.ROIs, self.previewPanel.initialSize,
+                                                self.previewPanel.preview_font, self.previewPanel.preview_RGBcolor,
+                                                self.previewPanel.line_thickness)
+            self.shouldSaveCfg = True                           # configuration has changed
 
-            elif event.EventObject.Name == 'previewSize':
-                self.onChangePreviewSize(event)
-            elif event.EventObject.Name == 'previewFPS':
-                self.onChangePreviewFPS(event)
-            elif event.EventObject.Name == 'previewFont':
-                self.onChangePreviewFont(event)
-            elif event.EventObject.Name == 'previewRGBColor':
-                self.onChangePreviewRGBPreview(event)
-            elif event.EventObject.Name == 'sourceFPS':
-                self.onChangeSourceFPS(event)
-            elif event.EventObject.Name == 'lineThickness':
-                self.onChangeLineThickness(event)
-            elif event.EventObject.Name == 'pickOutputBrowser':
-                self.onChangeOutput(event)
-            elif event.EventObject.Name == 'pickMaskBrowser':
-                self.onMaskBrowse(event)
+        self.screenUpdate(event)                                # skip event & refresh the screen
 
-            elif whichObjectstr == 'BaseMask':
-                event.Skip()
+    def onChangePreviewRGBColor(self, event):
+        input = gbl.correctType(self.previewRGBColor.GetValue(), 'preview_RGBcolor')        # get new value
 
-        elif lastKey == 'Return':
-            if whichObjectstr == 'wx._cont':
-                self.onChangeDateTime(event, 'start_date', 'Return')
+        if type(input) != tuple:                                # revert the value if input wasn't a tuple
+            self.previewRGBColor.ChangeValue(self.preview_RGBcolor)
 
-        elif lastKey == '/':
-            self.onChangeDateTime(event, 'start_date', lastKey)
+        elif input <> self.preview_RGBcolor:                    # update the variables
+            gbl.cfg_dict[self.mon_ID]['preview_RGBcolor'] = gbl.preview_RGBcolor = self.preview_RGBcolor = input
 
-        else:
-            self.onChangeDateTime(event, whichObjectstr, lastKey)
-    """
+            self.previewPanel.preview_RGBcolor = input          # change previewPanel setting
+                                                                # make new masks with new color
+            self.previewPanel.ROIframe, self.previewPanel.RGBmask = \
+                self.previewPanel.makeMaskFrames(self.previewPanel.ROIs, self.previewPanel.initialSize,
+                                                 self.previewPanel.preview_font, self.previewPanel.preview_RGBcolor,
+                                                 self.previewPanel.line_thickness)
+            self.shouldSaveCfg = True                           # configuration has changed
 
-#    def onChangeDateTime(self, event, whichCtrl, lastKey):
-    def onChangeDateTime(self, event):
-        # ---------------------------------------------------------------- get the date and time values from the widgets
-        event.Skip()
-        try:      # ------ bug in wxDateTimePickerCtrl: m_date not in sync occurs if month not changed
-            newdate = self.startDate.GetValue()
-        except:
+        self.screenUpdate(event)                                # skip event & refresh the screen
+
+    def onChangeLineThickness(self, event):
+        input = gbl.correctType(self.lineThickness.GetValue(), 'line_thickness')            # get new value
+
+        if not (type(input) == int or type(input) == float):    # don't change the value if input wasn't a number
+            self.lineThickness = self.line_thickness
+
+        elif input <> self.line_thickness:                      # update the variables
+            gbl.cfg_dict[self.mon_ID]['line_thickness'] = gbl.line_thickness = self.line_thickness = input
+
+            self.previewPanel.line_thickness = input            # change previewPanel setting
+                                                                # make new masks with new line thickness
+            self.previewPanel.ROIframe, self.previewPanel.RGBmask = \
+                self.previewPanel.makeMaskFrames(self.previewPanel.ROIs, self.previewPanel.initialSize,
+                                    self.previewPanel.preview_font, self.previewPanel.preview_RGBcolor,
+                                    self.previewPanel.line_thickness)
+            self.shouldSaveCfg = True                           # configuration has changed
+
+        self.screenUpdate(event)                                # skip event & refresh the screen
+
+    def onChangePreviewSize(self, event):
+        input = gbl.correctType(self.previewSize.GetValue(), 'preview_size')            # get new value
+
+        if type(input) != tuple:                                # revert the value if input wasn't a tuple
+            self.previewSize.ChangeValue(self.preview_size)
+
+        elif input <> self.preview_size:
+            gbl.cfg_dict[self.mon_ID]['preview_size'] = gbl.preview_size = self.preview_size = input
+            self.previewPanel.panelSize = input                 # update the value in the monitorPanel
+            self.clearVideo()                                   # remove monitorPanel and recreate with new size
+            self.refreshVideo()
+
+            self.shouldSaveCfg = True                           # configuration has changed
+
+        self.screenUpdate(event)                                # skip event & refresh the screen
+
+    def onChangePreviewFPS(self, event):
+        input = gbl.correctType(self.previewFPS.GetValue(), 'preview_fps')              # get new value
+
+        if not (type(input) == int or type(input) == float):    # don't change the value if input wasn't a number
+            self.previewFPS.ChangeValue(self.preview_fps)
+
+        elif input <> self.preview_fps:                         # update the variables
+            gbl.cfg_dict[self.mon_ID]['preview_fps'] = gbl.preview_fps = self.preview_fps = input
+
+            self.previewPanel.interval = 1000/input             # change previewPanel setting  (fps is converted to interval)
+            if self.previewPanel.playTimer.IsRunning():         # stop and restart the timer if it was running
+                self.previewPanel.playTimer.Stop()
+                self.previewPanel.playTimer.Start(1000/input)
+
+            self.shouldSaveCfg = True                           # configuration has changed
+
+        self.screenUpdate(event)                                # skip event & refresh the screen
+
+    def onChangeVideoOn(self, event):         # setting focus to videoOn checkbox causes navigation problems, so skip it
+        input = self.videoOn.GetValue()                                                 # get new value
+
+        if input <> self.video_on:                              # update the variables
+            gbl.cfg_dict[self.mon_ID]['video_on'] = gbl.video_on = self.video_on = input
+
+                                                                # no effect on screen
+            self.shouldSaveCfg = True                           # configuration has changed
+
+        self.screenUpdate(event)                                # skip event & refresh the screen
+
+    def onChangeDate(self, event):
+        try:
+            newdate = self.startDate.GetValue()                                         # get new value
+        except:                 # ------ bug in wxDateTimePickerCtrl: m_date not in sync occurs if month not changed
             newdate = self.start_datetime
-        newdate = newdate.FormatISODate()                     # converts date to string
+            gbl.statbar.SetStatusText('Due to a KNOWN BUG: month must be changed to enter a new date.')
+            winsound.Beep(600, 200)
+        newdate = newdate.FormatISODate()                       # convert date to string
 
-        newtime = self.startTime.GetValue()         # gets time as string
+        newtime = self.start_datetime.strftime('%H:%M:%S')      # get time as string (update datetime)
 
         # cannot use wxDateTime.AddTS because it changes date to 1/1/1970.  Instead, convert date & time to strings,
         # then convert back to python datetime for manipulations
+        input = gbl.strdatetime2pydatetime(newdate, newtime)    # combine string date & time into python datetime object
 
-        self.start_datetime = gbl.strdatetime2pydatetime(newdate, newtime)  # combine string date & time into python datetime object
+        if input <> self.start_datetime:                        #  update all datetime values
+            gbl.start_datetime = gbl.cfg_dict[self.mon_ID]['start_datetime'] = self.start_datetime
 
-        #  update all datetime values
-        gbl.start_datetime = gbl.cfg_dict[self.mon_ID]['start_datetime'] = self.start_datetime
+                                                                # no effect on screen
+            self.shouldSaveCfg = True                           # configuration has changed
 
-        """
-        # -------- navigation for date & time controls
-        if  lastKey == 'Return' and whichCtrl == 'start_date':
-            self.startTime.SetFocus()                                      # done with date, proceed to time
-        elif lastKey == 'Return' and whichCtrl == 'start_time':
-            self.sourceMMSize.SetFocus()                                       # done with time, proceed to fps
-        if   lastKey == 'Tab'    and whichCtrl == 'start_date':
-            EVT_RIGHT = wx.KeyEvent(47)                         # '/' moves focus to right in datepickerctrl
-            self.startDate.HandleAsNavigationKey(EVT_RIGHT)
-            self.startDate.Layout()
-        elif lastKey == 'Tab'    and whichCtrl == 'start_time':
-            EVT_RIGHT = wx.KeyEvent(47)                         # '/' moves focus to right in datepickerctrl
-            self.startTime.HandleAsNavigationKey(EVT_RIGHT)
+        self.screenUpdate(event)                                # skip event & refresh the screen
 
-        print('check')
-        """
+    def onChangeTime(self, event):
+        newtime = self.startTime.GetValue()                                             # gets time as string
 
+        newdate = self.start_datetime.strftime('%Y-%m-%d')      # get date as string (update datetime)
+
+
+        # cannot use wxDateTime.AddTS because it changes date to 1/1/1970.  Instead, convert date & time to strings,
+        # then convert back to python datetime for manipulations
+        input = gbl.strdatetime2pydatetime(newdate, newtime)    # combine string date & time into python datetime object
+
+        if input <> self.start_datetime:                        #  update all datetime values
+            gbl.start_datetime = gbl.cfg_dict[self.mon_ID]['start_datetime'] = self.start_datetime
+
+                                                                # no effect on screen
+            self.shouldSaveCfg = True                           # configuration has changed
+
+        self.screenUpdate(event)                                # skip event & refresh the screen
+
+    # -------------------------------------------------------------------- get the date and time values from the widgets
     def onChangeSourceFPS(self, event):
-        input = gbl.correctType(self.sourceFPS.GetValue(), 'source_fps')
-        if not (type(input) == int or type(input) == float):
-            input = self.source_fps                         # don't change the value if input wasn't a number
-            self.sourceFPS.SetValue(input)
+        input = gbl.correctType(self.sourceFPS.GetValue(), 'source_fps')                # get new value
 
-        gbl.cfg_dict[self.mon_ID]['source_fps'] = gbl.source_fps = gbl.source_fps = input        # update self & cfg_dict
-        self.startDate.SetFocus()
+        if not (type(input) == int or type(input) == float):    # don't change the value if input wasn't a number
+            self.sourceFPS.ChangeValue(self.source_fps)
+
+        elif input <> self.source_fps:                            # update the variables
+            gbl.cfg_dict[self.mon_ID]['source_fps'] = gbl.source_fps = gbl.source_fps = input
+
+                                                                # no effect on screen
+            self.shouldSaveCfg = True                           # configuration has changed
+
+        self.screenUpdate(event)                                # skip event & refresh the screen
 
     def onChangeSourceMMSize(self, event):
-        input = gbl.correctType(self.sourceMMSize.GetValue(), 'source_mmsize')
-        if not (type(input) == tuple):
-            input = self.source_mmsize                         # don't change the value if input wasn't a number
-            self.sourceMMSize.SetValue(input)
+        input = gbl.correctType(self.sourceMMSize.GetValue(), 'source_mmsize')               # get new value
 
-        gbl.cfg_dict[self.mon_ID]['source_mmsize'] = gbl.source_mmsize = gbl.source_mmsize = input        # update self & cfg_dict
-        self.sourceFPS.SetFocus()
+        if not (type(input) == tuple):                          # don't change the value if input wasn't a number
+            self.sourceMMSize.ChangeValue(self.source_mmsize)
 
-    def onChangeTrackType(self, event):
+        elif input <> self.source_mmsize:                       # update the variables
+            gbl.cfg_dict[self.mon_ID]['source_mmsize'] = gbl.source_mmsize = gbl.source_mmsize = input
+
+            # no effect on screen
+            self.shouldSaveCfg = True  # configuration has changed
+
+        self.screenUpdate(event)  # skip event & refresh the screen
+
+    def onChangeTrackType(self, event):    # NOT IN USE
+        self.shouldSaveCfg = True
         gbl.cfg_dict[self.mon_ID]['track_type'] = gbl.track_type = self.track_type = event.Selection         # update self & cfg_dict
+        event.Skip()
 
     def onChangeRb(self, event):
         RbSelected = event.EventObject.Label
@@ -645,194 +782,112 @@ class maskMakerPanel(wx.Panel):
         elif RbSelected == 'Folder':
             self.source_type = 2
         else:
-            print('Invalid RB number in maskPanel.py.')
+            gbl.statbar.SetStatusText('Invalid RB number in maskPanel.py.')
+            winsound.Beep(600,200)
 
+        # FileBrowseButton prevents invalid input other than ''
         if self.sources[self.source_type].GetValue() != '':                     # update self sources
             self.source = self.sources[self.source_type].GetValue()
 
-        self.currentSource.SetValue(self.source)                                # update currentSource field
+        self.currentSource.ChangeValue(self.source)                                # update currentSource field
         gbl.cfg_dict[self.mon_ID]['source'] = gbl.source = self.source                # update cfg_dict
         gbl.cfg_dict[self.mon_ID]['source_type'] = gbl.source_type = self.source_type                # update cfg_dict
+        self.shouldSaveCfg = True
 
-        self.refreshVideo()
+        self.screenUpdate(event)
 
-    def onChangeSource0(self, event):                   # TODO: get calling object from event & combine the three onChangeSource functions
-#        if gbl.cfg_dict[self.mon_ID]['source_type'] == 0:                    # if it was a webcam, remove from list
-#            gbl.webcams_inuse.remove('Monitor%d' % self.mon_ID)                 # only one webcam implemented at this time
-#            gbl.webcams -= 1
+    def onChangeSource0(self, event):         # TODO: if possible, get calling object from event & combine the three onChangeSource functions
+        self.shouldSaveCfg = True
+        if gbl.cfg_dict[self.mon_ID]['source_type'] == 0:                    # if it was a webcam, remove from list
+            gbl.webcams_inuse.remove('Monitor%d' % self.mon_ID)                 # only one webcam implemented at this time
+            gbl.webcams -= 1
 
         self.source_type = 0                                                    # update self source_type
         self.source = self.sources[self.source_type].GetValue()                 # update self source
-#        gbl.webcams_inuse.append(self.mon_name)              # add this monitor to webcam list (only one webcam implemented at this time)
-#        gbl.webcams += 1
 
-        self.currentSource.SetValue(self.source)                                # update currentSource field
-        self.rbs[0].SetValue(True)                                              # update RBs
+        gbl.webcams_inuse.append(self.mon_name)              # add this monitor to webcam list (only one webcam implemented at this time)
+        gbl.webcams += 1
+
+        self.currentSource.ChangeValue(self.source)                                # update currentSource field
+        self.rbs[0].ChangeValue(True)                                              # update RBs
         gbl.cfg_dict[self.mon_ID]['source_type'] = gbl.source_type = self.source_type             # update cfg_dict
         gbl.cfg_dict[self.mon_ID]['source'] = gbl.source = self.source
 
-        self.refreshVideo()                                 # change video playback
+        self.screenUpdate(event)
 
-    def onChangeSource1(self, event):
-        possibleSource = event.EventObject.GetValue()                           # change source information
-        if not os.path.isfile(possibleSource):
-            self.sources[1].SetValue('')
-            return                                      # do nothing if invalid filename was specified
+    def onChangeSource1(self, input):                       # passing the event doesn't pass the value
+        if input <> self.currentSource:
 
-#        if gbl.cfg_dict[self.mon_ID]['source_type'] == 0:                    # if it was a webcam, remove from list
-#            gbl.webcams_inuse.remove('Monitor%d' % self.mon_ID)                 # only one webcam implemented at this time
-#            gbl.webcams -= 1
-        self.source_type = 1                                                    # update self source_type
+    #        if gbl.cfg_dict[self.mon_ID]['source_type'] == 0:                # if it was a webcam, remove from list
+    #            gbl.webcams_inuse.remove('Monitor%d' % self.mon_ID)          # webcam NOT IN USE
+    #            gbl.webcams -= 1
+            gbl.cfg_dict[self.mon_ID]['source_type'] = gbl.source_type = self.source_type = 1
+            gbl.cfg_dict[self.mon_ID]['source'] = gbl.source = self.source = input
 
-        self.source = possibleSource                                            # update self source
+            self.currentSource.ChangeValue(self.source)                       # update currentSource field
+            self.rbs[1].SetValue(True)                                     # update RBs
 
-        self.currentSource.SetValue(self.source)                                # upate currentSource field
-        self.rbs[1].SetValue(True)                                              # update RBs
-        gbl.cfg_dict[self.mon_ID]['source_type'] = gbl.source_type = self.source_type             # update cfg_dict
-        gbl.cfg_dict[self.mon_ID]['source'] = gbl.source = self.source
+            self.clearVideo()
+            self.refreshVideo()
+            self.shouldSaveCfg = True
+        self.screenUpdate(None)
 
-
-
-        self.refreshVideo()
-
-    def onChangeSource2(self, event):
-        possibleSource = event.EventObject.GetValue()                           # change source information
-        if not os.path.isdir(possibleSource):
-            self.sources[2].SetValue('')
-            return                                      # do nothing if invalid filename was specified
+    def onChangeSource2(self, input):                               # passing the event doesn't pass the value
+        if input <> self.currentSource:
 
 #        if gbl.cfg_dict[self.mon_ID]['source_type'] == 0:                   # if it was a webcam, remove from list
 #            gbl.webcams_inuse.remove('Monitor%d' % self.mon_ID)               # only one webcam implemented at this time
 #            gbl.webcams -= 1
+            gbl.cfg_dict[self.mon_ID]['source_type'] = gbl.source_type = self.source_type = 2
+            gbl.cfg_dict[self.mon_ID]['source'] = gbl.source = self.source = input
 
-        self.source_type = 2                                                    # update self source type
+            self.currentSource.ChangeValue(self.source)  # update currentSource field
+            self.rbs[2].SetValue(True)  # update RBs
 
-        self.source = possibleSource                                            # update self source
+            self.clearVideo()
+            self.refreshVideo()
+            self.shouldSaveCfg = True
 
-        self.currentSource.SetValue(self.source)                                # update currentSource field
-        self.rbs[2].SetValue(True)                                              # update RBs
-        gbl.cfg_dict[self.mon_ID]['source_type'] = gbl.source_type = self.source_type             # update cfg_dict
-        gbl.cfg_dict[self.mon_ID]['source'] = gbl.source = self.source
+        self.screenUpdate(None)
 
-        self.refreshVideo()
+    # --------------------------------------------------------------------------------------------- change output folder
+    def onChangeOutput(self, input):                                  # passing the event doesn't pass the value
+        if input <> self.data_folder:
+            gbl.cfg_dict[self.mon_ID]['data_folder'] = gbl.data_folder = self.data_folder = input
+            self.shouldSaveCfg = True
 
-    def onChangePreviewSize(self, event):
-        input = gbl.correctType(self.previewSize.GetValue(), 'preview_size')                          # keep this incase new value is invalid
-        if type(input) != tuple:
-            input = self.preview_size
-
-        gbl.cfg_dict[self.mon_ID]['preview_size'] = gbl.preview_size = self.preview_size = input           # update self & cfg_dict
-
-        self.refreshVideo()                                 # close and restart video playback
-        self.previewFPS.SetFocus()
-
-    def onChangePreviewFPS(self, event):
-        input = gbl.correctType(self.previewFPS.GetValue(), 'preview_fps')
-        if not (type(input) == int or type(input) == float):
-            input = self.preview_fps                        # don't change the value if input wasn't a number
-
-        gbl.cfg_dict[self.mon_ID]['preview_fps'] = gbl.preview_fps = self.preview_fps = input           # update self & cfg_dict
-
-        self.refreshVideo()                                 # close and restart video playback
-        self.previewFont.SetFocus()
-
-    def onChangePreviewFont(self, event):
-        input = gbl.correctType(self.previewFont.GetValue(), 'preview_font')
-        if not (type(input) == int or type(input) == float):
-            input = self.preview_font                        # don't change the value if input wasn't a number
-
-        gbl.cfg_dict[self.mon_ID]['preview_font'] = gbl.preview_font = self.preview_font = input           # update self & cfg_dict
-
-        self.refreshVideo()                                 # close and restart video playback
-        self.previewRGBColor.SetFocus()
-
-    def onChangePreviewRGBColor(self, event):
-        input = gbl.correctType(self.previewRGBColor.GetValue(), 'preview_RGBcolor')                          # keep this incase new value is invalid
-        if type(input) != tuple:
-            input = self.preview_RGBcolor
-
-        gbl.cfg_dict[self.mon_ID]['preview_RGBcolor'] = gbl.preview_RGBcolor = self.preview_RGBcolor = input           # update self & cfg_dict
-
-        self.refreshVideo()                                 # close and restart video playback
-        self.lineThickness.SetFocus()
-
-    def onChangeLineThickness(self, event):
-        input = gbl.correctType(self.lineThickness.GetValue(), 'line_thickness')
-        if not (type(input) == int  or type(input) == float):
-            input = self.line_thickness                        # don't change the value if input wasn't a number
-
-        gbl.cfg_dict[self.mon_ID]['line_thickness'] = gbl.line_thickness = self.line_thickness = input           # update self & cfg_dict
-
-        self.refreshVideo()                                 # close and restart video playback
-        self.previewSize.SetFocus()
-
-    def onChangeOutput(self, event):   # --------------------------------------------------------- change output folder
-        gbl.cfg_dict[self.mon_ID]['data_folder'] = gbl.data_folder = self.data_folder = self.pickOutputBrowser.GetValue()
-
-    def onMaskBrowse(self, event):      # ------------------------------------------------------ change mask file & ROIs
-        gbl.cfg_dict[self.mon_ID]['mask_file'] = gbl.mask_file = self.mask_file = self.pickMaskBrowser.GetValue()
-        gbl.genmaskflag = False                             # ROIs need to be reread from the mask file
-
-        self.refreshVideo()
+        self.screenUpdate(None)
 
     def onMaskGen(self, event):
-        gbl.genmaskflag = True                              # ROIs need to be read from gbl.ROIs
-        gbl.shouldSaveMask = True
-
-        self.mask = []  # holds rows for output to a mask file
-        self.ROIs = []  # holds tuples for drawing ROIs
-
-        mask_dict = {}
-        mask_keys = ['cols', 'x1', 'x_len', 'x_sep', 'x_tilt', 'rows', 'y1', 'y_len', 'y_sep', 'y_tilt']
-
-        for count in range(0,5):
-            mask_dict[mask_keys[count]] = int(self.X[count+1].GetValue())               # x column
-
-        for count in range(5,10):
-            mask_dict[mask_keys[count]] = int(self.Y[count-4].GetValue())               # y column
-
-        ROI = 1  # counter; numbers the ROIs
-
-        # every ROI list will contain:  [(ax,ay),(bx,by),(cx,cy),(dx,dy),(ax,ay)]
-        # number the ROIs vertically for easier use of output since flies of same genotype are unusally loaded vertically
-
-        # x-coordinates change through cols
-        # (x1, y1) is the top left corner of the top left ROI
-        for col in range(0, int(mask_dict['cols'])):
-            # x-coordinates change through columns
-            # y-coordinates change through rows
-            for row in range(0, mask_dict['rows']):
-                ax = mask_dict['x1'] + \
-                     col*(mask_dict['x_len'] +mask_dict['x_sep'] + mask_dict['x_tilt']) + \
-                     row*mask_dict['x_tilt']
-                bx = ax + mask_dict['x_len']                # add width
-                cx = bx
-                dx = ax
-                ay = mask_dict['y1'] + \
-                     col*mask_dict['y_tilt'] + \
-                     row*(mask_dict['y_len'] + mask_dict['y_sep'] + mask_dict['y_tilt'])
-                by = ay
-                cy = ay + mask_dict['y_len']                # add height
-                dy = cy
-
-                # --------------------------------------------------- create the mask coordinates for this ROI
-                if row == 0 and col == 0:
-                    self.mask.append(  # for saving to mask file
-                        '(lp1\n((I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\n' % (ax, ay, bx, by, cx, cy, dx, dy))
-                else:
-                    self.mask.append(
-                        'ttp%d\na((I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\n' % (
-                        ROI, ax, ay, bx, by, cx, cy, dx, dy))
-
-                self.ROIs.append([(ax, ay), (bx, by), (cx, cy), (dx, dy), (ax, ay)])  # for immediate use by program
-
-                ROI += 1                                    # increment ROI number
-
-        self.mask.append('ttp%d\na.(lp1\nI1\n' % (ROI + 1))
-        self.mask.append('aI1\n' * mask_dict['rows'] * (mask_dict['cols'] -1))
-        self.mask.append('a.\n\n\n')
-
+        self.ROIs, self.maskFileContents = self.previewPanel.onMaskGen(self.X, self.Y)             # run the mask generator for this preview panel
+        self.clearVideo()
         self.refreshVideo()
+        self.screenUpdate(event)
+
+    # ------------------------------------------------------------------------------------------ change mask file & ROIs
+    def onChangeMask(self, input):                                     # passing the event doesn't pass the value
+        if input <> self.mask_file:
+            gbl.cfg_dict[self.mon_ID]['mask_file'] = gbl.mask_file = self.mask_file = input
+
+            self.clearVideo()                                   # update the video
+            self.refreshVideo()
+            self.shouldSaveCfg = True
+
+        self.screenUpdate(None)
+
+    def Q_shouldSaveMask(self, nextPage):
+        if self.shouldSaveMask:  # mask generated.  prompt user to save it.
+            dlg = wx.MessageDialog(self, 'Do you want to save the current mask first?',
+                                   style=wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+            answer = dlg.ShowModal()
+            dlg.Destroy()
+            if answer == wx.ID_YES:
+                self.onSaveMask(self)  # not an event driven call
+            elif answer == wx.ID_CANCEL:
+                nextPage = gbl.mon_ID       # cancel changing mask file and don't change the page
+
+        self.shouldSaveMask = False
+        return  nextPage
 
     def onSaveMask(self, event):            # ---------------------------------------------------  Save new mask to file
         """
@@ -849,36 +904,37 @@ class maskMakerPanel(wx.Panel):
                             style=(wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
                             )
 
-        if not(dlg.ShowModal() == wx.ID_OK):                     # show the file browser window
+        if not(dlg.ShowModal() == wx.ID_OK):                    # show the file browser window
             return False
         else:
-            self.mask_file = dlg.GetPath()                   # get the path from the save dialog
+            input = dlg.GetPath()                   # get the path from the save dialog
 
-            if os.path.isfile(self.mask_file):
-                os.remove(self.mask_file)                    # get rid of old file before appending data
+            if os.path.isfile(input):
+                os.remove(input)                    # get rid of old file before appending data
 
-            with open(self.mask_file, 'a') as mask_file:
-                for roi in self.mask:
+            with open(input, 'a') as mask_file:
+                for roi in self.maskFileContents:
                     mask_file.write(roi)                          # write to file line by line
 
-        gbl.shouldSaveMask = False                          # mask is saved
+        self.shouldSaveMask = False                              # mask is saved
+        self.shouldSaveCfg = True
 
         dlg.Destroy()
         mask_file.close()
 
-        self.pickMaskBrowser.SetValue(self.mask_file)                # update the mask browser textctrl box
-
-        self.refreshVideo()
+        self.pickMaskBrowser.textbox.ChangeValue(input)                                # update variables and textctrl
+        self.screenUpdate(event)
 
     def onClearMask(self, event):
+        self.shouldSaveCfg = True
         self.ROIs = []
-        gbl.genmaskflag = True
         cfg.mon_nicknames_to_dicts(self.mon_ID)
+
+        self.clearVideo()
         self.refreshVideo()
+        self.screenUpdate(event)
 
-
-
-# ------------------------------------------------------------------------------------------ Stand alone test code
+"""# ------------------------------------------------------------------------------------------ Stand alone test code
 #  insert other classes above and call them in mainFrame
 #
 class mainFrame(wx.Frame):
@@ -888,7 +944,7 @@ class mainFrame(wx.Frame):
         wx.Frame.__init__(self, *args, **kwds)
 
         config = cfg.Configuration(self)
-        whole = maskMakerPanel(self)
+        whole = monCfgPanel(self)
 
 
 
@@ -908,3 +964,4 @@ if __name__ == "__main__":
     app.MainLoop()                              # Begin user interactions.
 
 #
+"""

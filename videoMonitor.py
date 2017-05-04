@@ -1,18 +1,63 @@
-import wx
-import cv2, cv2.cv
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#       Major revisions by Caitlin A Laughrey and Loretta E Laughrey in 2016-2017.
+#
+#       pvg_acquire.py
+#
+#       Copyright 2011 Giorgio Gilestro <giorgio@gilest.ro>
+#
+#       This program is free software; you can redistribute it and/or modify
+#       it under the terms of the GNU General Public License as published by
+#       the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+#
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#       GNU General Public License for more details.
+#
+#       You should have received a copy of the GNU General Public License
+#       along with this program; if not, write to the Free Software
+#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#       MA 02110-1301, USA.
+#
+#
+
+__author__ = "Giorgio Gilestro <giorgio@gilest.ro>"
+__version__ = "$Revision: 1.0 $"
+__date__ = "$Date: 2011/08/16 21:57:19 $"
+__copyright__ = "Copyright (c) 2011 Giorgio Gilestro"
+__license__ = "Python"
+
+
+""" 
+ ======================================================================================================================
+ These functions create one video playback panel.
+ Webcam is not available because it cannot end acquisition of data.
+======================================================================================================================
+"""
+
+
 import os
 import numpy as np
 import winsound
-import configurator as cfg
-import pysolovideoGlobals as gbl
+import wx                               # needs installation
+import cv2, cv2.cv                      # needs installation
+import configurator as cfg              # part of this program - handles configuration parameters
+import pysolovideoGlobals as gbl        # part of this program - contains global variables and functions
+import cPickle
 
-# TODO: display column numbers above top row of ROIs
+# TODO: prevent flicker when refreshing video
 
-# --------------------------------------------------------------------------------------------- for using a video camera
+""" ========================================== NOT IN USE =========================== capture frames from a video camera
+"""
 class realCam(object):                                  # don't use global variables for this object due to threading
     """
-    realCam class will handle a webcam connected to the system
+    realCam class is NOT IN USE, but is left here for restoration if desired.
+    realCam class will provide images from a webcam connected to the system
     """
+    #  ------------------------------------------------------------------------------------------- initialize the camera
     def __init__(self_realCam, mon_ID=gbl.mon_ID, fps=gbl.source_fps, devnum=0):
         self_realCam.mon_ID = mon_ID                                    # don't use gbl nicknames due to threading
         self_realCam.source = devnum                                    # source is the device number
@@ -21,21 +66,21 @@ class realCam(object):                                  # don't use global varia
         self_realCam.currentFrame = 0
         self_realCam.loop = True                   # cameras don't really loop, and shouldn't stop
 
-        # ----------------------------------------------------------------------------------- initialize the camera
         try:    # ------ may fail to start camera
-            self_realCam.captureVideo = cv2.VideoCapture(self_realCam.source)      # only one camera (device 0) is supported
-                                                                                # argument is required even though it's "unexpected"
+            self_realCam.captureVideo = cv2.VideoCapture(self_realCam.source)  # only one camera (device 0) is supported
+                                                                    # argument is required even though it's "unexpected"
             retrn, self_realCam.frame = self_realCam.captureVideo.read()
-        except:
+        except:     # ------ notify user and set capture to None
             self_realCam.captureVideo = None                          # capture failed
             gbl.statbar.SetStatusText('Real Cam capture failed.')
             winsound.Beep(600,200)
             return
-        #  ----------------------------------------------------------------------------- preserve camera properties
+
+        # ----------------------------------------------------------------------------- collect camera properties
         self_realCam.initialSize = self_realCam.getCamFrameSize()
         self_realCam.lastFrame = 0                                      # cameras don't have a last frame
 
-
+    # -------------------------------------------------------------------------------------------- get camera frame size
     def getCamFrameSize(self_realCam):
         """
         Return real size
@@ -43,13 +88,14 @@ class realCam(object):                                  # don't use global varia
         self_realCam.rows, self_realCam.cols, channels = self_realCam.frame.shape
         return int(self_realCam.cols), int(self_realCam.rows)
 
+    # --------------------------------------------------------------------------------------------------- get next frame
     def getImage(self_realCam):  # capture and prepare the next frame
         """
         for live cameras
         """
         try:    # ------ may fail to read frame
             retrn, self_realCam.frame = self_realCam.captureVideo.read()
-        except:
+        except:     # ------ notify user and set frame to None.
             self_realCam.frame = None
             gbl.statbar.SetStatusText('Real Cam capture failed.')
             winsound.Beep(600, 200)
@@ -57,58 +103,66 @@ class realCam(object):                                  # don't use global varia
         self_realCam.currentFrame += 1          # there is no last frame
         return self_realCam.frame
 
-
-# ----------------------------------------------------------------------------------------------- for using a video file
+""" =================================================================================== capture frames from a video file
+"""
 class virtualCamMovie(object):
     """
-    A Virtual cam to be used to pick images from a movie (avi, mov)
+    A Virtual cam provides images from a movie file (avi, mov)
+    self_vMovie is used instead of self to help reduce confusion over functions with identical names in different classes.
+    Identical naming of functions allows program to process input the same way for each video input class.  
     """
-    def __init__(self_vMovie, mon_ID=gbl.mon_ID, fps=gbl.source_fps, source= gbl.source, loop=True):
+    # ---------------------------------------------------------------------------------------------- open the video file
+    def __init__(self_vMovie, mon_ID=gbl.mon_ID, fps=gbl.source_fps, source=gbl.source, loop=True):
         self_vMovie.mon_ID = mon_ID                            # don't use gbl nicknames after init due to threading
-        self_vMovie.source = source
-        self_vMovie.fps = fps
-
+        self_vMovie.source = source             # video file path and name
+        self_vMovie.fps = fps                   # speed at which video was recorded
+        self_vMovie.loop = loop                 # true if video should loop back at end of file
         self_vMovie.currentFrame = 0
-        self_vMovie.loop = loop
 
         try:    # ------ video may not open
             self_vMovie.captureVideo = cv2.VideoCapture(self_vMovie.source)
             flag, self_vMovie.frame = self_vMovie.captureVideo.read()
-        except:
-            self_vMovie.captureVideo = None                                       # capture failed
+        except: # ------ capture failed
+            self_vMovie.captureVideo = None
             gbl.statbar.SetStatusText('Video Cam capture failed.')
             winsound.Beep(600, 200)
             return
 
-        self_vMovie.initialSize = self_vMovie.getVideoCamSize()                         # frame size from video
-        self_vMovie.lastFrame = self_vMovie.captureVideo.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
+        self_vMovie.initialSize = self_vMovie.getVideoCamSize()                         # get frame size from video
+        self_vMovie.lastFrame = self_vMovie.captureVideo.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)  # and length of video
 
+    # --------------------------------------------------------------------------------------------- get movie frame size
     def getVideoCamSize(self_vMovie):
         try:    # ------ frame is sometimes a NoneType object
             self_vMovie.rows, self_vMovie.cols, channels = self_vMovie.frame.shape
             return int(self_vMovie.cols), int(self_vMovie.rows)
         except:
             gbl.statbar.SetStatusText('No video frame available in videoMonitor.py, getVideoCamSize')
-            return 500, 500     # randomly chosen substitute values
+            winsound.Beep(600,200)
+            return 500, 500     # randomly chosen substitute values for size
 
-    def getImage(self_vMovie):            # capture next frame from video file
+# ------------------------------------------------------------------------------------------------------- get next frame
+
+    # --------------------------------------------------------------------------------------------------- get next frame
+    def getImage(self_vMovie):
         """
         for input from video file
         """
-        if (self_vMovie.currentFrame >= self_vMovie.lastFrame) and self_vMovie.loop:   # reached end of file
+        if (self_vMovie.currentFrame >= self_vMovie.lastFrame) and self_vMovie.loop:    # reached end of file
             self_vMovie.currentFrame = 0
-            self_vMovie.captureVideo = cv2.VideoCapture(self_vMovie.source)         # restart the video
+            self_vMovie.captureVideo = cv2.VideoCapture(self_vMovie.source)  # restart the video (source is required)
 
         elif (self_vMovie.currentFrame >= self_vMovie.lastFrame) and not self_vMovie.loop:
-            self_vMovie.frame = None
+            self_vMovie.frame = None                                         # stop video
             gbl.statbar.SetStatusText('End of Video File.')
-            winsound.Beep(600, 200)
+            winsound.Beep(300, 200)
             return
         else: pass
 
+        # -------------------------------------------------------------------- read next frame
         try:    # ------ may fail to read frame
             flag, self_vMovie.frame = self_vMovie.captureVideo.read()
-        except:
+        except:     # ------ notify user and set frame to None
             self_vMovie.frame = None
             gbl.statbar.SetStatusText('Capture failed.')
             winsound.Beep(600, 200)
@@ -117,13 +171,19 @@ class virtualCamMovie(object):
         self_vMovie.currentFrame += 1
         return self_vMovie.frame
 
-# ------------------------------------------------------------------------------------ for using a sequence of 2D images
+""" ========================================================================== capture frames from 2D images in a folder
+"""
 class virtualCamFrames(object):
     """
     A Virtual cam to be used to pick images from a folder rather than a webcam
-    Images are handled through PIL
+    Images are handled through OpenCV
+    File types accepted are .tif and .jpg
     """
+    # ------------------------------------------------------------------------------------------------ prepare file list
     def __init__(self_vFrames, mon_ID = gbl.mon_ID, fps= gbl.source_fps, source=gbl.source, loop=True):
+        """
+        files will be shown in alphabetical order
+        """
         self_vFrames.mon_ID = mon_ID
         self_vFrames.source = source
         self_vFrames.fps = fps
@@ -131,23 +191,21 @@ class virtualCamFrames(object):
         self_vFrames.currentFrame = 0
         self_vFrames.loop = loop
 
-        # ------------------------------------------------------------------------------ initialize file manager
-        self_vFrames.fileList = self_vFrames.__populateList__()
+        # -------------------------------------------------------------------------- initialize file manager
+        self_vFrames.fileList = self_vFrames.__populateList__()         # get list of files
 
         self_vFrames.lastFrame = len(self_vFrames.fileList)
         if self_vFrames.lastFrame == 0:
-            self_vFrames.captureVideo = None                                       # capture failed
+            self_vFrames.captureVideo = None                            # no files found.  capture failed.
             gbl.statbar.SetStatusText('No images in folder.')
             winsound.Beep(600, 200)
             return
 
-
         filepath = os.path.join(self_vFrames.source, self_vFrames.fileList[0])
+        self_vFrames.frame = cv2.imread(filepath, cv2.cv.CV_LOAD_IMAGE_COLOR)       # read first image
+        self_vFrames.initialSize = self_vFrames.getFramesSize()                     # get frame size
 
-        self_vFrames.frame = cv2.imread(filepath, cv2.cv.CV_LOAD_IMAGE_COLOR)
-
-        self_vFrames.initialSize = self_vFrames.getFramesSize()
-
+    # ---------------------------------------------------------------------------------- create list of files to be used
     def __populateList__(self_vFrames):
         """
         Populate the file list
@@ -162,10 +220,12 @@ class virtualCamFrames(object):
         fileList.sort()
         return fileList
 
+    # ----------------------------------------------------------------------------------- get image size from first file
     def getFramesSize(self_vFrames):
         self_vFrames.rows, self_vFrames.cols, channels = self_vFrames.frame.shape
         return int(self_vFrames.cols), int(self_vFrames.rows)
 
+    # --------------------------------------------------------------------------------------------------- get next frame
     def getImage(self_vFrames):
         """
         for folder of 2D images
@@ -175,196 +235,392 @@ class virtualCamFrames(object):
 
         elif self_vFrames.currentFrame > self_vFrames.lastFrame and not self_vFrames.loop:
             self_vFrames.frame = None
-            gbl.statbar.SetStatusText('End of File List.')
-            winsound.Beep(600, 200)
+            gbl.statbar.SetStatusText('End of File List.')                      # stop if not looping
+            winsound.Beep(300, 200)
             return
 
         try:    # ------ may fail to find files in folder
             filepath = os.path.join(self_vFrames.source, self_vFrames.fileList[self_vFrames.currentFrame])
             self_vFrames.frame = cv2.imread(filepath, cv2.cv.CV_LOAD_IMAGE_COLOR)
-        except:
-            self_vFrames.captureVideo = None                        # capture failed
-            gbl.statbar.SetStatusText('Error loading file ' + self_vFrames.fileList[self_vFrames.currentFrame])
+        except:     # ------ set capture to None
+            self_vFrames.frame = None
+            gbl.statbar.SetStatusText('Error loading file ' +
+                                      self_vFrames.source +
+                                      '(' + str(self_vFrames.currentFrame) + ')')
             winsound.Beep(600, 200)
             return
 
         self_vFrames.currentFrame += 1
         return self_vFrames.frame
 
-# ------------------------------------------------------------------------------------------ generic video display panel
-class monitorPanel(wx.Panel):                                       
+""" ======================================================================================== generic video display panel
+"""
+class monitorPanel(wx.Panel):
     """
-    One Panel to be used as thumbnail, or a preview panel
-    Avoid gbl nicknames, except for cfg_dict and flags, in case this is called for a monitor that is not currently selected
+    One video playback panel (monitor) to be used as a thumbnail, or a preview panel
+    Avoid gbl nicknames, except for cfg_dict and flags, due to threading
     """
-    def __init__( self_MP, parent, mon_ID=gbl.mon_ID, panelType='thumb', loop=True):
+    # ------------------------------------------------------------------------------------------- initialize the monitor
+    def __init__(self_MP, parent, mon_ID=gbl.mon_ID, panelType='thumb', loop=True, ROIs=[]):
 
         self_MP.mon_ID = mon_ID
         self_MP.mon_name = gbl.cfg_dict[self_MP.mon_ID]['mon_name']
-        self_MP.panelType = panelType     # ----------------------------------------------- panel attributes
+        self_MP.panelType = panelType                               # 'thumb' or 'preview'
+
         if panelType == 'preview':
-            self_MP.size = gbl.cfg_dict[self_MP.mon_ID]['preview_size']
+            self_MP.panelSize = gbl.cfg_dict[self_MP.mon_ID]['preview_size']
             self_MP.fps = gbl.cfg_dict[self_MP.mon_ID]['preview_fps']
         elif panelType == 'thumb':
-            self_MP.size = gbl.cfg_dict[0]['thumb_size']
+            self_MP.panelSize = gbl.cfg_dict[0]['thumb_size']
             self_MP.fps = gbl.cfg_dict[0]['thumb_fps']
         else:
-            self_MP.size = (320,240)
+            gbl.statbar.SetStatusText('Unexpected panel type in class monitorPanel')
+            winsound.Beep(600,200)
+            self_MP.panelSize = (320,240)    # choose arbitrary values
             self_MP.fps = 1
-            print('Unexpected panel type in class monitorPanel')
-
-        wx.Panel.__init__(self_MP, parent, id=wx.ID_ANY, size=self_MP.size, name=self_MP.mon_name)
+                                                                            # initialize the panel
+        wx.Panel.__init__(self_MP, parent, id=wx.ID_ANY, size=self_MP.panelSize, name=self_MP.mon_name)
 
         self_MP.parent = parent
-        self_MP.loop = loop
+        self_MP.loop = loop                                       # flag to loop or not at end of video
         self_MP.keepPlaying = False                               # flag to start and stop video playback
-        self_MP.source = gbl.cfg_dict[self_MP.mon_ID]['source']   # ----------------------------------- video source
-        self_MP.source_type = gbl.cfg_dict[self_MP.mon_ID]['source_type']
-#        if self_MP.source_type == 0:     # get the device number if the panel source is a webcam
+
+        # --------------------------------------------------------- collect parameters from global variables
+        self_MP.interval =          1000/ self_MP.fps
+        self_MP.source =            gbl.cfg_dict[self_MP.mon_ID]['source']
+        self_MP.source_type =       gbl.cfg_dict[self_MP.mon_ID]['source_type']
+#        if self_MP.source_type == 0:     # get the device number if the panel source is a webcam - WEBCAM NOT USED
 #            self_MP.source = 0
-
-        if gbl.genmaskflag:
-            self_MP.ROIs = self_MP.Parent.ROIs
-        else:
-            self_MP.mask_file = gbl.cfg_dict[self_MP.mon_ID]['mask_file']
-            try:    # ------ mask file may be corrupt
-                self_MP.ROIs = gbl.loadROIsfromMaskFile(self_MP.mask_file)
-            except: self_MP.ROIs = []
-
+        self_MP.mask_file =         gbl.cfg_dict[self_MP.mon_ID]['mask_file']
         self_MP.preview_font =      gbl.cfg_dict[self_MP.mon_ID]['preview_font']
         self_MP.preview_RGBcolor =  gbl.cfg_dict[self_MP.mon_ID]['preview_RGBcolor']
         self_MP.line_thickness =    gbl.cfg_dict[self_MP.mon_ID]['line_thickness']
+        self_MP.video_on =          gbl.cfg_dict[self_MP.mon_ID]['video_on']
 
-        self_MP.interval = 1000/ self_MP.fps
+        if ROIs == []:                             # if no ROIs were passed from the calling function, load mask file
+            try:    # ------ mask file may be corrupt
+                self_MP.ROIs = self_MP.loadROIsfromMaskFile()
+            except: # ------ ROIs is an empty list
+                pass
+        else:
+            self_MP.ROIs = ROIs                     # otherwise use the supplied ROIs
 
-        self_MP.widgetMaker()             # ------------------------------------------ panel widgets and sizers
-        self_MP.sizers()
-        self_MP.SetSize(self_MP.size)
+        # ---------------------------------------------------------------- lay out the panel
+        self_MP.widgetMaker()                   # create widgets
+        self_MP.sizers()                        # set up panel layout
+        self_MP.SetSize(self_MP.panelSize)
         self_MP.SetMinSize(self_MP.GetSize())
         self_MP.SetBackgroundColour('#A9A9A9')
-        self_MP.allowEditing = False
 
         # ---------------------------------------- use the sourcetype to create the correct type of object for capture
-        if gbl.cfg_dict[self_MP.mon_ID]['source_type'] == 0:
-            self_MP.captureVideo = realCam(self_MP.mon_ID, self_MP.fps, devnum=0)
-        elif gbl.cfg_dict[self_MP.mon_ID]['source_type'] == 1:
+        if gbl.cfg_dict[self_MP.mon_ID]['source_type'] == 0:                # webcam
+            # !!!!!  NOT USED because webcams have no end and cannot stop acquisition.
+            gbl.statbar.SetStatusText('Webcam not available.')
+            winsound.Beep(600, 200)
+            return      #------------------------- delete notification to user and uncomment next line to restore webcam
+
+#            self_MP.captureVideo = realCam(self_MP.mon_ID, self_MP.fps, devnum=0)
+
+        elif gbl.cfg_dict[self_MP.mon_ID]['source_type'] == 1:              # video file
             self_MP.captureVideo = virtualCamMovie(self_MP.mon_ID, self_MP.fps, self_MP.source, loop=self_MP.loop)
-        elif gbl.cfg_dict[self_MP.mon_ID]['source_type'] == 2:
+
+        elif gbl.cfg_dict[self_MP.mon_ID]['source_type'] == 2:              # folder of images
             self_MP.captureVideo = virtualCamFrames(self_MP.mon_ID, self_MP.fps, self_MP.source, loop=self_MP.loop)
 
-        self_MP.initialSize = (self_MP.initialCols, self_MP.initialRows) = self_MP.captureVideo.initialSize      # input frame size
-        if self_MP.size > self_MP.captureVideo.initialSize:         # if size desired is bigger than input size
-            self_MP.size = self_MP.captureVideo.initialSize         # reduce it to the input size
+        self_MP.initialSize = (self_MP.initialCols, self_MP.initialRows) = self_MP.captureVideo.initialSize      # get frame size
+
+        if self_MP.panelSize > self_MP.captureVideo.initialSize:         # if size desired is bigger than input size
+            winsound.Beep(600,200)
+            gbl.statbar.SetStatusText('Input frame size is only ' + str(self_MP.initialSize))
+            self_MP.panelSize = self_MP.captureVideo.initialSize         # reduce it to the input size
             if panelType == 'thumb':
-                gbl.thumb_size = self_MP.size
+                gbl.thumb_size = self_MP.panelSize
             elif panelType == 'preview':
-                gbl.preview_size = self_MP.size
+                gbl.preview_size = self_MP.panelSize
             cfg.cfg_nicknames_to_dicts()
 
-            self_MP.SetSize(self_MP.size)
-            winsound.Beep(600,200)
-            gbl.statbar.SetStatusText('Input frame size is only ' + str(self_MP.size))
+            self_MP.SetSize(self_MP.panelSize)               # set panel size to fit desired frame size
 
 
-        # mouse coordinates for mask panels only
+        # -------------------------------------- for mask maker preview panel, enable mouse coordinate selection
         if gbl.mon_ID != 0:
             self_MP.Bind(wx.EVT_LEFT_UP, self_MP.onLeftUp)
-        # ---------------------------------------------------------------------- create a timer that will play the video
+
+        # -------------------------------------------------------------- create a timer that will play the video
         self_MP.Bind(wx.EVT_PAINT, self_MP.onPaint)
         self_MP.Bind(wx.EVT_TIMER, self_MP.onNextFrame)
         self_MP.playTimer = wx.Timer(self_MP, id=wx.ID_ANY)
-        self_MP.numberOfTimers = gbl.numberOfTimers +1
 
-    # ---------------------------------------------------------------------------------------------------------- Widgets
+    # ----------------------------------------------------------------------- create monitor number to display in corner
     def widgetMaker(self_MP):
-        # --------------------------------------------------------------------- monitor number to display in corner
         monfont = wx.Font(25, wx.SWISS, wx.NORMAL, wx.NORMAL)
         self_MP.monDisplayNumber = wx.StaticText(self_MP, wx.ID_ANY, ' %s' % self_MP.mon_ID)
         self_MP.monDisplayNumber.SetFont(monfont)
 
+    # -------------------------------------------------------------------------------- place number in upper left corner
     def sizers(self_MP):
         self_MP.numberSizer = wx.BoxSizer(wx.HORIZONTAL)
         self_MP.numberSizer.Add(self_MP.monDisplayNumber, 0, wx.ALIGN_LEFT | wx.ALIGN_TOP, 20)
-
-        self_MP.SetSizer(self_MP.numberSizer)                       # just uncommented
+        self_MP.SetSizer(self_MP.numberSizer)
         self_MP.Layout()
 
+    # --------------------------------------------------- create frames to lay over video images for viewing during playback
+    def makeMaskFrames(self_MP, ROIs, initialSize, font, RGBcolor, line_thickness):
+        # creates a transparent 2D frame called mask to wipe out current color values
+        # draws the ROIs and numbers on the frame called RGBmask in colors to lay over the mask
+        # returns both mask and frame
+
+        # ---------------------------------------------------------------------------------------- create frame on ones
+        npsize = (initialSize[1], initialSize[0])  # opencv and np use opposite order
+        mask_frame = np.ones(npsize, np.uint8)  # binary frame for creating mask
+
+        if not ROIs: ROIs = []
+        # ------------------------------------------------------------------ draw ROIs and numbers on frame using zeros
+        # zeros in regions that will be masked, ones in regions that won't
+        roiNum = 0  # I know it seems backwards, but ones are places where video frame value is used.
+        lastY = 0  # It makes the math easier.
+        for roi in ROIs:
+            roiNum = roiNum + 1  # use 1-indexed ROI numbers
+            for count in range(0, 4):  # draw the ROI
+                cv2.line(mask_frame, roi[count], roi[count + 1], 0, line_thickness)
+            # ----------------------------------------------------------------------- only number the top row of ROIs
+            if lastY >= roi[0][1] or lastY == 0:  # indicates a new column has started
+                roiWidth = abs(roi[1][0] - roi[0][0])
+                numPosition = (roi[0][0], roi[0][1] - 5 * line_thickness)
+                fontScale = font * roiWidth * 10 / initialSize[0]  # fontscale has no relation to typefont sizes
+                cv2.putText(mask_frame, str(roiNum), org=numPosition,
+                            fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=fontScale,
+                            color=(0), thickness=line_thickness)
+
+            lastY = roi[0][1]
+
+        # stack 3 mask_frames so each color has ROIs that won't be covered by other colors
+        mask = np.dstack((mask_frame, mask_frame, mask_frame))  # this mask zeroes out pixels in the original image
+        mask = mask.astype(np.uint8)
+
+        redmask = (1 - mask_frame) * RGBcolor[0]
+        greenmask = (1 - mask_frame) * RGBcolor[1]
+        bluemask = (1 - mask_frame) * RGBcolor[2]
+
+        RGBmask = np.dstack((redmask, greenmask, bluemask))  # this mask applies colors to pixels in the image
+
+        return mask, RGBmask
+
+    def onMaskGen(self_MP, X, Y):
+        self_MP.X = X
+        self_MP.Y = Y
+
+        # putting this generator in maskPanel.py makes it difficult to keep ROIs with their own monitors.
+
+        if self_MP.X[1].GetValue() == 0:                      # reject if 0 rows, 0 columns, or 0 width or height
+            winsound.Beep(600, 200)
+            gbl.statbar.SetStatusText('Zero dimensions specified for rows.')
+            return
+        elif self_MP.Y[1].GetValue() == 0 :
+            winsound.Beep(600, 200)
+            gbl.statbar.SetStatusText('Zero dimensions specified for columns.')
+            return
+        elif  self_MP.X[3].GetValue() == 0 :
+            winsound.Beep(600, 200)
+            gbl.statbar.SetStatusText('Zero dimensions specified for width.')
+            return
+        elif self_MP.Y[3].GetValue() == 0:
+            winsound.Beep(600,200)
+            gbl.statbar.SetStatusText('Zero dimensions specified for height.')
+            return
+
+        self_MP.mask = []                  # holds rows for output to a mask file
+        self_MP.ROIs = []     # holds tuples for drawing ROIs in the videoMonitor panel
+
+        mask_dict = {}
+        mask_keys = ['cols', 'x1', 'x_len', 'x_sep', 'x_tilt', 'rows', 'y1', 'y_len', 'y_sep', 'y_tilt']
+
+        for count in range(0,5):
+            mask_dict[mask_keys[count]] = int(self_MP.X[count+1].GetValue())               # x column
+
+        for count in range(5,10):
+            mask_dict[mask_keys[count]] = int(self_MP.Y[count-4].GetValue())               # y column
+
+        ROI = 1  # counter; numbers the ROIs
+
+        # every ROI list will contain:  [(ax,ay),(bx,by),(cx,cy),(dx,dy),(ax,ay)]
+        # number the ROIs vertically for easier use of output since flies of same genotype are unusally loaded vertically
+
+        # x-coordinates change through cols
+        # (x1, y1) is the top left corner of the top left ROI
+        for col in range(0, int(mask_dict['cols'])):
+            # x-coordinates change through columns
+            # y-coordinates change through rows
+            for row in range(0, mask_dict['rows']):
+                ax = mask_dict['x1'] + \
+                     col*(mask_dict['x_len'] +mask_dict['x_sep'] + mask_dict['x_tilt']) + \
+                     row*mask_dict['x_tilt']
+                bx = ax + mask_dict['x_len']                # add width
+                cx = bx
+                dx = ax
+                ay = mask_dict['y1'] + \
+                     col*mask_dict['y_tilt'] + \
+                     row*(mask_dict['y_len'] + mask_dict['y_sep'] + mask_dict['y_tilt'])
+                by = ay
+                cy = ay + mask_dict['y_len']                # add height
+                dy = cy
+
+                # --------------------------------------------------- create the mask coordinates for this ROI
+                if row == 0 and col == 0:
+                    self_MP.mask.append(  # for saving to mask file
+                        '(lp1\n((I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\n' % (ax, ay, bx, by, cx, cy, dx, dy))
+                else:
+                    self_MP.mask.append(
+                        'ttp%d\na((I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\nt(I%d\nI%d\n' % (
+                        ROI, ax, ay, bx, by, cx, cy, dx, dy))
+
+                self_MP.ROIs.append([(ax, ay), (bx, by), (cx, cy), (dx, dy), (ax, ay)])  # for immediate use by program
+
+                ROI += 1                                    # increment ROI number
+
+        self_MP.mask.append('ttp%d\na.(lp1\nI1\n' % (ROI + 1))                             # for saving as mask file
+        self_MP.mask.append('aI1\n' * mask_dict['rows'] * (mask_dict['cols'] -1))
+        self_MP.mask.append('a.\n\n\n')
+
+        gbl.shouldSaveMask = True                           # ask about saving before next refreshVideo
+        gbl.shouldSaveCfg = True
+
+        return self_MP.ROIs, self_MP.mask
+
+    # --------------------------------------------------------------------------------------------------- read Mask file
+    def loadROIsfromMaskFile(self_MP):
+        # returns empty list if mask file doesn't load
+        # identical to function in track.py
+
+        if self_MP.mask_file is None:
+            gbl.statbar.SetStatusText('Mask file not found')
+            winsound.Beep(600, 200)
+            return False                                    # sets the haveMask flag to show that mask was not loaded
+
+        if os.path.isfile(self_MP.mask_file):  # if mask file is there, try to load ROIs
+            try:  # ------ mask file could be corrupt
+                cf = open(self_MP.mask_file, 'r')  # read mask file
+                ROItuples = cPickle.load(cf)  # list of 4 tuple sets describing rectangles on the image
+                cf.close()
+            except:
+                gbl.statbar.SetStatusText('Mask failed to load')
+                winsound.Beep(600, 200)
+                return False                            # sets the haveMask flag to show that mask was not loaded
+        else:
+            gbl.statbar.SetStatusText('Mask file not found')
+            winsound.Beep(600, 200)
+            return  False                               # sets the haveMask flag to show that mask was not loaded
+
+        ROIs = []
+        # ------------------------------------------------------------------------------------------ make gbl.ROIs
+        for roi in ROItuples:  # complete each rectangle by adding first coordinate to end of list
+            roiList = []  # clear for each rectangle
+            for coordinate in roi:  # add each coordinate to the list for the rectangle
+                roiList.append(coordinate)
+            roiList.append(roi[0])
+            ROIs.append(roiList)  # add the rectangle lists to the list of ROIs
+
+        return  ROIs
+
+    # ------------------------------------------------------------------------------------------ start playing the video
     def PlayMonitor(self_MP):
 
         try: self_MP.ROIs               # if there are no ROIs yet, make an empty list
         except: self_MP.ROIs = []
 
-        if not gbl.genmaskflag or self_MP.ROIs == []:
-            self_MP.ROIs = gbl.loadROIsfromMaskFile(gbl.mask_file)              # new ROIs are ready
+        if self_MP.ROIs == []:                               # use ROIs from the mask file
+            self_MP.ROIs = self_MP.loadROIsfromMaskFile()    # unless ROIS are already loaded
 
-        self_MP.ROIframe, self_MP.RGBmask = gbl.makeMaskFrames(self_MP.ROIs, # creates overlay of ROIs with source dimensions
-                                        self_MP.initialSize, self_MP.preview_font, self_MP.preview_RGBcolor)
+        # ---------------------------------------------------------- create masks for overlaying ROIs onto image
+        #                    ROI frame will zero out masked area and RGBmask will fill in masked area with color
+        self_MP.ROIframe, self_MP.RGBmask = self_MP.makeMaskFrames(self_MP.ROIs,
+                                        self_MP.initialSize, self_MP.preview_font, self_MP.preview_RGBcolor,
+                                        self_MP.line_thickness)
 
-        # each of the 3 video input classes has a "getImage" function
+        # ------------------------------------------- each of the 3 video input classes has a "getImage" function
         self_MP.frame = self_MP.captureVideo.getImage()
 
-        # multiply element by element to leave zeros where lines will be drawn
+        # ---------------------------------- multiply element by element to leave zeros where lines will be drawn
         self_MP.frame2 = np.multiply(self_MP.frame.copy(), self_MP.ROIframe)
 
-        # add RGBmask to frame to turn lines red
+        # --------------------------------------------------------------- add RGBmask to frame to color the lines
         self_MP.frame3 = np.add(self_MP.frame2.copy(), self_MP.RGBmask)
 
-        self_MP.newframe = cv2.resize(self_MP.frame3.copy(), dsize=self_MP.size)
+        # --------------------------------------------------------------------- resize the image to fit the panel
+        self_MP.newframe = cv2.resize(self_MP.frame3.copy(), dsize=self_MP.panelSize)
 
-        self_MP.bmp = wx.BitmapFromBuffer(self_MP.size[0], self_MP.size[1], self_MP.newframe.tostring())
+        # ----------------------------------------------------------------------- create bitmap from masked image
+        self_MP.bmp = wx.BitmapFromBuffer(self_MP.panelSize[0], self_MP.panelSize[1], self_MP.newframe.tostring())
+
+#        self_MP.playTimer.Start(self_MP.interval)          # timer cannot be started here.  must start in main thread
 
         self_MP.keepPlaying = True
-        gbl.genmaskflag = False
-        self_MP.Show()
+        self_MP.Show()                  # display the image
 
-    def onNextFrame(self_MP, evt):  # -------------------------------------------------- captures next frame
+    # ----------------------------------------------------------------------------- captures next frame and applies mask
+    def onNextFrame(self_MP, evt):
+
+        # if ROIframe is not available, playMonitor() was probably not run before the playtimer started
+
         self_MP.frame = self_MP.captureVideo.getImage()
 
         if self_MP.frame is None:
-            gbl.statbar.SetStatusText('Reached end of file. Monitor %d'% gbl.mon_ID)
-            self_MP.keepPlaying = False
-            self_MP.playTimer.Stop()
-            winsound.Beep(600,200)
-            gbl.del_started_item(gbl.timersStarted, self_MP.mon_ID)                                                         ###### debug
+            gbl.statbar.SetStatusText('Reached end of file. Monitor %d'% self_MP.mon_ID)
+            self_MP.keepPlaying = False         # since it didn't loop, make sure the playback process stops
+            self_MP.playTimer.Stop()            # notify user
+            winsound.Beep(300,200)
             return
 
 
-        frame2 = np.multiply(self_MP.frame.copy(), self_MP.ROIframe)  # apply mask (like PlayMonitor function)
+        ########################################################################################################################### debug
+        try: self_MP.ROIframe
+        except: print('what happened?')
+
+
+
+        frame2 = np.multiply(self_MP.frame.copy(), self_MP.ROIframe)        # apply mask to image
         frame3 = np.add(frame2.copy(), self_MP.RGBmask)
-        self_MP.newframe = cv2.resize(frame3.copy(), dsize=self_MP.size)        # resize the frame before copy from buffer
-                                                                                # too large a frame will be corrupted
+
+        self_MP.newframe = cv2.resize(frame3.copy(), dsize=self_MP.panelSize)    # resize the frame before copy from buffer
+                                                                            # since too large a frame will be corrupted
 
         try:    # ------ copy from buffer may fail
-            self_MP.bmp.CopyFromBuffer(self_MP.newframe.tostring())  # copies data from buffer to bitmap
-            self_MP.Refresh()  # triggers EVT_PAINT
+            self_MP.bmp.CopyFromBuffer(self_MP.newframe.tostring())         # copies data from buffer to bitmap
+            self_MP.Refresh()                                               # triggers EVT_PAINT
 
-        except:
+        except:     # ------ if something goes wrong, stop playback & notify user
             gbl.statbar.SetStatusText('Could not paint image.')
             self_MP.keepPlaying = False
+            self_MP.playTimer.Stop()
+            winsound.Beep(300,200)
+            return
 
-    def onPaint(self_MP, evt):  # ---------------------------------------------- applies ROIs to image frame
+    # ----------------------------------------------------------------------------------- paints new image to the screen
+    def onPaint(self_MP, evt):
         # BufferedPaintDC only works inside an event method.  ClientDC doesn't seem to do the job.
-
         try: self_MP.bmp    # ------ may have failed to create .bmp file
         except: pass
         else:
-            thePanel = evt.GetEventObject()     # sometimes the event object is still not the right size.  Reset it just in case
-            thePanel.SetSize(self_MP.size)
-            dc = wx.BufferedPaintDC(thePanel)  # eventobject is a monitorPanel; create a buffered paint device context (DC)
+            thePanel = evt.GetEventObject()     # eventobject is the monitorPanel
+            thePanel.SetSize(self_MP.panelSize)      # sometimes the event object is still not the right size.  Reset it just in case
+            dc = wx.BufferedPaintDC(thePanel)       # create a buffered paint device context (DC)
             dc.DrawBitmap(self_MP.bmp, 0, 0, True)  # draw bitmap on the buffered DC
 
-        evt.Skip()
+        evt.Skip()      # allow any other processing to complete
 
-    def onLeftUp(self, event):           # -------------------------- get mouse pointer coordinates of upper left corner
-        print('wait here')
+    # ------------- get mouse pointer coordinates in the preview panel and set upper left coordinates for mask generator
+    def onLeftUp(self, event):
         try:    # ------ may have been clicked somewhere else, so don't fail
             (x_mouse, y_mouse) = event.GetPosition()
-            x_source = x_mouse * self.initialSize[0] / self.size[0]
-            y_source = y_mouse * self.initialSize[1] / self.size[1]
+            x_source = x_mouse * self.initialSize[0] / self.panelSize[0]
+            y_source = y_mouse * self.initialSize[1] / self.panelSize[1]
 
-            self.parent.X[2].SetValue(x_source)
-            self.parent.Y[2].SetValue(y_source)
-        except: pass
+            self.parent.X[2].ChangeValue(x_source)                 # put values in (X,Y) on mask generator table
+            self.parent.Y[2].ChangeValue(y_source)
+        except: # ------ ignore the click
+            pass
+
+        event.Skip()        # continue any other processes for the click
 
 
 # ------------------------------------------------------------------------------------------ Stand alone test code
@@ -375,9 +631,10 @@ class mainFrame(wx.Frame):
 
         wx.Frame.__init__(self, *args, **kwds)
 
-        self.config = cfg.Configuration(self)
-        thumbnailsize = gbl.cfg_dict[0]['size_thumb']
-        thumb = monitorPanel(self, gbl.cfg_dict, 'thumb')
+        gbl.mask_file = 'C:\Users\Lori\Documents\PyCharmProjects\Data\oneROI.msk'
+        self.config = cfg.Configuration(self,'C:\Users\Lori\Documents\PyCharmProjects\Data\oneROI.cfg')
+        thumb = monitorPanel(self, mon_ID=1, panelType='thumb', loop=True, ROIs=[])
+        thumb.PlayMonitor()
 
         print('done.')
 

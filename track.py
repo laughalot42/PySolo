@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
+#       Major revisions by Caitlin A Laughrey and Loretta E Laughrey in 2016-2017.
+#
 #       pvg_acquire.py
 #
 #       Copyright 2011 Giorgio Gilestro <giorgio@gilest.ro>
@@ -28,7 +30,7 @@ __date__ = "$Date: 2011/08/16 21:57:19 $"
 __copyright__ = "Copyright (c) 2011 Giorgio Gilestro"
 __license__ = "Python"
 
-#       Revisions by Caitlin Laughrey and Loretta E Laughrey in 2016.
+
 
 import wx
 import os
@@ -42,252 +44,284 @@ import math
 import datetime
 from itertools import repeat  # generate tab-delimited zeroes to fill in extra columns
 import winsound
+import cPickle
 
-# TODO: monitors are being tracked one at a time
 
-class consolePanel(wx.TextCtrl):  # ------------------------------------------------ redirect sysout to scrolled textctrl
-    def __init__(self, parent, size=(200, 200)):  # parent is the cfgPanel
-        self.mon_ID = gbl.mon_ID  # keep track of which monitor this console is for
+
+""" =================================================================================================== Tracking console
+Textctrl panel that reports tracking progress
+"""
+class consolePanel(wx.TextCtrl):
+    # -------------------------------------------------------------------------------------- initialize the Textctrl box
+    def __init__(self, parent, size=(200, 200)):    # parent is the cfgPanel
+        self.mon_ID = gbl.mon_ID                    # keep track of which monitor this console is for
         style = wx.TE_MULTILINE | wx.TE_RICH | wx.TE_AUTO_SCROLL | wx.HSCROLL | wx.VSCROLL | wx.TE_READONLY
         wx.TextCtrl.__init__(self, parent, wx.ID_ANY, size=size, style=style, name=gbl.mon_name)
 
+    # ----------------------------------------------------- writes message to the Textctrl box and refreshes the display
     def writemsg(self, message):
         self.AppendText(message + '\n')
         self.Parent.SetSizer(self.Parent.thumbGridSizer)
         self.Refresh()
         self.Layout()
 
-class trackedMonitor(wx.Panel):                                    # TODO: why does this need to be a panel?  does it matter?
-    def __init__(self, parent, mon_ID):
-        self.mon_ID = gbl.mon_ID = mon_ID       # make sure the settings for this monitor are in the nicknames
+
+""" ====================================================================================================== Tracked video
+Tracks objects in the video, producing distance traveled report.
+"""
+class trackedMonitor(object):
+    # -------------------------------------------------------------------------------------------- initialize the object
+    def __init__(self, parent, mon_ID, videoOn=False):
+        self.mon_ID =           gbl.mon_ID = mon_ID  # make sure the settings for this monitor are in the nicknames
         cfg.mon_dict_to_nicknames()
-        self.mon_name = gbl.mon_name
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, name=self.mon_name)
+        self.mon_name =         gbl.mon_name
 
-        # -------------------------------------------------------------------------------------------- source settings
-        self.parent = parent
-        self.loop = False                       # never loop tracking
-        self.keepPlaying = False                # don't start yet
-        self.source = gbl.source
-        self.source_type = gbl.source_type
-        self.devnum = 0                         # only one camera is currently supported
-        self.fps = gbl.source_fps
-        self.mmsize = gbl.source_mmsize
-        self.start_datetime = gbl.start_datetime
-        self.mask_file = gbl.mask_file
-        self.data_folder = gbl.data_folder
-        self.outputprefix = os.path.join(self.data_folder, self.mon_name)     # path to folder where output will be saved
-        self.console = consolePanel(parent, size=gbl.thumb_size)                         # the output console
+        # ---------------------------------------------- copy source settings to self to protect from threading
+        self.parent =           parent
+        self.loop =             False                       # never loop tracking
+        self.keepPlaying =      False                # don't start yet
+        self.source =           gbl.source
+        self.source_type =      gbl.source_type
+        self.devnum =           0                         # only one camera is currently supported
+        self.fps =              gbl.source_fps
+        self.mmsize =           gbl.source_mmsize
+        self.start_datetime =   gbl.start_datetime
+        self.mask_file =        gbl.mask_file
+        self.data_folder =      gbl.data_folder
+        self.outputprefix =     os.path.join(self.data_folder, self.mon_name)
+        self.console =          consolePanel(parent, size=gbl.thumb_size)                    # the output console
 
+        self.videoOn =          videoOn             # normally don't want to watch frame by frame during tracking
+        self.preview_font =     gbl.preview_font
+        self.preview_RGBcolor = gbl.preview_RGBcolor
+        self.line_thickness =   gbl.line_thickness
+        self.preview_size =     gbl.preview_size
 
-        # ---------------------------------------- use the sourcetype to create the correct type of object for capture
+        # ------------------------------------ use the sourcetype to create the correct type of object for capture
         if self.source_type == 0:
-            self.captureMovie = VM.realCam(self.mon_ID, 1, devnum=0)
+            self.captureMovie = VM.realCam(self.mon_ID, 1, devnum=0)        # NOT IN USE
         elif self.source_type == 1:
             self.captureMovie = VM.virtualCamMovie(self.mon_ID, 1, self.source, loop=False)
         elif self.source_type == 2:
             self.captureMovie = VM.virtualCamFrames(self.mon_ID, 1, self.source, loop=False)
 
-        (self.cols, self.rows) = self.size = self.captureMovie.initialSize
-        self.distscale = (float(self.mmsize[0])/float(self.size[0]), float(self.mmsize[1])/float(self.size[1]))
-        self.areascale = self.distscale[0] * self.distscale[1]
+        (self.cols, self.rows) =  self.size = self.captureMovie.initialSize
+        self.distscale =         (float(self.mmsize[0])/float(self.size[0]), float(self.mmsize[1])/float(self.size[1]))
+        self.areascale =          self.distscale[0] * self.distscale[1]
 
-        self.ROIs = gbl.loadROIsfromMaskFile(self.mask_file)  # -----------------------------------------------------ROIs
+        self.haveMask = self.loadROIsfromMaskFile()  # -----------------------------------------------ROIs
 
-    def startTrack(self, show_raw_diff=False, drawPath=True):  # ---------------------------------------- begin tracking
+
+    def loadROIsfromMaskFile(self):
+        # returns empty list if mask file doesn't load
+        # identical to function in videoMonitor.py
+
+        if self.mask_file is None:
+            gbl.statbar.SetStatusText('Mask file not found')
+            winsound.Beep(600, 200)
+            return False                                    # sets the haveMask flag to show that mask was not loaded
+
+        if os.path.isfile(self.mask_file):  # if mask file is there, try to load ROIs
+            try:  # ------ mask file could be corrupt
+                cf = open(self.mask_file, 'r')  # read mask file
+                ROItuples = cPickle.load(cf)  # list of 4 tuple sets describing rectangles on the image
+                cf.close()
+            except:
+                gbl.statbar.SetStatusText('Mask failed to load')
+                winsound.Beep(600, 200)
+                return False                            # sets the haveMask flag to show that mask was not loaded
+        else:
+            gbl.statbar.SetStatusText('Mask file not found')
+            winsound.Beep(600, 200)
+            return  False                               # sets the haveMask flag to show that mask was not loaded
+
+        self.ROIs = []
+        # ------------------------------------------------------------------------------------------ make gbl.ROIs
+        for roi in ROItuples:  # complete each rectangle by adding first coordinate to end of list
+            roiList = []  # clear for each rectangle
+            for coordinate in roi:  # add each coordinate to the list for the rectangle
+                roiList.append(coordinate)
+            roiList.append(roi[0])
+            self.ROIs.append(roiList)  # add the rectangle lists to the list of ROIs
+
+        return  True                                    # sets the haveMask flag to show that mask was loaded
+
+    # --------------------------------------------------------------------------------------------------- begin tracking
+    def startTrack(self, show_raw_diff=False, drawPath=True):
         """
-        Each frame is compared against the moving average
-        take an opencv frame as input and return an array of distances moved per minute for each ROI
+        Collect the locations of the flies in each frame of the video
+        Calculate the distance between locations from one frame to the next
+        If a fly disappears, use the prior location so that distance == 0
+        Sum the distances
         """
 
+        # ------------------------------------------------------------------------ notify user that tracking has started
         gbl.statbar.SetStatusText('Tracking started: ' + self.mon_name)
+        self.parent.trkdConsList[self.mon_ID].writemsg('Start tracking monitor %d.' % self.mon_ID)
+#        self.parent.trkdConsList[self.mon_ID].SetFocus()
 
-        self.parent.trackedConsoles[self.mon_ID].writemsg('Start tracking monitor %d.' % self.mon_ID)
-        self.parent.trackedConsoles[self.mon_ID].SetFocus()
+        # ------------------------------------------------------------------------------- locate and calculate distances
+        fly_coords = self.getCoordsArray()                  # find coordinates of flies in each ROI in each frame
+        distByMinute = self.calcDistances(fly_coords)       # calculate distance each fly travelled in each minute
+        outputArrays = self.colSplit32(distByMinute)        # split data into 32 ROI groups for output to files
 
-        fly_coords = self.getCoordsArray()                       # finds coordinates of flies in each ROI in each frame
+        # ---------------------------------------------------------------------------------------------- output the data
+        self.outputprefix = self.checkFilenames(len(outputArrays))      # prevent overwriting of files
 
-        # ----------------------------------------------------------------------------------------------------------------------------- debug
-        try: os.remove('fly_coords.csv')
-        except: pass
-        open('fly_coords.csv', 'w').write('\n'.join('%d %d' % (mytuple[0][0], mytuple[0][1]) for mytuple in fly_coords))
-        # ------------------------------------------------------------------------------------------------------------------------------------
+        for batch in range(0, len(outputArrays)):
+            outputfile = self.outputprefix + str(batch + 1) + '.txt'    # create a filename for saving
 
-
-        distByMinute = self.calcDistances(fly_coords)            # calculates distance each fly travelled in each minute
-        outputArrays = self.colSplit32(distByMinute)             # splits data into 32 ROI groups
-
-        self.outputprefix = self.checkFilenames(len(outputArrays))      # prevents overwriting of files
-
-        for batch in range(0, len(outputArrays)):                  # output the files
-            outputfile = self.outputprefix + str(batch + 1) + '.txt'  # create a filename for saving
-
-            f_out = open(outputfile, 'a')                                       # TODO: if output fails, notify user
+            f_out = open(outputfile, 'a')                                                                       # TODO: if output fails, notify user
             for rownum in range(0, len(outputArrays[batch])):
-                f_out.write(outputArrays[batch][rownum])       # save "part" to the file in tab delimited format
-                self.parent.trackedConsoles[self.mon_ID].writemsg(outputArrays[batch][rownum])
-                self.parent.trackedConsoles[self.mon_ID].SetFocus()
+                f_out.write(outputArrays[batch][rownum])                # output the data
             f_out.close()
 
-            outputfile = os.path.split(self.outputprefix)[1]
+            outputfile = os.path.split(self.outputprefix)[1]            # print output filename to console for user
+            self.parent.trkdConsList[self.mon_ID].writemsg('Output file names start with:  %s' % outputfile)
+#            self.parent.trkdConsList[self.mon_ID].SetFocus()
 
-        if outputfile == '':
-            gbl.statbar.SetStatusText('Cancelled.')
-        else:
-            gbl.statbar.SetStatusText('Done. Output file names start with:  ' + outputfile)
+        self.parent.trkdConsList[self.mon_ID].writemsg('Acquisition of Monitor %d is finished.' % self.mon_ID)
+        gbl.statbar.SetStatusText('')
 
-        self.parent.trackedConsoles[self.mon_ID].writemsg('Acquisition of Monitor %d is finished.' % self.mon_ID)
-        self.parent.trackedConsoles[self.mon_ID].SetFocus()
-
+    # -------------------------------------------------------------create table of fly coordinates for entire video
+    # every ROI, every frame
     def getCoordsArray(self):
-        self.parent.trackedConsoles[self.mon_ID].writemsg('collecting coordinates for monitor %d' % self.mon_ID)
-        self.parent.trackedConsoles[self.mon_ID].SetFocus()
+        self.parent.trkdConsList[self.mon_ID].writemsg('collecting coordinates for monitor %d' % self.mon_ID)
+#        self.parent.trkdConsList[self.mon_ID].SetFocus()
         keepgoing = True
-        fly_coords = []                                 # table of coordinates of flies in each ROI for each frame
+        fly_coords = []
         self.frameCount = 0
 
         # ---------------------------------------------------- process first frame, which can't be compared to anything.
         frame = self.captureMovie.getImage()
-        previousFrame_fly_coords = self.getFrameFlyCoords(frame, [(0,0)]*len(self.ROIs))    # there are no previous coordinates
+        try:
+            frame[0]        # verify that the frame has data
+        except:
+            keepgoing = False       # if not, end tracking
+            self.parent.trkdConsList[self.mon_ID].writemsg('End of video.')
+#            self.parent.trkdConsList[self.mon_ID].SetFocus()
+            return fly_coords
 
         # ------------------------------------------------ make 2D array of fly coordinates for every ROI in every frame
+        # first set of previous coordinates - get locations from frame.  if no fly is found, location will be (0,0)
+        previousFrame_fly_coords = self.getFrameFlyCoords(frame, [(0,0)]*len(self.ROIs))
+
         while keepgoing:                     # goes through WHOLE video
             # each of the 3 video input classes has a "getImage" function.
-            # CaptureMovie is either webcam, video, or a folder
+            # CaptureMovie is either video file, or a folder
             frame = self.captureMovie.getImage()                # get image
+            try:
+                frame[0]                    # verify that the frame has data
+            except:
+                keepgoing = False           # if not, stop tracking
+                self.parent.trkdConsList[self.mon_ID].writemsg('End of video.')
+#                self.parent.trkdConsList[self.mon_ID].SetFocus()
+                return previousFrame_fly_coords                 # return a value that won't increase the distance
+
             self.frameCount = self.frameCount + 1
-            if frame is not None:
-                fly_coords.append(self.getFrameFlyCoords(frame, previousFrame_fly_coords)) # append coordinates for every ROI in this frame
-            else:
-                keepgoing = False
-            previousFrame_fly_coords = fly_coords[-1]
+            if self.frameCount/20.0 == int(self.frameCount/20):     # periodically update the console for the user
+                self.parent.trkdConsList[self.mon_ID].writemsg('Frame # %d' % self.frameCount)
+#                self.parent.trkdConsList[self.mon_ID].SetFocus()
+
+            # --------------------------------------------------- collect coordinates for every ROI in this frame
+            fly_coords.append(self.getFrameFlyCoords(frame, previousFrame_fly_coords))
+
+            previousFrame_fly_coords = fly_coords[-1]       # save this frame as previous in case fly disappears
 
         return fly_coords
 
-    def getFrameFlyCoords(self, grey_image, previousCoords):             # returns an array of fly coordinates for one frame
+    # ------------------------------------------------------------------------ returns all fly coordinates for one frame
+    def getFrameFlyCoords(self, grey_image, previousCoords):
 
         fliesInFrame = []
-        for flyNum in range(0, len(self.ROIs)):                               # locate the fly in each ROI
-            ROI = self.ROIs[flyNum]
+        for self.flyNum in range(0, len(self.ROIs)):
+            ROI = self.ROIs[self.flyNum]
             ROIimg = grey_image[ROI[0][1]:ROI[2][1],ROI[0][0]:ROI[2][0]]    # make a mini-image of the ROI
 
-            # prepare the ROI for object recognition.  By doing the preparation inside the ROI instead of over the
-            # whole image, contrast issues are reduced.
-            bw_image = self.prepImage(ROIimg)                               # convert image to binary b&w
-            fliesInFrame.append(self.getFlyCoords(bw_image, previousCoords[flyNum]))   # determines coordinates of center of fly in ROI
+            # prepare the ROI for object recognition.
+            # By doing the preparation inside the ROI instead of over the whole image, contrast issues are reduced.
+            bw_image = self.prepImage(ROIimg)          # convert image to binary b&w
 
-        return fliesInFrame
+            # ------------------------------------------------------- get coordinates of center of this fly in ROI
+            fliesInFrame.append(self.getFlyCoords(bw_image, previousCoords[self.flyNum]))
 
+
+        return fliesInFrame         # all fly location for each ROI in one frame
+
+    # ----------------------------------- displays 3 images: original, B&W, and contours ----------------------------------- debug - shows images
+    def debug3img(self, origimg, bwimg, contrimg, contours):
+        # Use this function by checking the box "Watch Video Tracking" on the monitor configuration panel
+        # draw bounding rectangles on the contours image, then combine all three images into one and display
+
+        cv2.drawContours(contrimg, contours, -1, (100, 0, 0), 1)        # draws the contours on the frame in gray
+
+        for contour in contours:                            # draw bounding rectangle for each contour
+            rect = cv2.boundingRect(contour)
+            pt1 = (rect[0], rect[1])                        # upper left corner
+            pt2 = (rect[0] + rect[2], rect[1] + rect[3])    # lower right corner
+            cv2.rectangle(contrimg, pt1, pt2, 150, 1)       # draw the rectangle in gray with line thickness of 1 pixel
+
+        allimgs = np.hstack((self.origROIimg, bwimg, contrimg))     # combine the images into one array, side-by-side
+
+        # display the combined image
+        self.videoOn = gbl.debugimg(allimgs, outprefix='fly%d-frame%d' % (self.flyNum, self.frameCount))
+
+    # ----------------------------------------------------------------------- convert from gray scale to black and white
     def prepImage(self, frame):
         # ----------blurs edges
-        frame = cv2.GaussianBlur(frame, (3, 3), 0)  # height & width of kernel must be odd and positive
-        grey_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # remove color & collapse to 2D array
+        frameBlurred = cv2.GaussianBlur(frame, (3, 3), 0)  # height & width of kernel must be odd and positive
+        try:
+            grey_image = cv2.cvtColor(frameBlurred, cv2.COLOR_BGR2GRAY)  # remove color & collapse to 2D array
+        except:
+            self.parent.trkdConsList[self.mon_ID].writemsg('Cannot cvtColor in track.py prepImage.  Tracking stopped.')
+#            self.parent.trkdConsList[self.mon_ID].SetFocus()
+            self.keepPlaying = False
+            return frame
 
-        # -------------------------------------------------------------------------------------------------------------------------------debug
-        self.origROIimg = grey_image                    # for use in getFlyCoords
+        #""" -------------------------------------------------------------------------------------------------------------------------------debug
+        self.origROIimg = grey_image                    # for comparing images in getFlyCoords
+        #""" -------------------------------------------------------------------------------------------------------------------------------
 
+        # select a threshold that reveals a fly-like object (expect 2 contours: edge of cell and fly) & get B&W image
         retvalue, bw_image = self.adptThreshold(grey_image)
-#        retvalue, bw_image = cv2.threshold(grey_image, 80, 255, cv2.THRESH_BINARY)  # convert to black & white          # TODO:  best threshold values?  was 20,255
-                                                                                    # adaptive thresholds are terrible
-        bw_image = cv2.morphologyEx(bw_image, cv2.MORPH_OPEN, (2, 2))  # remove noise (dilate and erode)
-        bw_image = 255 - bw_image  # flies need to be white on black background for using cv2.contours to locate them.
-
-        # -------------------------------------------------------------------------------------------------------------------------------debug
-        self.origROIimg = grey_image                    # for use in getFlyCoords
-#        gbl.debugimg(np.hstack((grey_image, bw_image)))
-
-        # -------------------------------------------------------------------------------------------------------------------------------
+        bw_image = cv2.morphologyEx(bw_image, cv2.MORPH_OPEN, (2, 2))           # remove noise (dilate and erode)
+        bw_image = 255 - bw_image  # flies need to be white on black background for using cv2.contours
 
         return bw_image
 
+    # -------------------------- determine which threshold value produces 2 contours in the image and return a B&W image
     def adptThreshold(self, img):
-    # goal is to choose threshold value that produces three contours in the image                                           # TODO: could be more efficient by combining with finding coordinates
+        # goal is to choose threshold value that produces two contours in the image
+        # cv2 adaptive threshold function results in messy pictures & can't isolate flies
+        # ideally the image should have 2 contours:  the edge of the cell, and the fly
+
         for testValue in range(45, 150, 5):
-            retvalue, bw_image = cv2.threshold(img, testValue, 255, cv2.THRESH_BINARY)  # convert to black & white          # TODO:  best threshold values?  was 20,255
+            retvalue, bw_image = cv2.threshold(img, testValue, 255, cv2.THRESH_BINARY)  # convert to black & white
 
-            a = copy.deepcopy(bw_image)                       # find contours
-            contours, hierarchy = cv2.findContours(a, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # find contours
-
-            """ # --------------------------------------------------------------debug
-            try:
-                cv2.drawContours(a, contours, -1, (100, 0, 0), 1)
-                rect0 = cv2.boundingRect(contours[0])
-                rect1 = cv2.boundingRect(contours[1])
-                rect2 = cv2.boundingRect(contours[2])
-            except:
-                pass
-
-            pt1 = (rect0[0], rect0[1])
-            pt2 = (rect0[0] + rect0[2], rect0[1] + rect0[3])
-            cv2.rectangle(a, pt1, pt2, 150, 1)
-            try:
-                pt1 = (rect1[0], rect1[1])
-                pt2 = (rect1[0] + rect1[2], rect1[1] + rect1[3])
-                cv2.rectangle(a, pt1, pt2, 150, 1)
-            except:
-                pass
-            try:
-                pt1 = (rect2[0], rect2[1])
-                pt2 = (rect2[0] + rect2[2], rect2[1] + rect2[3])
-                cv2.rectangle(a, pt1, pt2, 150, 1)
-            except:
-                pass
-
-            both = np.hstack((self.origROIimg, bw_image, a))
-
-            gbl.debugimg(both, outprefix=str(testValue))
-
-            """ # --------------------------------------------------------------------
-
-            if len(contours) == 2:
+            contrimg = copy.deepcopy(bw_image)     # find contours function will write over the image so keep a copy to show
+            contours, hierarchy = cv2.findContours(contrimg, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # find contours
+            if len(contours) == 2:        # on is cell edge, other is fly              # TODO: why is this different from what happens in getFlyCoords?
                 return retvalue, bw_image
 
-        # if no setting produced 3 contours, use value of 75
+        # if no setting produced 2 contours, use value of 75 and move on
         retvalue, bw_image = cv2.threshold(img, 75, 255, cv2.THRESH_BINARY)
-
         return retvalue, bw_image
 
-
-    def getFlyCoords(self, ROIimg, previousCoords):  # returns coordinates of a single fly
-        a = copy.deepcopy(ROIimg)
-        contours, hierarchy = cv2.findContours(a, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # find contours
-
-        """# --------------------------------------------------------------debug
-        try:
-            cv2.drawContours(a, contours, -1, (100, 0, 0), 1)
-            rect0 = cv2.boundingRect(contours[0])
-            rect1 = cv2.boundingRect(contours[1])
-            rect2 = cv2.boundingRect(contours[2])
-        except:
-            pass
-
-        pt1 = (rect0[0], rect0[1])
-        pt2 = (rect0[0] + rect0[2], rect0[1] + rect0[3])
-        cv2.rectangle(a, pt1, pt2, 150, 1)
-        try:
-            pt1 = (rect1[0], rect1[1])
-            pt2 = (rect1[0] + rect1[2], rect1[1] + rect1[3])
-            cv2.rectangle(a, pt1, pt2, 150, 1)
-        except:
-            pass
-        try:
-            pt1 = (rect2[0], rect2[1])
-            pt2 = (rect2[0] + rect2[2], rect2[1] + rect2[3])
-            cv2.rectangle(a, pt1, pt2, 150, 1)
-        except:
-            pass
-
-        both = np.hstack((self.origROIimg, ROIimg, a))
-
-        gbl.debugimg(both)
-
-        """# --------------------------------------------------------------------
+    # ------------------------------------------------------------------------------ returns coordinates of a single fly
+    def getFlyCoords(self, ROIimg, previousCoords):
+        contrimg = copy.deepcopy(ROIimg)                # findcontours overwrites the images, so save a copy for showing
+        contours, hierarchy = cv2.findContours(contrimg, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # find contours
 
         # use the smallest region for the fly
         flyArea = []
-        if len(contours) == 3:  # if there's a fly, there will be 3 contours: edge of frame, edge of cell, and fly
+        if len(contours) == 3:  # if there's a fly, there will be 3 contours: edge of frame, edge of cell, and fly   # TODO:  why is this different from what happens in adptThreshold?
             for contour in contours:
                 flyArea.append(cv2.contourArea(contour))  # find the area of each contour
+            # -------------------------------------------------------------------------------------------------------------------------- debug
+            # if "Watch Video Tracking" is checked on the monitor configuration page, display the ROI images
+            if self.videoOn == True:
+                self.debug3img(self.origROIimg, ROIimg, contrimg, contours)  # #
+            # --------------------------------------------------------------------------------------------------------------------------
 
             # smallest contour represents the fly
             val, flyidx = min((val, idx) for (idx, val) in enumerate(flyArea))
@@ -301,13 +335,14 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         return ((fly_rect[0] + fly_rect[2] / 2),  # x-coordinate
                 (fly_rect[1] + fly_rect[3] / 2))  # y-coordinate
 
-    def calcDistances(self, fly_coords):        # calculate distances travelled in mm
-        # ------------------------------------------------------- in one minute increments, tabulate the distances moved
-        # AFTER whole video is finished, do calculations
+    # ----------------------------------------------------- calculate distances travelled in millimeters over one minute
+    def calcDistances(self, fly_coords):
+        # Now that all fly coordinates are known, calculate distances
 
-        self.parent.trackedConsoles[self.mon_ID].writemsg('Calculating distances for monitor %d' % self.mon_ID)
-        self.parent.trackedConsoles[self.mon_ID].SetFocus()
-        distByMinute = []  # this is the tracking data we're producing in pixels per minute
+        self.parent.trkdConsList[self.mon_ID].writemsg('Calculating distances for monitor %d' % self.mon_ID)
+#        self.parent.trkdConsList[self.mon_ID].SetFocus()
+
+        distByMinute =          []  # this is the tracking data we're producing in pixels per minute
         self.previousFrame = fly_coords[0]
         for self.frameCount in range(0, len(fly_coords), int(60 * self.fps)):  # for each one minute interval
             subsetCoordinates = fly_coords[self.frameCount:(self.frameCount + int(60 * self.fps))]  # get distance value for each ROI
@@ -315,64 +350,65 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
 
         return distByMinute
 
-    def getDistances(self, coords, currentFrame):   # ------------------------- tabulates distance travelled by each fly
-        totalDists = np.zeros(len(self.ROIs), dtype=int)     # tabulation of distances travelled in each ROI throughout video
-        theseDists = np.zeros(len(self.ROIs))          # array of distances travelled between 2 frames for each ROI
+    # ------------------------------------------------------- tabulates distance travelled by every fly between 2 frames
+    def getDistances(self, coords, currentFrame):
+        totalDists = np.zeros(len(self.ROIs), dtype=int)  # tabulation of distances travelled in each ROI throughout video
+        theseDists = np.zeros(len(self.ROIs))             # array of distances travelled between 2 frames for each ROI
 
         for thisFrame in coords:
             d_squareds = np.square(np.subtract(self.previousFrame, thisFrame))  # (x1-x2)^2, (y1-y2)^2 for each element
-            d_squareds = d_squareds * self.distscale            # convert pixels to distance in mm
+            d_squareds = d_squareds * self.distscale      # convert pixels to distance in mm based on user provided frame size
 
-            for roiNum in range(0, len(d_squareds)):        # iterate through the ROIs, calculating distances
-                flyDist = np.sqrt(d_squareds[roiNum][0] + d_squareds[roiNum][1])  # d = sqrt(x^2 + y^2)
+            for roiNum in range(0, len(d_squareds)):      # iterate through the ROIs, calculating distances
+                flyDist = np.sqrt(d_squareds[roiNum] + d_squareds[roiNum])  # d = sqrt(x^2 + y^2)
 
-                if flyDist >= 3:          # ignore distances that are this small: could be vibrations or rounding errors
-                    theseDists[roiNum] = flyDist
-                else:
+                if flyDist <= 3:          # ignore distances that are this small: could be vibrations or rounding errors
                     theseDists[roiNum] = 0
+                else:
+                    theseDists[roiNum] = flyDist
 
-            totalDists = totalDists + theseDists   # adds these distances to the running tab
+            totalDists = totalDists + theseDists            # adds these distances to the running tab
 
             self.previousFrame = thisFrame                  # store for comparison with next frame
             currentFrame = currentFrame +1                  # keeps track of actual frame number in whole video
 
         return totalDists
 
-    def colSplit32(self, array):                                                                                        # TODO: didn't fill 2nd file
-        # cannot use wxDateTime.AddTS because it changes date to 1/1/1970.  Instead, convert date & time to strings,
-        # concatenate, then convert back to wxDateTime
+    # ----------------------------------------------- split data into files with 32 ROIs each for use in DAMFileScan110X
+    def colSplit32(self, array):
+        # cannot use wxDateTime.AddTS because it changes date to 1/1/1970.
+        # Instead, use python datatime for generating the datetime stamps for each row of data
 
-        self.parent.trackedConsoles[self.mon_ID].writemsg('Splitting monitor %d' % self.mon_ID)                         # TODO: third file not needed
-        self.parent.trackedConsoles[self.mon_ID].SetFocus()
+        self.parent.trkdConsList[self.mon_ID].writemsg('Splitting monitor %d' % self.mon_ID)
+#        self.parent.trkdConsList[self.mon_ID].SetFocus()
 
         oneMinute = datetime.timedelta(minutes = 1)
-
         monitorDateTime = self.start_datetime
-
         rownum = 1
 
         # ----------------------------------------------------------- determine how many files are needed and prep array
         listofFilesContents = []
-        moreFilesNeeded = int(math.ceil((len(array) - 10) / 32.0))      # number of additional files needed
+        moreFilesNeeded = int(math.ceil((len(array) - 10) / 32.0))    # number of additional files needed
         for num in range(0, 1 + moreFilesNeeded):
             listofFilesContents.append([])                            # create an empty list for each file to be created
 
-
-        # all three files are being generated at the same time by adding 32 elements of the row to each file before going
+        # all the files are being generated at the same time by adding 32 elements of the row to each file before going
         # to the next row.
         for rowdata in array:
             # ------------------------------------------------------------------------- create first 10 columns (prefix)
             if rownum <> 1:
                 monitorDateTime = monitorDateTime + oneMinute            # get the date and time for this row of data
 
+            # column 0 is the row number, column 1 is the date
             prefix = str(rownum) + '\t' + datetime.datetime.strftime(monitorDateTime, '%d %b %y\t%H:%M:%S')
-                                                                    # column 0 is the row number, column 1 is the date
-            prefix = prefix + '\t1\t1\t0\t0\t0\t0\t0'     # next 7 columns are not used but DAMFileScan110X does not take 0000000 or 1111111
 
-            # ------------------------------------ split row into 32 column listofFilesContents and write to the files with the prefix
-            #                                           last 32 or fewer columns will be handled after this loop
+            # next 7 columns are not used but DAMFileScan110X does not take 0000000 or 1111111
+            prefix = prefix + '\t1\t1\t0\t0\t0\t0\t0'
+
+            # -------------------- split row into 32 ROIs per file
+            # last 32 or fewer columns will be handled after this loop
             for batch in range(0, moreFilesNeeded):
-                datastring = prefix                 # start the row with the prefix
+                datastring = prefix           # start the row with the prefix
 
                 startcol = batch * 32         # calculate start and end columns for this file (rowdata is 0-indexed)
                 endcol = startcol + 32
@@ -380,19 +416,20 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
                 for number in rowdata[startcol:endcol]:           # add the 32 data values to the row
                     datastring = datastring + '\t%d' % number
 
-                listofFilesContents[batch].append(datastring + '\n')            # append the row to list "listofFilesContents[batch]" for this file
+                # append the row to list "listofFilesContents[batch]" for this file
+                listofFilesContents[batch].append(datastring + '\n')
 
             # ------------------------------------------------------------------ handle last 32 or fewer columns of data
             datastring = prefix
 
-            startcol = (moreFilesNeeded) * 32        # all but one file of data from rowdata has been added  (rowdata is 0-indexed)
+            startcol = (moreFilesNeeded) * 32        # all but one file of data from rowdata has been added
             endcol = startcol + len(rowdata)         # include remaining data in this file
 
             for number in rowdata[startcol:endcol]:                 # add data to the string
                 datastring = datastring + '\t%d' % number
 
-            # ------------------------------------------------------- pad with zeros until 32 columns of data are added
-            if len(rowdata) != moreFilesNeeded * 32:        # need to pad empty columns with zeroes
+            # -------------------------------------------------------- pad with zeros until 32 columns of data are added
+            if len(rowdata) != moreFilesNeeded * 32:
                 morecols = (moreFilesNeeded+1) * 32 - len(rowdata)        # calculate how many zero columns are needed
 
                 datastring = datastring + '\t' + '\t'.join(list(repeat('0', morecols))) + '\n'      # add the zeros
@@ -401,9 +438,9 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
 
             rownum = rownum +1
 
-
         return listofFilesContents          # returns array containing list of all files with their contents
 
+    # -------------------------------------------- requests a different filename prefix to prevent overwritting of files
     def tryNewName(self):
         defaultDir = os.path.split(self.outputprefix)[0]
         wildcard = "File Prefix |*.txt|" \
@@ -421,7 +458,8 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         dlg.Destroy()
         return self.outputprefix
 
-    def checkFilenames(self, moreFilesNeeded):       # ----------------------------- gets valid output name and avoids overwriting
+    # -------------------------------------------------------------------- gets valid output name and avoids overwriting
+    def checkFilenames(self, moreFilesNeeded):
         goodname = False
         if not os.path.isdir(os.path.split(self.outputprefix)[0]):          # ------ directory must exist
             self.outputprefix = self.tryNewName()
@@ -442,8 +480,6 @@ class trackedMonitor(wx.Panel):                                    # TODO: why d
         return self.outputprefix
 
 # ------------------------------------------------------------------------------------------ Stand alone test code
-#  insert other classes above and call them in mainFrame
-#
 
 class mainFrame(wx.Frame):
 
